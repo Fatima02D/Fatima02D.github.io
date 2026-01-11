@@ -2,7 +2,7 @@
 
 ## 📊 Vue d'ensemble
 
-Ce document structure la collecte de données pour les 8 parties du projet afin de produire des résultats scientifiquement rigoureux et impressionnants pour Stanford.
+Ce document structure la collecte de données pour les 8 parties du projet afin de produire des résultats scientifiquement rigoureux.
 
 ---
 
@@ -500,4 +500,3 @@ Projet_Robot_Data/
 
 ---
 
-**Ce plan vous permet de collecter des données scientifiquement rigoureuses qui impressionneront Stanford!**
