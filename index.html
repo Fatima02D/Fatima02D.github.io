@@ -1,1238 +1,1171 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fatima - Robotics & Mechatronics Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #1a1a1a;
-            --accent: #d4af37;
-            --secondary: #2c5f2d;
-            --bg: #fafaf8;
-            --text: #2a2a2a;
-            --text-light: #666;
-            --border: #e0ddd5;
-            --danger: #dc2626;
-            --warning: #fbbf24;
-            --success: #16a34a;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Work Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            background: linear-gradient(135deg, #f5f5f0 0%, #e8e6db 100%);
-            border-bottom: 3px solid var(--accent);
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(44, 95, 45, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .hero-content {
-            text-align: center;
-            z-index: 1;
-            max-width: 900px;
-            padding: 2rem;
-            animation: fadeInUp 1.2s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 900;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-            line-height: 1.1;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1.1rem, 3vw, 1.5rem);
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            font-weight: 300;
-            animation: fadeInUp 1.2s ease-out 0.2s both;
-        }
-
-        .hero-mission {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            color: var(--secondary);
-            font-weight: 500;
-            max-width: 700px;
-            margin: 0 auto 2.5rem;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.6);
-            border-left: 4px solid var(--accent);
-            animation: fadeInUp 1.2s ease-out 0.4s both;
-        }
-
-        /* Language Toggle */
-        .language-toggle {
-            position: fixed;
-            top: 100px;
-            right: 2rem;
-            z-index: 999;
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            padding: 0.3rem;
-            display: flex;
-            gap: 0.3rem;
-        }
-
-        .lang-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            background: transparent;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            color: var(--text-light);
-        }
-
-        .lang-btn.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        .lang-btn:hover {
-            color: var(--accent);
-        }
-
-        .lang-btn.active:hover {
-            color: white;
-        }
-
-        /* Language content visibility */
-        [lang]:not(.active-lang) {
-            display: none;
-        }
-
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(250, 250, 248, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        nav.scrolled {
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        }
-
-        .nav-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.2rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        section {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 5rem 2rem;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-            margin-bottom: 3rem;
-            color: var(--primary);
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: var(--accent);
-        }
-
-        /* Project Organization */
-        .project-overview {
-            background: white;
-            padding: 3rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin-bottom: 4rem;
-            border-top: 5px solid var(--accent);
-        }
-
-        .project-overview h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-
-        .project-overview p {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-
-        .project-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 1.5rem;
-            background: var(--bg);
-            border-radius: 8px;
-            border-top: 3px solid var(--secondary);
-        }
-
-        .stat-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .stat-label {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        /* Phase Status Badge */
-        .phase-status {
-            display: inline-block;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 1rem;
-        }
-
-        .status-completed {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .status-pivot {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-planned {
-            background: #e0e7ff;
-            color: #3730a3;
-        }
-
-        /* Phase Cards */
-        .phases-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .phase-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: all 0.4s ease;
-            border: 1px solid var(--border);
-            position: relative;
-        }
-
-        .phase-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-        }
-
-        .phase-card.phase-highlight {
-            border: 2px solid var(--warning);
-        }
-
-        .phase-card.phase-highlight::before {
-            content: 'DETAILED ANALYSIS';
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--warning);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            z-index: 10;
-        }
-
-        .phase-card.phase-highlight[lang="fr"]::before {
-            content: 'ANALYSE DÉTAILLÉE';
-        }
-
-        .phase-header {
-            padding: 2rem;
-            background: linear-gradient(135deg, var(--primary) 0%, #333 100%);
-            color: white;
-            border-bottom: 3px solid var(--accent);
-            position: relative;
-        }
-
-        .phase-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 700;
-            opacity: 0.3;
-            line-height: 1;
-        }
-
-        .phase-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-
-        .phase-body {
-            padding: 2rem;
-        }
-
-        .phase-objective {
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
-            line-height: 1.7;
-        }
-
-        .phase-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .tech-tag {
-            background: var(--accent);
-            color: white;
-            padding: 0.4rem 0.9rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .phase1-highlight-box {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-left: 4px solid var(--warning);
-            padding: 2rem;
-            border-radius: 8px;
-            margin: 2rem 0;
-        }
-
-        .phase1-metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .metric-box {
-            background: white;
-            padding: 1rem;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .metric-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--warning);
-        }
-
-        .metric-label {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-top: 0.3rem;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
-        }
-
-        .about-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-
-        .about-text p {
-            margin-bottom: 1.5rem;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .skill-category {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            border-top: 3px solid var(--accent);
-        }
-
-        .skill-category h3 {
-            font-family: 'Playfair Display', serif;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-
-        .skill-category ul {
-            list-style: none;
-        }
-
-        .skill-category li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-light);
-        }
-
-        .skill-category li:last-child {
-            border-bottom: none;
-        }
-
-        footer {
-            background: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 5rem;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: var(--accent);
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 600;
-            transition: all 0.3s;
-            margin-top: 1rem;
-        }
-
-        .cta-button:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        @media (max-width: 768px) {
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-                font-size: 0.85rem;
-            }
-
-            .phases-container {
-                grid-template-columns: 1fr;
-            }
-
-            .language-toggle {
-                top: 80px;
-                right: 1rem;
-            }
-
-            .phase1-metrics {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fatima - Robotics & Mechatronics Portfolio</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Work+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --primary: #1a1a1a;
+      --accent: #d4af37;
+      --secondary: #2c5f2d;
+      --bg: #fafaf8;
+      --text: #2a2a2a;
+      --text-light: #666;
+      --border: #e0ddd5;
+      --danger: #dc2626;
+      --warning: #fbbf24;
+      --success: #16a34a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Work Sans", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: linear-gradient(135deg, #f5f5f0 0%, #e8e6db 100%);
+      border-bottom: 3px solid var(--accent);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(44, 95, 45, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      text-align: center;
+      z-index: 1;
+      max-width: 900px;
+      padding: 2rem;
+      animation: fadeInUp 1.2s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-title {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+      animation: fadeInUp 1.2s ease-out 0.2s both;
+    }
+
+    .hero-mission {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--secondary);
+      font-weight: 500;
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.6);
+      border-left: 4px solid var(--accent);
+      animation: fadeInUp 1.2s ease-out 0.4s both;
+    }
+
+    /* Language Toggle */
+    .language-toggle {
+      position: fixed;
+      top: 100px;
+      right: 2rem;
+      z-index: 999;
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 0.3rem;
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .lang-btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      background: transparent;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      color: var(--text-light);
+    }
+
+    .lang-btn.active { background: var(--accent); color: white; }
+    .lang-btn:hover { color: var(--accent); }
+    .lang-btn.active:hover { color: white; }
+
+    /* Language content visibility */
+    [lang]:not(.active-lang) { display: none; }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(250, 250, 248, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.1); }
+
+    .nav-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: "Playfair Display", serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after { width: 100%; }
+
+    section { max-width: 1400px; margin: 0 auto; padding: 5rem 2rem; }
+
+    .section-title {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 3rem;
+      color: var(--primary);
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: var(--accent);
+    }
+
+    /* Project Organization */
+    .project-overview {
+      background: white;
+      padding: 3rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      margin-bottom: 4rem;
+      border-top: 5px solid var(--accent);
+    }
+
+    .project-overview h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .project-overview p {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .project-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1.5rem;
+      background: var(--bg);
+      border-radius: 8px;
+      border-top: 3px solid var(--secondary);
+    }
+
+    .stat-number {
+      font-family: "Playfair Display", serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label { color: var(--text-light); font-size: 0.9rem; margin-top: 0.5rem; }
+
+    /* Phase Status Badge */
+    .phase-status {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 1rem;
+    }
+
+    .status-completed { background: #dcfce7; color: #166534; }
+    .status-pivot { background: #fef3c7; color: #92400e; }
+    .status-planned { background: #e0e7ff; color: #3730a3; }
+
+    /* Phase Cards */
+    .phases-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .phase-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: all 0.4s ease;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .phase-card:hover { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+
+    .phase-card.phase-highlight { border: 2px solid var(--warning); }
+
+    .phase-card.phase-highlight::before {
+      content: "DETAILED ANALYSIS";
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--warning);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      z-index: 10;
+    }
+    .phase-card.phase-highlight[lang="fr"]::before { content: "ANALYSE DÉTAILLÉE"; }
+
+    .phase-header {
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--primary) 0%, #333 100%);
+      color: white;
+      border-bottom: 3px solid var(--accent);
+      position: relative;
+    }
+
+    .phase-number {
+      font-family: "Playfair Display", serif;
+      font-size: 3rem;
+      font-weight: 700;
+      opacity: 0.3;
+      line-height: 1;
+    }
+
+    .phase-title { font-size: 1.4rem; font-weight: 600; margin-top: 0.5rem; }
+
+    .phase-body { padding: 2rem; }
+
+    .phase-objective {
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .phase-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+
+    .tech-tag {
+      background: var(--accent);
+      color: white;
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .phase1-highlight-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid var(--warning);
+      padding: 2rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+
+    .phase1-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .metric-box {
+      background: white;
+      padding: 1rem;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .metric-value { font-size: 1.8rem; font-weight: 700; color: var(--warning); }
+    .metric-label { font-size: 0.85rem; color: var(--text-light); margin-top: 0.3rem; }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text { font-size: 1.1rem; line-height: 1.8; }
+    .about-text p { margin-bottom: 1.5rem; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .skill-category {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-top: 3px solid var(--accent);
+    }
+
+    .skill-category h3 {
+      font-family: "Playfair Display", serif;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .skill-category ul { list-style: none; }
+
+    .skill-category li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-light);
+    }
+
+    .skill-category li:last-child { border-bottom: none; }
+
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 5rem;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin-top: 1rem;
+    }
+
+    .cta-button:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 768px) {
+      .about-content { grid-template-columns: 1fr; gap: 2rem; }
+      .nav-links { gap: 1rem; font-size: 0.85rem; }
+      .phases-container { grid-template-columns: 1fr; }
+      .language-toggle { top: 80px; right: 1rem; }
+      .phase1-metrics { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Language Toggle -->
-    <div class="language-toggle">
-        <button class="lang-btn active" onclick="switchLanguage('fr')">FR</button>
-        <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
+  <!-- Language Toggle -->
+  <div class="language-toggle">
+    <button class="lang-btn active" data-lang="fr" type="button">FR</button>
+    <button class="lang-btn" data-lang="en" type="button">EN</button>
+  </div>
+
+  <nav id="navbar">
+    <div class="nav-content">
+      <div class="logo" id="logoLang">FR</div>
+      <ul class="nav-links">
+        <li>
+          <a href="#home" lang="fr" class="active-lang">Accueil</a>
+          <a href="#home" lang="en">Home</a>
+        </li>
+        <li>
+          <a href="#about" lang="fr" class="active-lang">À propos</a>
+          <a href="#about" lang="en">About</a>
+        </li>
+        <li>
+          <a href="#projects" lang="fr" class="active-lang">Projets</a>
+          <a href="#projects" lang="en">Projects</a>
+        </li>
+        <li>
+          <a href="#skills" lang="fr" class="active-lang">Compétences</a>
+          <a href="#skills" lang="en">Skills</a>
+        </li>
+        <li>
+          <a href="#contact" lang="fr" class="active-lang">Contact</a>
+          <a href="#contact" lang="en">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <!-- French -->
+      <div lang="fr" class="active-lang">
+        <h1 class="hero-title">Robotique & Systèmes intelligents</h1>
+        <p class="hero-subtitle">Étudiante en génie mécanique – Mécatronique | Robotique & systèmes autonomes</p>
+        <div class="hero-mission">
+          Mission : Explorer, apprendre et concevoir des solutions technologiques utiles, en alliant ingénierie,
+          créativité et sens des responsabilités, pour impacter positivement et durablement
+        </div>
+        <a href="#projects" class="cta-button">Découvrir mes projets</a>
+      </div>
+
+      <!-- English -->
+      <div lang="en">
+        <h1 class="hero-title">Robotics & Intelligent Systems</h1>
+        <p class="hero-subtitle">Mechanical Engineering Student – Mechatronics | Robotics & Autonomous Systems</p>
+        <div class="hero-mission">
+          Mission: Explore, learn, and design meaningful technological solutions by combining engineering, creativity,
+          and responsibility to create positive and lasting impact
+        </div>
+        <a href="#projects" class="cta-button">Discover my projects</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <!-- French -->
+    <div lang="fr" class="active-lang">
+      <h2 class="section-title">À propos</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>
+            Étudiante en génie mécanique avec un intérêt pour la mécatronique et la robotique, je travaille sur des projets
+            techniques visant à renforcer mes compétences et ma compréhension des systèmes complexes.
+          </p>
+          <p>
+            J'aborde chaque projet de manière progressive et structurée, en privilégiant la compréhension, l'expérimentation
+            et l'amélioration continue.
+          </p>
+        </div>
+        <div class="about-text">
+          <p>
+            Ce portfolio documente mon parcours d'apprentissage à travers des projets techniques, des expérimentations et
+            des réflexions personnelles en ingénierie.
+          </p>
+          <p><strong>Approche méthodologique :</strong> Analyse critique des problèmes, validation empirique par tests, et décisions basées sur données quantitatives.</p>
+        </div>
+      </div>
     </div>
 
-    <nav id="navbar">
-        <div class="nav-content">
-            <div class="logo">FR</div>
-            <ul class="nav-links">
-                <li><a href="#home" lang="fr" class="active-lang">Accueil</a><a href="#home" lang="en">Home</a></li>
-                <li><a href="#about" lang="fr" class="active-lang">À propos</a><a href="#about" lang="en">About</a></li>
-                <li><a href="#projects" lang="fr" class="active-lang">Projets</a><a href="#projects" lang="en">Projects</a></li>
-                <li><a href="#skills" lang="fr" class="active-lang">Compétences</a><a href="#skills" lang="en">Skills</a></li>
-                <li><a href="#contact" lang="fr" class="active-lang">Contact</a><a href="#contact" lang="en">Contact</a></li>
-            </ul>
+    <!-- English -->
+    <div lang="en">
+      <h2 class="section-title">About</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>
+            As a mechanical engineering student with a focus on mechatronics and robotics, I work on technical projects aimed at strengthening my skills and understanding of complex systems.
+          </p>
+          <p>
+            I approach each project progressively and systematically, prioritizing understanding, experimentation, and continuous improvement.
+          </p>
         </div>
-    </nav>
-
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <!-- French -->
-            <div lang="fr" class="active-lang">
-                <h1 class="hero-title">Robotique & Systèmes intelligents</h1>
-                <p class="hero-subtitle">Étudiante en génie mécanique – Mécatronique | Robotique & systèmes autonomes</p>
-                <div class="hero-mission">
-                    Mission : Explorer, apprendre et concevoir des solutions technologiques utiles, en alliant ingénierie, créativité et sens des responsabilités, pour impacter positivement et durablement
-                </div>
-                <a href="#projects" class="cta-button">Découvrir mes projets</a>
-            </div>
-
-            <!-- English -->
-            <div lang="en">
-                <h1 class="hero-title">Robotics & Intelligent Systems</h1>
-                <p class="hero-subtitle">Mechanical Engineering Student – Mechatronics | Robotics & Autonomous Systems</p>
-                <div class="hero-mission">
-                    Mission: Explore, learn, and design meaningful technological solutions by combining engineering, creativity, and responsibility to create positive and lasting impact
-                </div>
-                <a href="#projects" class="cta-button">Discover my projects</a>
-            </div>
+        <div class="about-text">
+          <p>
+            This portfolio documents my learning journey through technical projects, experiments, and personal reflections on engineering.
+          </p>
+          <p><strong>Methodological approach:</strong> Critical problem analysis, empirical validation through testing, and data-driven decision making.</p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section id="about">
-        <!-- French -->
-        <div lang="fr" class="active-lang">
-            <h2 class="section-title">À propos</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>Étudiante en génie mécanique avec un intérêt pour la mécatronique et la robotique, je travaille sur des projets techniques visant à renforcer mes compétences et ma compréhension des systèmes complexes.</p>
-                    
-                    <p>J'aborde chaque projet de manière progressive et structurée, en privilégiant la compréhension, l'expérimentation et l'amélioration continue.</p>
-                </div>
-                <div class="about-text">
-                    <p>Ce portfolio documente mon parcours d'apprentissage à travers des projets techniques, des expérimentations et des réflexions personnelles en ingénierie.</p>
-                    
-                    <p><strong>Approche méthodologique :</strong> Analyse critique des problèmes, validation empirique par tests, et décisions basées sur données quantitatives.</p>
-                </div>
-            </div>
+  <section id="projects">
+    <!-- French -->
+    <div lang="fr" class="active-lang">
+      <h2 class="section-title">Projets</h2>
+
+      <div class="project-overview">
+        <h3>Plateforme Robotique Mobile Autonome</h3>
+        <p>
+          Conception et développement incrémental d'une plateforme robotique mobile autonome, pensée comme un système modulaire et évolutif.
+          Le projet progresse à travers 8 phases distinctes, intégrant progressivement la commande des moteurs, la localisation, la navigation autonome et la manipulation d'objets.
+        </p>
+        <p><strong>Objectif global :</strong> Créer un système capable de se déplacer de manière fiable, d'interagir avec son environnement et d'exécuter des tâches autonomes simples.</p>
+
+        <div class="project-stats">
+          <div class="stat-item">
+            <div class="stat-number">8</div>
+            <div class="stat-label">Phases de développement</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">1</div>
+            <div class="stat-label">Phase complétée</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">12</div>
+            <div class="stat-label">Problèmes identifiés</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Apprentissage</div>
+          </div>
         </div>
+      </div>
 
-        <!-- English -->
-        <div lang="en">
-            <h2 class="section-title">About</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>As a mechanical engineering student with a focus on mechatronics and robotics, I work on technical projects aimed at strengthening my skills and understanding of complex systems.</p>
-                    
-                    <p>I approach each project progressively and systematically, prioritizing understanding, experimentation, and continuous improvement.</p>
-                </div>
-                <div class="about-text">
-                    <p>This portfolio documents my learning journey through technical projects, experiments, and personal reflections on engineering.</p>
-                    
-                    <p><strong>Methodological approach:</strong> Critical problem analysis, empirical validation through testing, and data-driven decision making.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 2rem;">Phases du Projet</h3>
 
-    <section id="projects">
-        <!-- French -->
-        <div lang="fr" class="active-lang">
-            <h2 class="section-title">Projets</h2>
-            
-            <div class="project-overview">
-                <h3>Plateforme Robotique Mobile Autonome</h3>
-                <p>Conception et développement incrémental d'une plateforme robotique mobile autonome, pensée comme un système modulaire et évolutif. Le projet progresse à travers 8 phases distinctes, intégrant progressivement la commande des moteurs, la localisation, la navigation autonome et la manipulation d'objets.</p>
-                
-                <p><strong>Objectif global :</strong> Créer un système capable de se déplacer de manière fiable, d'interagir avec son environnement et d'exécuter des tâches autonomes simples.</p>
-
-                <div class="project-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">8</div>
-                        <div class="stat-label">Phases de développement</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">1</div>
-                        <div class="stat-label">Phase complétée</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">12</div>
-                        <div class="stat-label">Problèmes identifiés</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Apprentissage</div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 2rem;">Phases du Projet</h3>
-
-            <div class="phases-container">
-                <!-- Phase 1 -->
-                <div class="phase-card phase-highlight">
-                    <div class="phase-header">
-                        <div class="phase-number">01</div>
-                        <h3 class="phase-title">Assemblage & Analyse<span class="phase-status status-pivot">COMPLÉTÉE - PIVOT</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Assembler plateforme 2WD initiale, effectuer tests de mobilité de base, et conduire analyse critique complète révélant limitations fondamentales nécessitant migration vers plateforme à chenilles.
-                        </p>
-                        
-                        <div class="phase1-highlight-box">
-                            <strong>Décision stratégique :</strong> Après identification de 12 problèmes (75% nécessitant upgrade hardware), décision data-driven de migrer vers châssis à chenilles pour garantir viabilité du projet.
-                            
-                            <div class="phase1-metrics">
-                                <div class="metric-box">
-                                    <div class="metric-value">13.4cm</div>
-                                    <div class="metric-label">Déviation/2m</div>
-                                </div>
-                                <div class="metric-box">
-                                    <div class="metric-value">500g</div>
-                                    <div class="metric-label">Limite charge</div>
-                                </div>
-                                <div class="metric-box">
-                                    <div class="metric-value">70%</div>
-                                    <div class="metric-label">ROI composants</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="phase-tech">
-                            <span class="tech-tag">Arduino Uno</span>
-                            <span class="tech-tag">L298N</span>
-                            <span class="tech-tag">Diagnostic</span>
-                            <span class="tech-tag">Analyse critique</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 2 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">02</div>
-                        <h3 class="phase-title">Calibration Encodeurs<span class="phase-status status-planned">PLANIFIÉE</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Intégrer les encodeurs optiques pour mesure précise de la vitesse et distance. Implémenter contrôle PID pour synchronisation des moteurs et déplacement rectiligne reproductible.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">Encodeurs optiques</span>
-                            <span class="tech-tag">Interruptions</span>
-                            <span class="tech-tag">PID Control</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 3 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">03</div>
-                        <h3 class="phase-title">Communication I2C<span class="phase-status status-planned">PLANIFIÉE</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Établir communication ESP32-Arduino via I2C pour contrôle manuel du robot par manette Xbox. Mesure et optimisation de la latence commande-réponse.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">ESP32</span>
-                            <span class="tech-tag">I2C Protocol</span>
-                            <span class="tech-tag">Xbox Controller</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 4 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">04</div>
-                        <h3 class="phase-title">Suivi de Ligne<span class="phase-status status-planned">PLANIFIÉE</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Implémenter algorithme de suivi de trajectoire prédéfinie au sol. Optimisation du contrôle PID pour stabilité à différentes vitesses.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">Capteurs IR</span>
-                            <span class="tech-tag">PID Tuning</span>
-                            <span class="tech-tag">Trajectory Following</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 5 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">05</div>
-                        <h3 class="phase-title">Évitement d'Obstacles<span class="phase-status status-planned">PLANIFIÉE</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Détection et évitement automatique d'obstacles en temps réel. Détermination expérimentale des seuils de distance optimaux pour minimiser collisions.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">HC-SR04</span>
-                            <span class="tech-tag">Ultrasonic Sensors</span>
-                            <span class="tech-tag">Reactive Control</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 6 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">06</div>
-                        <h3 class="phase-title">Navigation A→B<span class="phase-status status-planned">PLANIFIÉE</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Implémentation odométrie pour localisation. Navigation autonome point-à-point avec planification de trajectoire et correction d'erreur cumulative.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">Odometry</span>
-                            <span class="tech-tag">Path Planning</span>
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">Raspberry Pi</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 7 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">07</div>
-                        <h3 class="phase-title">Bras Robotique<span class="phase-status status-planned">PLANIFIÉE</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Conception et intégration d'un bras robotique 4-DOF pour manipulation d'objets. Cinématique inverse et tests de précision de préhension.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">Servomoteurs</span>
-                            <span class="tech-tag">Kinematics</span>
-                            <span class="tech-tag">Impression 3D</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 8 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">08</div>
-                        <h3 class="phase-title">Intégration Finale<span class="phase-status status-planned">PLANIFIÉE</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Intégration complète de tous les modules en un système autonome cohérent. Machine à états finis (FSM) pour coordination navigation-manipulation. Tests robustesse multi-scénarios.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">FSM</span>
-                            <span class="tech-tag">System Integration</span>
-                            <span class="tech-tag">Testing & Validation</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- English -->
-        <div lang="en">
-            <h2 class="section-title">Projects</h2>
-            
-            <div class="project-overview">
-                <h3>Autonomous Mobile Robot Platform</h3>
-                <p>Incremental design and development of an autonomous mobile robot platform, conceived as a modular and scalable system. The project progresses through 8 distinct phases, progressively integrating motor control, localization, autonomous navigation, and object manipulation.</p>
-                
-                <p><strong>Overall objective:</strong> Create a system capable of reliable movement, environmental interaction, and autonomous execution of simple tasks.</p>
-
-                <div class="project-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">8</div>
-                        <div class="stat-label">Development phases</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">1</div>
-                        <div class="stat-label">Completed phase</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">12</div>
-                        <div class="stat-label">Identified problems</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">100%</div>
-                        <div class="stat-label">Learning</div>
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 2rem;">Project Phases</h3>
-
-            <div class="phases-container">
-                <!-- Phase 1 -->
-                <div class="phase-card phase-highlight">
-                    <div class="phase-header">
-                        <div class="phase-number">01</div>
-                        <h3 class="phase-title">Assembly & Analysis<span class="phase-status status-pivot">COMPLETED - PIVOT</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Assemble initial 2WD platform, conduct basic mobility tests, and perform comprehensive critical analysis revealing fundamental limitations requiring migration to tracked platform.
-                        </p>
-                        
-                        <div class="phase1-highlight-box">
-                            <strong>Strategic decision:</strong> After identifying 12 distinct problems (75% requiring hardware upgrade), data-driven decision to migrate to tracked chassis to ensure project viability.
-                            
-                            <div class="phase1-metrics">
-                                <div class="metric-box">
-                                    <div class="metric-value">13.4cm</div>
-                                    <div class="metric-label">Deviation/2m</div>
-                                </div>
-                                <div class="metric-box">
-                                    <div class="metric-value">500g</div>
-                                    <div class="metric-label">Load limit</div>
-                                </div>
-                                <div class="metric-box">
-                                    <div class="metric-value">70%</div>
-                                    <div class="metric-label">Components ROI</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="phase-tech">
-                            <span class="tech-tag">Arduino Uno</span>
-                            <span class="tech-tag">L298N</span>
-                            <span class="tech-tag">Diagnostics</span>
-                            <span class="tech-tag">Critical Analysis</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 2 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">02</div>
-                        <h3 class="phase-title">Encoder Calibration<span class="phase-status status-planned">PLANNED</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Integrate optical encoders for precise speed and distance measurement. Implement PID control for motor synchronization and reproducible straight-line movement.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">Optical Encoders</span>
-                            <span class="tech-tag">Interrupts</span>
-                            <span class="tech-tag">PID Control</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 3 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">03</div>
-                        <h3 class="phase-title">I2C Communication<span class="phase-status status-planned">PLANNED</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Establish ESP32-Arduino communication via I2C for manual robot control via Xbox controller. Measure and optimize command-response latency.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">ESP32</span>
-                            <span class="tech-tag">I2C Protocol</span>
-                            <span class="tech-tag">Xbox Controller</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 4 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">04</div>
-                        <h3 class="phase-title">Line Following<span class="phase-status status-planned">PLANNED</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Implement predefined ground trajectory following algorithm. Optimize PID control for stability at various speeds.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">IR Sensors</span>
-                            <span class="tech-tag">PID Tuning</span>
-                            <span class="tech-tag">Trajectory Following</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 5 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">05</div>
-                        <h3 class="phase-title">Obstacle Avoidance<span class="phase-status status-planned">PLANNED</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Real-time automatic obstacle detection and avoidance. Experimental determination of optimal distance thresholds to minimize collisions.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">HC-SR04</span>
-                            <span class="tech-tag">Ultrasonic Sensors</span>
-                            <span class="tech-tag">Reactive Control</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 6 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">06</div>
-                        <h3 class="phase-title">A→B Navigation<span class="phase-status status-planned">PLANNED</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Implement odometry for localization. Autonomous point-to-point navigation with path planning and cumulative error correction.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">Odometry</span>
-                            <span class="tech-tag">Path Planning</span>
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">Raspberry Pi</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 7 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">07</div>
-                        <h3 class="phase-title">Robotic Arm<span class="phase-status status-planned">PLANNED</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Design and integration of a 4-DOF robotic arm for object manipulation. Inverse kinematics and grasping precision tests.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">Servo Motors</span>
-                            <span class="tech-tag">Kinematics</span>
-                            <span class="tech-tag">3D Printing</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 8 -->
-                <div class="phase-card">
-                    <div class="phase-header">
-                        <div class="phase-number">08</div>
-                        <h3 class="phase-title">Final Integration<span class="phase-status status-planned">PLANNED</span></h3>
-                    </div>
-                    <div class="phase-body">
-                        <p class="phase-objective">
-                            Complete integration of all modules into a coherent autonomous system. Finite state machine (FSM) for navigation-manipulation coordination. Multi-scenario robustness testing.
-                        </p>
-                        <div class="phase-tech">
-                            <span class="tech-tag">FSM</span>
-                            <span class="tech-tag">System Integration</span>
-                            <span class="tech-tag">Testing & Validation</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="skills">
-        <!-- French -->
-        <div lang="fr" class="active-lang">
-            <h2 class="section-title">Compétences Techniques</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Programmation</h3>
-                    <ul>
-                        <li>Python</li>
-                        <li>C/C++</li>
-                        <li>MATLAB</li>
-                        <li>Arduino Framework</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Hardware</h3>
-                    <ul>
-                        <li>STM32 Microcontrollers</li>
-                        <li>ESP32</li>
-                        <li>Arduino Uno</li>
-                        <li>Raspberry Pi</li>
-                        <li>L298N, TB6612 Drivers</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Systèmes</h3>
-                    <ul>
-                        <li>Contrôle PID</li>
-                        <li>Odométrie</li>
-                        <li>Communication I2C</li>
-                        <li>PWM & Encodeurs</li>
-                        <li>Diagnostic Hardware</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Outils & Méthodes</h3>
-                    <ul>
-                        <li>VS Code / STM32</li>
-                        <li>Git/GitHub</li>
-                        <li>Analyse Data-Driven</li>
-                        <li>Documentation Technique</li>
-                        <li>Troubleshooting Méthodique</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- English -->
-        <div lang="en">
-            <h2 class="section-title">Technical Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Programming</h3>
-                    <ul>
-                        <li>Python</li>
-                        <li>C/C++</li>
-                        <li>MATLAB</li>
-                        <li>Arduino Framework</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Hardware</h3>
-                    <ul>
-                        <li>STM32 Microcontrollers</li>
-                        <li>ESP32</li>
-                        <li>Arduino Uno</li>
-                        <li>Raspberry Pi</li>
-                        <li>L298N, TB6612 Drivers</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Systems</h3>
-                    <ul>
-                        <li>PID Control</li>
-                        <li>Odometry</li>
-                        <li>I2C Communication</li>
-                        <li>PWM & Encoders</li>
-                        <li>Hardware Diagnostics</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Tools & Methods</h3>
-                    <ul>
-                        <li>VS Code / STM32</li>
-                        <li>Git/GitHub</li>
-                        <li>Data-Driven Analysis</li>
-                        <li>Technical Documentation</li>
-                        <li>Systematic Troubleshooting</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" style="text-align: center;">
-        <!-- French -->
-        <div lang="fr" class="active-lang">
-            <h2 class="section-title">Contact</h2>
-            <p style="color: var(--text-light); max-width: 600px; margin: 0 auto 2rem;">
-                Intéressé par mes projets ou souhaitez échanger autour de la robotique et des systèmes autonomes ?  
-                N'hésitez pas à me contacter.
+      <div class="phases-container">
+        <!-- Phase 1 -->
+        <div class="phase-card phase-highlight">
+          <div class="phase-header">
+            <div class="phase-number">01</div>
+            <h3 class="phase-title">Assemblage & Analyse<span class="phase-status status-pivot">COMPLÉTÉE - PIVOT</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Assembler plateforme 2WD initiale, effectuer tests de mobilité de base, et conduire analyse critique complète révélant limitations fondamentales nécessitant migration vers plateforme à chenilles.
             </p>
+
+            <div class="phase1-highlight-box">
+              <strong>Décision stratégique :</strong> Après identification de 12 problèmes (75% nécessitant upgrade hardware), décision data-driven de migrer vers châssis à chenilles pour garantir viabilité du projet.
+
+              <div class="phase1-metrics">
+                <div class="metric-box">
+                  <div class="metric-value">13.4cm</div>
+                  <div class="metric-label">Déviation/2m</div>
+                </div>
+                <div class="metric-box">
+                  <div class="metric-value">500g</div>
+                  <div class="metric-label">Limite charge</div>
+                </div>
+                <div class="metric-box">
+                  <div class="metric-value">70%</div>
+                  <div class="metric-label">ROI composants</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="phase-tech">
+              <span class="tech-tag">Arduino Uno</span>
+              <span class="tech-tag">L298N</span>
+              <span class="tech-tag">Diagnostic</span>
+              <span class="tech-tag">Analyse critique</span>
+            </div>
+          </div>
         </div>
 
-        <!-- English -->
-        <div lang="en">
-            <h2 class="section-title">Contact</h2>
-            <p style="color: var(--text-light); max-width: 600px; margin: 0 auto 2rem;">
-                Interested in my projects or would like to discuss robotics and autonomous systems?  
-                Feel free to contact me.
+        <!-- Phase 2 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">02</div>
+            <h3 class="phase-title">Calibration Encodeurs<span class="phase-status status-planned">PLANIFIÉE</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Intégrer les encodeurs optiques pour mesure précise de la vitesse et distance. Implémenter contrôle PID pour synchronisation des moteurs et déplacement rectiligne reproductible.
             </p>
+            <div class="phase-tech">
+              <span class="tech-tag">Encodeurs optiques</span>
+              <span class="tech-tag">Interruptions</span>
+              <span class="tech-tag">PID Control</span>
+            </div>
+          </div>
         </div>
 
-        <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
-            <a href="mailto:saidafatimazahraadiouf@gmail.com" class="cta-button">
-                📧 Email
-            </a>
-            <a href="https://www.linkedin.com/in/saida-fatimatou-zahraa-diouf" class="cta-button" target="_blank" rel="noopener noreferrer">
-                💼 LinkedIn
-            </a>
-            <a href="https://github.com/fatima02d" class="cta-button" target="_blank" rel="noopener noreferrer">
-                💻 GitHub
-            </a>
+        <!-- Phase 3 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">03</div>
+            <h3 class="phase-title">Communication I2C<span class="phase-status status-planned">PLANIFIÉE</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Établir communication ESP32-Arduino via I2C pour contrôle manuel du robot par manette Xbox. Mesure et optimisation de la latence commande-réponse.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">ESP32</span>
+              <span class="tech-tag">I2C Protocol</span>
+              <span class="tech-tag">Xbox Controller</span>
+            </div>
+          </div>
         </div>
-    </section>
 
-    <footer>
-        <p lang="fr" class="active-lang">&copy; 2026 - Portfolio Robotique & Systèmes intelligents</p>
-        <p lang="en">&copy; 2026 - Robotics & Intelligent Systems Portfolio</p>
-        <p lang="fr" class="active-lang" style="margin-top: 0.5rem; opacity: 0.7; font-size: 0.9rem;">Apprendre, concevoir, améliorer</p>
-        <p lang="en" style="margin-top: 0.5rem; opacity: 0.7; font-size: 0.9rem;">Learn, design, improve</p>
-    </footer>
+        <!-- Phase 4 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">04</div>
+            <h3 class="phase-title">Suivi de Ligne<span class="phase-status status-planned">PLANIFIÉE</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Implémenter algorithme de suivi de trajectoire prédéfinie au sol. Optimisation du contrôle PID pour stabilité à différentes vitesses.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">Capteurs IR</span>
+              <span class="tech-tag">PID Tuning</span>
+              <span class="tech-tag">Trajectory Following</span>
+            </div>
+          </div>
+        </div>
 
-    <script>
-        // Language switching
-        let currentLang = 'fr';
+        <!-- Phase 5 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">05</div>
+            <h3 class="phase-title">Évitement d'Obstacles<span class="phase-status status-planned">PLANIFIÉE</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Détection et évitement automatique d'obstacles en temps réel. Détermination expérimentale des seuils de distance optimaux pour minimiser collisions.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">HC-SR04</span>
+              <span class="tech-tag">Ultrasonic Sensors</span>
+              <span class="tech-tag">Reactive Control</span>
+            </div>
+          </div>
+        </div>
 
-        function switchLanguage(lang) {
-            currentLang = lang;
-            
-            // Update active button
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Hide all language content
-            document.querySelectorAll('[lang]').forEach(el => {
-                el.classList.remove('active-lang');
-            });
-            
-            // Show selected language content
-            document.querySelectorAll(`[lang="${lang}"]`).forEach(el => {
-                el.classList.add('active-lang');
-            });
-            
-            // Update HTML lang attribute
-            document.documentElement.lang = lang;
+        <!-- Phase 6 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">06</div>
+            <h3 class="phase-title">Navigation A→B<span class="phase-status status-planned">PLANIFIÉE</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Implémentation odométrie pour localisation. Navigation autonome point-à-point avec planification de trajectoire et correction d'erreur cumulative.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">Odometry</span>
+              <span class="tech-tag">Path Planning</span>
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">Raspberry Pi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 7 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">07</div>
+            <h3 class="phase-title">Bras Robotique<span class="phase-status status-planned">PLANIFIÉE</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Conception et intégration d'un bras robotique 4-DOF pour manipulation d'objets. Cinématique inverse et tests de précision de préhension.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">Servomoteurs</span>
+              <span class="tech-tag">Kinematics</span>
+              <span class="tech-tag">Impression 3D</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 8 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">08</div>
+            <h3 class="phase-title">Intégration Finale<span class="phase-status status-planned">PLANIFIÉE</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Intégration complète de tous les modules en un système autonome cohérent. Machine à états finis (FSM) pour coordination navigation-manipulation. Tests robustesse multi-scénarios.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">FSM</span>
+              <span class="tech-tag">System Integration</span>
+              <span class="tech-tag">Testing & Validation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- English -->
+    <div lang="en">
+      <h2 class="section-title">Projects</h2>
+
+      <div class="project-overview">
+        <h3>Autonomous Mobile Robot Platform</h3>
+        <p>
+          Incremental design and development of an autonomous mobile robot platform, conceived as a modular and scalable system.
+          The project progresses through 8 distinct phases, progressively integrating motor control, localization, autonomous navigation, and object manipulation.
+        </p>
+        <p><strong>Overall objective:</strong> Create a system capable of reliable movement, environmental interaction, and autonomous execution of simple tasks.</p>
+
+        <div class="project-stats">
+          <div class="stat-item">
+            <div class="stat-number">8</div>
+            <div class="stat-label">Development phases</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">1</div>
+            <div class="stat-label">Completed phase</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">12</div>
+            <div class="stat-label">Identified problems</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Learning</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 2rem;">Project Phases</h3>
+
+      <div class="phases-container">
+        <!-- Phase 1 -->
+        <div class="phase-card phase-highlight">
+          <div class="phase-header">
+            <div class="phase-number">01</div>
+            <h3 class="phase-title">Assembly & Analysis<span class="phase-status status-pivot">COMPLETED - PIVOT</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Assemble initial 2WD platform, conduct basic mobility tests, and perform comprehensive critical analysis revealing fundamental limitations requiring migration to tracked platform.
+            </p>
+
+            <div class="phase1-highlight-box">
+              <strong>Strategic decision:</strong> After identifying 12 distinct problems (75% requiring hardware upgrade), data-driven decision to migrate to tracked chassis to ensure project viability.
+
+              <div class="phase1-metrics">
+                <div class="metric-box">
+                  <div class="metric-value">13.4cm</div>
+                  <div class="metric-label">Deviation/2m</div>
+                </div>
+                <div class="metric-box">
+                  <div class="metric-value">500g</div>
+                  <div class="metric-label">Load limit</div>
+                </div>
+                <div class="metric-box">
+                  <div class="metric-value">70%</div>
+                  <div class="metric-label">Components ROI</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="phase-tech">
+              <span class="tech-tag">Arduino Uno</span>
+              <span class="tech-tag">L298N</span>
+              <span class="tech-tag">Diagnostics</span>
+              <span class="tech-tag">Critical Analysis</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">02</div>
+            <h3 class="phase-title">Encoder Calibration<span class="phase-status status-planned">PLANNED</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Integrate optical encoders for precise speed and distance measurement. Implement PID control for motor synchronization and reproducible straight-line movement.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">Optical Encoders</span>
+              <span class="tech-tag">Interrupts</span>
+              <span class="tech-tag">PID Control</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">03</div>
+            <h3 class="phase-title">I2C Communication<span class="phase-status status-planned">PLANNED</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Establish ESP32-Arduino communication via I2C for manual robot control via Xbox controller. Measure and optimize command-response latency.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">ESP32</span>
+              <span class="tech-tag">I2C Protocol</span>
+              <span class="tech-tag">Xbox Controller</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 4 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">04</div>
+            <h3 class="phase-title">Line Following<span class="phase-status status-planned">PLANNED</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Implement predefined ground trajectory following algorithm. Optimize PID control for stability at various speeds.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">IR Sensors</span>
+              <span class="tech-tag">PID Tuning</span>
+              <span class="tech-tag">Trajectory Following</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 5 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">05</div>
+            <h3 class="phase-title">Obstacle Avoidance<span class="phase-status status-planned">PLANNED</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Real-time automatic obstacle detection and avoidance. Experimental determination of optimal distance thresholds to minimize collisions.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">HC-SR04</span>
+              <span class="tech-tag">Ultrasonic Sensors</span>
+              <span class="tech-tag">Reactive Control</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 6 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">06</div>
+            <h3 class="phase-title">A→B Navigation<span class="phase-status status-planned">PLANNED</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Implement odometry for localization. Autonomous point-to-point navigation with path planning and cumulative error correction.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">Odometry</span>
+              <span class="tech-tag">Path Planning</span>
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">Raspberry Pi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 7 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">07</div>
+            <h3 class="phase-title">Robotic Arm<span class="phase-status status-planned">PLANNED</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Design and integration of a 4-DOF robotic arm for object manipulation. Inverse kinematics and grasping precision tests.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">Servo Motors</span>
+              <span class="tech-tag">Kinematics</span>
+              <span class="tech-tag">3D Printing</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 8 -->
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-number">08</div>
+            <h3 class="phase-title">Final Integration<span class="phase-status status-planned">PLANNED</span></h3>
+          </div>
+          <div class="phase-body">
+            <p class="phase-objective">
+              Complete integration of all modules into a coherent autonomous system. Finite state machine (FSM) for navigation-manipulation coordination. Multi-scenario robustness testing.
+            </p>
+            <div class="phase-tech">
+              <span class="tech-tag">FSM</span>
+              <span class="tech-tag">System Integration</span>
+              <span class="tech-tag">Testing & Validation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <!-- French -->
+    <div lang="fr" class="active-lang">
+      <h2 class="section-title">Compétences Techniques</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>Programmation</h3>
+          <ul>
+            <li>Python</li>
+            <li>C/C++</li>
+            <li>MATLAB</li>
+            <li>Arduino Framework</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Hardware</h3>
+          <ul>
+            <li>STM32 Microcontrollers</li>
+            <li>ESP32</li>
+            <li>Arduino Uno</li>
+            <li>Raspberry Pi</li>
+            <li>L298N, TB6612 Drivers</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Systèmes</h3>
+          <ul>
+            <li>Contrôle PID</li>
+            <li>Odométrie</li>
+            <li>Communication I2C</li>
+            <li>PWM & Encodeurs</li>
+            <li>Diagnostic Hardware</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Outils & Méthodes</h3>
+          <ul>
+            <li>VS Code / STM32</li>
+            <li>Git/GitHub</li>
+            <li>Analyse Data-Driven</li>
+            <li>Documentation Technique</li>
+            <li>Troubleshooting Méthodique</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- English -->
+    <div lang="en">
+      <h2 class="section-title">Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>Programming</h3>
+          <ul>
+            <li>Python</li>
+            <li>C/C++</li>
+            <li>MATLAB</li>
+            <li>Arduino Framework</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Hardware</h3>
+          <ul>
+            <li>STM32 Microcontrollers</li>
+            <li>ESP32</li>
+            <li>Arduino Uno</li>
+            <li>Raspberry Pi</li>
+            <li>L298N, TB6612 Drivers</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Systems</h3>
+          <ul>
+            <li>PID Control</li>
+            <li>Odometry</li>
+            <li>I2C Communication</li>
+            <li>PWM & Encoders</li>
+            <li>Hardware Diagnostics</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Tools & Methods</h3>
+          <ul>
+            <li>VS Code / STM32</li>
+            <li>Git/GitHub</li>
+            <li>Data-Driven Analysis</li>
+            <li>Technical Documentation</li>
+            <li>Systematic Troubleshooting</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="text-align: center;">
+    <!-- French -->
+    <div lang="fr" class="active-lang">
+      <h2 class="section-title">Contact</h2>
+      <p style="color: var(--text-light); max-width: 600px; margin: 0 auto 2rem;">
+        Intéressé par mes projets ou souhaitez échanger autour de la robotique et des systèmes autonomes ?
+        N'hésitez pas à me contacter.
+      </p>
+    </div>
+
+    <!-- English -->
+    <div lang="en">
+      <h2 class="section-title">Contact</h2>
+      <p style="color: var(--text-light); max-width: 600px; margin: 0 auto 2rem;">
+        Interested in my projects or would like to discuss robotics and autonomous systems?
+        Feel free to contact me.
+      </p>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+      <a href="mailto:saidafatimazahraadiouf@gmail.com" class="cta-button">📧 Email</a>
+      <a href="https://www.linkedin.com/in/saida-fatimatou-zahraa-diouf" class="cta-button" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a>
+      <a href="https://github.com/fatima02d" class="cta-button" target="_blank" rel="noopener noreferrer">💻 GitHub</a>
+    </div>
+  </section>
+
+  <footer>
+    <p lang="fr" class="active-lang">&copy; 2026 - Portfolio Robotique & Systèmes intelligents</p>
+    <p lang="en">&copy; 2026 - Robotics & Intelligent Systems Portfolio</p>
+    <p lang="fr" class="active-lang" style="margin-top: 0.5rem; opacity: 0.7; font-size: 0.9rem;">Apprendre, concevoir, améliorer</p>
+    <p lang="en" style="margin-top: 0.5rem; opacity: 0.7; font-size: 0.9rem;">Learn, design, improve</p>
+  </footer>
+
+  <script>
+    // Language switching (FIXED: no reliance on global 'event')
+    let currentLang = "fr";
+
+    function switchLanguage(e, lang) {
+      currentLang = lang;
+
+      // Update active button
+      document.querySelectorAll(".lang-btn").forEach((btn) => btn.classList.remove("active"));
+      if (e && e.target) e.target.classList.add("active");
+
+      // Hide all language content
+      document.querySelectorAll("[lang]").forEach((el) => el.classList.remove("active-lang"));
+
+      // Show selected language content
+      document.querySelectorAll(`[lang="${lang}"]`).forEach((el) => el.classList.add("active-lang"));
+
+      // Update HTML lang attribute + logo
+      document.documentElement.lang = lang;
+      const logo = document.getElementById("logoLang");
+      if (logo) logo.textContent = lang.toUpperCase();
+    }
+
+    // Bind language buttons (no inline onclick)
+    document.querySelectorAll(".lang-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => switchLanguage(e, btn.dataset.lang));
+    });
+
+    // Ensure initial state is correct (FR visible)
+    window.addEventListener("DOMContentLoaded", () => {
+      // Force FR on first load (and keep FR button active)
+      const frBtn = document.querySelector('.lang-btn[data-lang="fr"]');
+      switchLanguage({ target: frBtn }, "fr");
+    });
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute("href"));
+        if (target) {
+          const navHeight = document.getElementById("navbar").offsetHeight;
+          const targetPosition = target.offsetTop - navHeight;
+          window.scrollTo({ top: targetPosition, behavior: "smooth" });
         }
+      });
+    });
 
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const navHeight = document.getElementById('navbar').offsetHeight;
-                    const targetPosition = target.offsetTop - navHeight;
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
+    // Navbar scroll effect
+    const navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 100) navbar.classList.add("scrolled");
+      else navbar.classList.remove("scrolled");
+    });
+
+    // Intersection Observer for animations (safe guard)
+    if ("IntersectionObserver" in window) {
+      const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+          }
         });
+      }, observerOptions);
 
-        // Navbar scroll effect
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.phase-card, .skill-category').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
-    </script>
+      document.querySelectorAll(".phase-card, .skill-category").forEach((el) => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(20px)";
+        el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        observer.observe(el);
+      });
+    } else {
+      // Fallback: show elements if IntersectionObserver not supported
+      document.querySelectorAll(".phase-card, .skill-category").forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0)";
+      });
+    }
+  </script>
 </body>
 </html>
