@@ -1,234 +1,332 @@
-🔧 Problèmes rencontrés – Projet Robot Autonome Pick & Place
-1️⃣ Instabilité mécanique du châssis
+# Phase 1 — Problèmes & Solutions
 
-Problème :
+**Projet :** Robot Mobile Autonome Pick & Place  
+**Auteure :** Saida Fatimatou Zahraa Diouf  
+**Période :** Janvier — Avril 2026  
 
-Le châssis en MDF/plexi fléchissait légèrement.
+---
 
-Vibrations lors des accélérations.
+## Philosophie
 
-Déformation quand une charge était ajoutée (bras robotique).
+En ingénierie, un problème n'est pas un échec. C'est une donnée. Chaque obstacle rencontré ici a mené à une meilleure décision.
 
-Impact :
+---
 
-Erreur dans la trajectoire.
+# PARTIE A — Plateforme 2WD (Plaque en bois) — Janvier-Avril 2026
 
-Perte de précision dans l’odometry.
+---
 
-Risque de basculement.
+## Problème A1 — Moteurs ne tournaient pas au départ
 
-Solution :
+**Statut :** ✅ Résolu  
 
-Serrage renforcé des entretoises.
+**Problème :** Code uploadé avec succès, Serial Monitor affiche les messages, mais aucun mouvement des moteurs.
 
-Redistribution du poids (batterie en bas).
+**Diagnostic méthodique :**
 
-Réduction du poids du bras.
+| Hypothèse testée | Résultat | Conclusion |
+|---|---|---|
+| Problème logiciel | Code simplifié → même résultat | ❌ Pas le code |
+| Pins PWM incorrectes | digitalWrite HIGH au lieu de analogWrite | ❌ Pas le PWM |
+| Batterie non connectée au L298N | Voltage mesuré sur Vmotor = 0V | ✅ Cause racine |
+| GND non commun Arduino/L298N | Pas de continuité mesurée | ✅ Cause secondaire |
 
-2️⃣ Moteurs non synchronisés (déviation en ligne droite)
+**Solution :** Connecter batterie 7.4V sur L298N + ajouter fil GND commun entre Arduino et L298N.
 
-Problème :
+**Leçon fondamentale :**
+```
+Alimentation logique (Arduino USB) ≠ Alimentation moteurs (batterie)
+GND commun = obligatoire pour que les signaux PWM aient une référence
+```
 
-Les deux moteurs n’avaient pas la même vitesse réelle malgré un PWM identique.
+---
 
-Le robot dérivait vers la gauche/droite.
+## Problème A2 — Confusion fils moteur vs fils encodeur
 
-Cause :
+**Statut :** ✅ Résolu  
+**Sévérité :** Modérée  
 
-Tolérances mécaniques.
+**Symptôme :** Tentative de brancher les fils Hall (encodeur) sur le L298N — aucun mouvement logiquement.
 
-Différence de friction.
+**Cause :** Mélange entre circuit de puissance (2 fils moteur) et circuit de mesure (4-6 fils encodeur).
 
-Variabilité interne des moteurs DC.
+**Clarification :**
+```
+Moteur DC avec encodeur = 6 fils au total
 
-Solution :
+Puissance (→ L298N) :
+  Rouge  = Moteur+
+  Noir   = Moteur-
 
-Utilisation des encodeurs.
+Encodeur (→ microcontrôleur) :
+  VCC    = 3.3V ou 5V
+  GND    = Masse
+  Hall A = Signal encodeur
+  Hall B = Signal encodeur (sens de rotation)
+```
 
-Implémentation d’un contrôle correctif (PID).
+**Leçon :** Puissance et mesure sont toujours deux circuits séparés en robotique.
 
-Calibration moteur gauche/droite.
+---
 
-3️⃣ Instabilité du contrôle PWM
+## Problème A3 — Canal B du L298N défectueux
 
-Problème :
+**Statut :** ⚠️ Non résolvable — composant grillé  
+**Sévérité :** Haute  
 
-À faible PWM, les moteurs ne démarraient pas.
+**Symptôme :** Moteur gauche fonctionne parfaitement, moteur droit immobile.
 
-À haut PWM, accélérations brutales.
+**Diagnostic :**
+1. Swap des moteurs physiquement → le moteur "défectueux" fonctionne sur canal A ✅
+2. Moteur fonctionnel placé sur canal B → ne tourne pas ❌
+3. Conclusion : Canal B du L298N grillé
 
-Cause :
+**Cause probable :** Surtension ou court-circuit lors du branchement initial.
 
-Zone morte du moteur DC.
+**Décision :** Ce problème, combiné aux autres limitations de la plateforme bois, a accéléré la migration vers le châssis Hiwonder à chenilles.
 
-Non-linéarité PWM → vitesse.
+---
 
-Solution :
+## Problème A4 — Châssis en bois trop flexible
 
-Détermination expérimentale de la zone morte.
+**Statut :** ✅ Résolu par migration  
+**Sévérité :** Haute  
 
-Courbe PWM vs vitesse réelle.
+**Symptôme :** Flexion visible de 2-3mm au centre du châssis avec 200g de charge. Vibrations lors des démarrages et arrêts.
 
-Filtrage logiciel des transitions.
+**Impact :**
+```
+Flexion châssis
+    ↓
+Désalignement des moteurs
+    ↓
+Forces non parallèles
+    ↓
+Déviation trajectoire + instabilité
+```
 
-4️⃣ Faux contacts et câblage instable
+**Données :**
+- Module de Young bois MDF : ~4000 MPa
+- Module de Young aluminium : ~69000 MPa
+- Châssis bois = 17x moins rigide que métal
 
-Problème :
+**Tentatives :**
+- Serrage entretoises → amélioration < 10%
+- Redistribution masse → flexion réduite à 1-2mm seulement
+- Limitation charge < 300g → incompatible avec bras robotique
 
-Connexions instables sur breadboard.
+**Conclusion :** Non résolvable sans changement de matériau.
 
-Fils qui se débranchent lors des vibrations.
+---
 
-Comportement erratique.
+## Problème A5 — Roue folle non-déterministe
 
-Impact :
+**Statut :** ✅ Résolu par migration  
+**Sévérité :** Critique — cause racine de la déviation  
 
-Debug difficile.
+**Symptôme :** Robot dévie de 13.4cm en moyenne sur 2 mètres. Déviation non reproductible.
 
-Mouvements aléatoires.
+**Mécanisme :**
+```
+La roue folle a une "mémoire" de direction
+    ↓
+Hystérésis directionnelle
+    ↓
+Friction latérale asymétrique et variable
+    ↓
+Comportement imprévisible
+```
 
-Solution :
+**Données empiriques :**
 
-Réorganisation complète du câblage.
+| Essai | Déviation sur 2m |
+|---|---|
+| 1 | 15cm gauche |
+| 2 | 8cm droite |
+| 3 | 12cm gauche |
+| 4 | 3cm droite |
+| 5 | 18cm gauche |
 
-Serre-câbles.
+Variance : ±18° → comportement non reproductible
 
-Connexions soudées pour les parties critiques.
+**Tentatives de compensation logicielle :**
+- Offset PWM fixe → déviation 13cm → 8cm (insuffisant)
+- Courbe PWM/vitesse → ~5cm (toujours insuffisant)
+- PID sans encodeurs → impossible (pas de feedback)
 
-5️⃣ Bruit électrique du L298N
+**Pourquoi insoluble logiciellement :** La friction de la roue folle varie à chaque instant et n'est pas observable. La compensation est toujours en retard, jamais préventive.
 
-Problème :
+**Solution :** Éliminer l'élément passif. Skid steering (chenilles) = zéro roue folle.
 
-Parasites électriques affectant les lectures encodeurs.
+---
 
-Reset occasionnel de l’Arduino.
+## Problème A6 — Moteurs non synchronisés
 
-Cause :
+**Statut :** ⚠️ Partiellement résolu, résolu par migration  
+**Sévérité :** Haute  
 
-Pic de courant lors du démarrage moteur.
+**Symptôme :** À PWM identique, moteur droit ~5-6% plus rapide que moteur gauche.
 
-Absence de filtrage.
+**Causes :**
+- Tolérance de fabrication des moteurs DC (±5% normale)
+- Friction asymétrique roue folle
+- Charge déséquilibrée
 
-Solution :
+**Tentative :**
+```cpp
+// Compensation offset fixe
+analogWrite(ENA, vitesse);
+analogWrite(ENB, vitesse * 0.95);
+```
+Résultat : amélioration partielle, offset varie avec la vitesse.
 
-Séparation alimentation logique / moteurs.
+**Solution définitive :** Encodeurs + PID en boucle fermée (Phase 2, nouveau châssis).
 
-Ajout de condensateurs de découplage.
+---
 
-Mise à la masse commune propre.
+## Problème A7 — Bruit électrique et parasites
 
-6️⃣ Erreur cumulative en navigation (Dead Reckoning)
+**Statut :** ✅ Atténué  
+**Sévérité :** Modérée  
 
-Problème :
+**Symptôme :** Lectures encodeurs erratiques, reset Arduino spontané lors du démarrage des moteurs.
 
-L’erreur de position augmentait avec la distance.
+**Cause :** Interférence électromagnétique (EMI) des moteurs DC et commutations L298N.
 
-Déviation significative sur longue trajectoire.
+**Solutions :**
+- Séparation physique câbles puissance / signal (min 3cm)
+- Condensateurs découplage 100µF sur Vmotor
+- Arduino alimenté par USB séparément pendant tests
 
-Cause :
+---
 
-Glissement des roues.
+## Décision stratégique — Migration vers chenilles
 
-Approximation du diamètre réel.
+**Date :** Mars 2026
 
-Jeu mécanique.
+**Bilan :**
 
-Solution :
+| Catégorie | Nb problèmes |
+|---|---|
+| Résolvables logiciellement | 2/7 (29%) |
+| Nécessitent upgrade hardware | 5/7 (71%) |
 
-Calibration du diamètre effectif.
+**Comparaison :**
 
-Réduction de la vitesse.
+| Option | Coût | Probabilité succès Phase 8 |
+|---|---|---|
+| Continuer plateforme bois | 0$ + ~40h debug | < 20% |
+| Migration châssis chenilles | ~120$ + 1 semaine | > 80% |
 
-Ajout futur possible de capteurs externes.
+**Décision : Migration.**
 
-7️⃣ Instabilité du suivi de ligne à haute vitesse
+**Composants récupérés :**
+- Arduino UNO → réserve
+- L298N (canal A fonctionnel) → réserve
+- Câbles, résistances → réutilisés
 
-Problème :
+---
 
-Oscillations autour de la ligne.
+# PARTIE B — Plateforme Chenilles Hiwonder — Avril 2026
 
-Perte de trajectoire à grande vitesse.
+---
 
-Cause :
+## Problème B1 — Connecteur LiPo incompatible avec Hiwonder
 
-Temps de réponse trop lent.
+**Statut :** ⏳ En attente d'achat  
+**Sévérité :** Bloquant pour tests moteurs  
 
-Gain PID mal ajusté.
+**Symptôme :** Connecteur XT30/XT60 de la LiPo Zeee ne rentre pas dans le port PWR Hiwonder (JST).
 
-Solution :
+**Solution :** Adaptateur XT30 → JST (~8$). Ne pas couper/souder les fils LiPo.
 
-Réglage empirique du PID.
+**Temporaire :** Piles AA du châssis pour premiers tests.
 
-Réduction de la vitesse maximale.
+---
 
-Lissage des corrections.
+## Problème B2 — Micro SD incompatible RPi
 
-8️⃣ Détection ultrason imprécise
+**Statut :** ✅ Identifié, solution claire  
+**Sévérité :** Bloquant pour OS  
 
-Problème :
+**Symptôme :** Carte SD standard ne rentre pas dans le slot RPi 4B.
 
-Mesures incohérentes.
+**Cause :** RPi 4B utilise une **micro SD** exclusivement.
 
-Faux positifs.
+**Solution :** SanDisk micro SD 32GB Class 10 (~15$).
 
-Variabilité selon l’angle.
+---
 
-Cause :
+## Problème B3 — Alimentation RPi en mobilité
 
-Surface non perpendiculaire.
+**Statut :** ✅ Solution temporaire en place  
 
-Réflexion irrégulière.
+**Options évaluées :**
 
-Solution :
+| Option | Courant | Verdict |
+|---|---|---|
+| Powerbank Podoru | ~2A | ✅ Tests statiques OK |
+| Résistance | N/A | ❌ Dissipe en chaleur |
+| Condensateur | N/A | ❌ Stocke, ne convertit pas |
+| LM2596 buck converter | 3A | ✅ Solution finale (~5$) |
 
-Moyenne de plusieurs mesures.
+**Temporaire :** Powerbank Podoru.  
+**Final :** LM2596 alimenté par LiPo → single-battery.
 
-Seuil adaptatif.
+---
 
-Limitation de la vitesse d’approche.
+## Problème B4 — Signal ECHO HC-SR04 incompatible GPIO RPi
 
-9️⃣ Centre de gravité trop élevé avec bras
+**Statut :** ✅ Résolu  
+**Sévérité :** Critique — risque griller GPIO  
 
-Problème :
+**Cause :** HC-SR04 sort 5V sur ECHO, RPi GPIO accepte max 3.3V.
 
-Tendance au basculement quand le bras s’étend.
+**Solution — diviseur de tension :**
+```
+ECHO (5V) ──── 1kΩ ──── RPi Pin 13 (GPIO27)
+                    |
+                   2kΩ
+                    |
+                   GND
 
-Perte d’adhérence des roues arrière.
+Résultat = 5V × (2kΩ / 3kΩ) = 3.33V ✅
+```
 
-Solution :
+Seul ECHO nécessite ce traitement. TRIG est accepté nativement par le HC-SR04.
 
-Positionnement du bras plus centré.
+---
 
-Batterie déplacée vers l’arrière.
+## Problème B5 — Identification pins GPIO RPi
 
-Limitation de l’extension maximale.
+**Statut :** ✅ Résolu  
 
-🔟 Complexité d’intégration finale
+**Règle :**
+- Rangée gauche = pins impairs (1, 3, 5...)
+- Rangée droite = pins pairs (2, 4, 6...)
+- Pin 1 = coin côté port Display/Caméra (pad carré visible sous la carte)
 
-Problème :
+---
 
-Chaque module fonctionnait séparément.
+## Problème B6 — L298N et Arduino non nécessaires
 
-Problèmes lors de l’intégration complète.
+**Statut :** ✅ Décision documentée  
 
-Conflits de timing et interruptions.
+| Composant | Remplacé par | Raison |
+|---|---|---|
+| L298N | Hiwonder Encoder Module | Driver I2C intégré au châssis |
+| Arduino UNO | RPi 4B + ESP32 | Architecture plus adaptée |
 
-Solution :
+Gardés en réserve pour projets futurs.
 
-Implémentation d’une Machine à États Finis (FSM).
+---
 
-Modularisation du code.
+## Résumé des achats déclenchés par les problèmes
 
-Tests progressifs par sous-systèmes.
+| Problème | Achat |
+|---|---|
+| Connecteur LiPo incompatible | Adaptateur XT30 → JST | 
+| Micro SD manquante | SanDisk micro SD 32GB |
+| Fils insuffisants | Jumper M-F 40pcs | 
+| LiPo sans chargeur | Chargeur CHICIRIS TE3AC | 
 
-💡 Leçons apprises
-
-Un projet robotique est 70% intégration, 30% code.
-
-La mécanique influence fortement la précision logicielle.
-
-La gestion d’énergie est critique.
-
-La robustesse passe par la simplification.
-
-Tester chaque module indépendamment est essentiel.
