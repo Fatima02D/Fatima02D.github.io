@@ -1,120 +1,495 @@
-# 🤖 Robot Mobile Autonome — Pick & Place
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Saida Fatimatou Zahraa Diouf — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #1a1a1a;
+      --accent: #d4af37;
+      --secondary: #2c5f2d;
+      --bg: #fafaf8;
+      --text: #2a2a2a;
+      --text-light: #666;
+      --border: #e0ddd5;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Work Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+    nav {
+      position:fixed; top:0; width:100%; z-index:1000;
+      background:rgba(250,250,248,0.96); backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner {
+      max-width:1200px; margin:0 auto; padding:1.2rem 2rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .logo { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:var(--primary); cursor:pointer; }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a { color:var(--text); text-decoration:none; font-weight:500; font-size:0.95rem; cursor:pointer; transition:color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--accent); }
+    .nav-links a.active { border-bottom:2px solid var(--accent); padding-bottom:2px; }
+    .lang-toggle { display:flex; gap:0.3rem; background:#f0ede6; border-radius:20px; padding:0.25rem; }
+    .lang-btn { padding:0.35rem 0.9rem; border:none; background:transparent; border-radius:16px; cursor:pointer; font-size:0.8rem; font-weight:600; color:var(--text-light); transition:all 0.2s; }
+    .lang-btn.active { background:var(--accent); color:#fff; }
+    .page { display:none; min-height:100vh; padding-top:70px; }
+    .page.active { display:block; }
+    .hero {
+      min-height:calc(100vh - 70px);
+      display:flex; align-items:center;
+      padding:4rem 2rem;
+      background:linear-gradient(135deg,#f5f5f0 0%,#e8e6db 100%);
+      border-bottom:3px solid var(--accent);
+    }
+    .hero-inner { max-width:900px; margin:0 auto; }
+    .hero h1 {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2.8rem,7vw,5rem);
+      font-weight:900; line-height:1.05;
+      color:var(--primary); margin-bottom:1.2rem;
+    }
+    .hero-sub { font-size:1.15rem; color:var(--text-light); margin-bottom:2rem; max-width:600px; }
+    .hero-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-top:2.5rem; }
+    .hero-card { background:#fff; border-radius:10px; padding:1.2rem 1.5rem; border-top:3px solid var(--accent); }
+    .hero-card .num { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--accent); }
+    .hero-card .label { font-size:0.85rem; color:var(--text-light); margin-top:0.2rem; }
+    .btn { display:inline-block; padding:0.9rem 2rem; background:var(--accent); color:#fff; font-weight:600; border:none; border-radius:6px; cursor:pointer; font-size:0.95rem; transition:all 0.3s; text-decoration:none; }
+    .btn:hover { background:var(--secondary); transform:translateY(-2px); }
+    .btn-outline { background:transparent; color:var(--accent); border:2px solid var(--accent); margin-left:1rem; }
+    .btn-outline:hover { background:var(--accent); color:#fff; }
+    .about-strip { max-width:1200px; margin:0 auto; padding:5rem 2rem; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+    .about-strip h2 { font-family:'Playfair Display',serif; font-size:2rem; margin-bottom:1.5rem; }
+    .about-strip p { color:var(--text-light); line-height:1.9; margin-bottom:1rem; }
+    .about-strip strong { color:var(--text); }
+    .lang-tag { display:inline-block; background:#f0ede6; border-radius:20px; padding:0.3rem 0.9rem; font-size:0.85rem; color:var(--text); margin:0.2rem; }
+    .page-header { background:var(--primary); color:#fff; padding:5rem 2rem 3rem; }
+    .page-header h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:900; }
+    .page-header p { color:rgba(255,255,255,0.6); margin-top:0.5rem; }
+    .projects-grid { max-width:1200px; margin:0 auto; padding:4rem 2rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:2rem; }
+    .project-card { background:#fff; border-radius:14px; overflow:hidden; border:1px solid var(--border); transition:all 0.3s; cursor:pointer; }
+    .project-card:hover { transform:translateY(-6px); box-shadow:0 12px 40px rgba(0,0,0,0.12); }
+    .project-card-header { background:var(--primary); padding:2rem; color:#fff; border-bottom:3px solid var(--accent); }
+    .project-card-header .tag { font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); margin-bottom:0.8rem; }
+    .project-card-header h3 { font-family:'Playfair Display',serif; font-size:1.4rem; }
+    .project-card-body { padding:2rem; }
+    .project-card-body p { color:var(--text-light); font-size:0.95rem; line-height:1.8; margin-bottom:1.5rem; }
+    .tech-tags { display:flex; flex-wrap:wrap; gap:0.4rem; }
+    .tech-tag { background:var(--accent); color:#fff; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.78rem; }
+    .status-badge { display:inline-block; padding:0.3rem 0.9rem; border-radius:20px; font-size:0.78rem; font-weight:600; }
+    .status-active { background:#dcfce7; color:#166534; }
+    .status-planned { background:#e0e7ff; color:#3730a3; }
+    .status-completed { background:#fef3c7; color:#92400e; }
+    .project-detail { display:none; }
+    .project-detail.active { display:block; }
+    .projects-list { display:block; }
+    .projects-list.hidden { display:none; }
+    .back-btn { display:inline-flex; align-items:center; gap:0.5rem; padding:0.6rem 1.2rem; background:#f0ede6; border:none; border-radius:6px; cursor:pointer; font-size:0.9rem; color:var(--text); margin:1.5rem 2rem; font-family:'Work Sans',sans-serif; transition:background 0.2s; }
+    .back-btn:hover { background:var(--border); }
+    .project-detail-inner { max-width:1000px; margin:0 auto; padding:2rem; }
+    .detail-section { margin-bottom:3rem; }
+    .detail-section h2 { font-family:'Playfair Display',serif; font-size:1.8rem; margin-bottom:1.2rem; padding-bottom:0.5rem; border-bottom:2px solid var(--accent); display:inline-block; }
+    .detail-section p { color:var(--text-light); line-height:1.9; margin-bottom:1rem; }
+    .detail-section strong { color:var(--text); }
+    .phases-table { width:100%; border-collapse:collapse; }
+    .phases-table th { background:var(--primary); color:#fff; padding:0.8rem 1rem; text-align:left; font-weight:500; font-size:0.9rem; }
+    .phases-table td { padding:0.9rem 1rem; border-bottom:1px solid var(--border); font-size:0.9rem; }
+    .phases-table tr:hover td { background:#f9f7f2; }
+    .phases-table tr.current td { background:#fef3c7; }
+    .hw-table { width:100%; border-collapse:collapse; }
+    .hw-table th { background:var(--primary); color:#fff; padding:0.8rem 1rem; text-align:left; font-weight:500; font-size:0.9rem; }
+    .hw-table td { padding:0.9rem 1rem; border-bottom:1px solid var(--border); font-size:0.9rem; color:var(--text-light); }
+    .hw-table td:first-child { color:var(--text); font-weight:500; }
+    .arch-block { background:var(--primary); color:#e8e6e0; border-radius:10px; padding:2rem; font-family:monospace; font-size:0.9rem; line-height:2; }
+    .arch-block .gold { color:var(--accent); }
+    .arch-block .green { color:#52b788; }
+    .skills-wrap { max-width:1200px; margin:0 auto; padding:4rem 2rem; }
+    .skills-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1.5rem; margin-bottom:5rem; }
+    .skill-card { background:#fff; border-radius:12px; padding:1.5rem; border-top:3px solid var(--accent); }
+    .skill-card h3 { font-family:'Playfair Display',serif; font-size:1.1rem; margin-bottom:1rem; }
+    .skill-card ul { list-style:none; }
+    .skill-card li { padding:0.45rem 0; border-bottom:1px solid var(--border); color:var(--text-light); font-size:0.9rem; }
+    .skill-card li:last-child { border-bottom:none; }
+    .contact-section { background:var(--primary); border-radius:16px; padding:3rem; color:#fff; }
+    .contact-section h2 { font-family:'Playfair Display',serif; font-size:2rem; margin-bottom:0.5rem; }
+    .contact-section p { color:rgba(255,255,255,0.6); margin-bottom:2rem; }
+    .contact-links { display:flex; flex-wrap:wrap; gap:1rem; }
+    .contact-link { display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; text-decoration:none; font-size:0.9rem; transition:all 0.3s; }
+    .contact-link:hover { background:var(--accent); border-color:var(--accent); }
+    @media(max-width:768px) {
+      .about-strip { grid-template-columns:1fr; gap:2rem; }
+      .hero-cards { grid-template-columns:1fr; }
+      .btn-outline { margin-left:0; margin-top:0.8rem; }
+    }
+  </style>
+</head>
+<body>
 
-**Auteure :** Saida Fatimatou Zahraa Diouf  
-**Programme :** Génie Mécatronique — UQTR  
-**Période :** 2026  
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="showPage('accueil')">Saida Fatimatou Zahraa Diouf</div>
+    <ul class="nav-links">
+      <li><a onclick="showPage('accueil')" id="nav-accueil" class="active">
+        <span class="fr">Accueil</span><span class="en" style="display:none">Home</span>
+      </a></li>
+      <li><a onclick="showPage('projets')" id="nav-projets">
+        <span class="fr">Projets</span><span class="en" style="display:none">Projects</span>
+      </a></li>
+      <li><a onclick="showPage('competences')" id="nav-competences">
+        <span class="fr">Compétences</span><span class="en" style="display:none">Skills</span>
+      </a></li>
+    </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
 
----
+<!-- ACCUEIL -->
+<div class="page active" id="page-accueil">
+  <div class="hero">
+    <div class="hero-inner">
+      <h1>
+        <span class="fr">Robotique &<br>Systèmes Autonomes</span>
+        <span class="en" style="display:none">Robotics &<br>Autonomous Systems</span>
+      </h1>
+      <p class="hero-sub">
+        <span class="fr">Saida Fatimatou Zahraa Diouf — Étudiante en génie mécatronique</span>
+        <span class="en" style="display:none">Saida Fatimatou Zahraa Diouf — Mechatronics Engineering Student</span>
+      </p>
+      <button class="btn" onclick="showPage('projets')">
+        <span class="fr">Voir mes projets</span>
+        <span class="en" style="display:none">View my projects</span>
+      </button>
+      <button class="btn btn-outline" onclick="showPage('competences')">
+        <span class="fr">Compétences</span>
+        <span class="en" style="display:none">Skills</span>
+      </button>
+      <div class="hero-cards" style="max-width:300px;">
+        <div class="hero-card">
+          <div class="num" style="font-size:1rem; padding-top:0.3rem;">
+            <span class="fr">Projet en cours</span>
+            <span class="en" style="display:none">Current project</span>
+          </div>
+          <div class="label fr">Robot autonome Pick &amp; Place</div>
+          <div class="label en" style="display:none">Autonomous Pick &amp; Place Robot</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="about-strip">
+    <div>
+      <h2 class="fr">À propos</h2>
+      <h2 class="en" style="display:none">About</h2>
+      <p class="fr">Étudiante en <strong>génie mécatronique à l'UQTR</strong>, je développe des compétences en robotique, systèmes embarqués et intelligence artificielle à travers des projets concrets et documentés rigoureusement.</p>
+      <p class="en" style="display:none">Mechatronics engineering student at <strong>UQTR</strong>, I develop skills in robotics, embedded systems, and artificial intelligence through concrete, rigorously documented projects.</p>
+    </div>
+    <div>
+      <h2 class="fr">Langues</h2>
+      <h2 class="en" style="display:none">Languages</h2>
+      <p style="margin-bottom:1rem;">
+        <span class="lang-tag">Français</span>
+        <span class="lang-tag">English</span>
+        <span class="lang-tag">Seereer</span>
+        <span class="lang-tag">Wolof</span>
+      </p>
+      <h2 class="fr" style="margin-top:2rem;">Formation</h2>
+      <h2 class="en" style="display:none; margin-top:2rem;">Education</h2>
+      <p class="fr"><strong>B.Ing Génie Mécatronique</strong> — UQTR<br><strong>Certificat en gestion de projet</strong></p>
+      <p class="en" style="display:none"><strong>B.Eng Mechatronics Engineering</strong> — UQTR<br><strong>Project Management Certificate</strong></p>
+    </div>
+  </div>
+</div>
 
-## 🌍 Pourquoi ce projet ?
+<!-- PROJETS -->
+<div class="page" id="page-projets">
+  <div class="projects-list" id="projects-list">
+    <div class="page-header">
+      <h1 class="fr">Projets</h1>
+      <h1 class="en" style="display:none">Projects</h1>
+      <p class="fr">Développement technique documenté et progressif</p>
+      <p class="en" style="display:none">Progressive and documented technical development</p>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card" onclick="showProject('robot')">
+        <div class="project-card-header">
+          <div class="tag fr">Robotique — 2026</div>
+          <div class="tag en" style="display:none">Robotics — 2026</div>
+          <h3 class="fr">Robot Mobile Autonome<br>Pick &amp; Place</h3>
+          <h3 class="en" style="display:none">Autonomous Mobile Robot<br>Pick &amp; Place</h3>
+        </div>
+        <div class="project-card-body">
+          <p class="fr">Robot à chenilles capable de naviguer, détecter une balle et la déplacer d'un point A à un point B. Mode téléopéré (Xbox) et autonome.</p>
+          <p class="en" style="display:none">Tracked robot capable of navigating, detecting a ball, and moving it from point A to point B. Teleoperated (Xbox) and autonomous modes.</p>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="tech-tags">
+              <span class="tech-tag">RPi 4B</span>
+              <span class="tech-tag">ESP32</span>
+              <span class="tech-tag">ROS2</span>
+              <span class="tech-tag">OpenCV</span>
+            </div>
+            <span class="status-badge status-active fr">En cours</span>
+            <span class="status-badge status-active en" style="display:none">In progress</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-Ce projet est ma façon d'apprendre la robotique en construisant quelque chose de concret — un robot capable de se déplacer, de se repérer dans l'espace, et de ramasser un objet pour le déposer ailleurs.
+  <div class="project-detail" id="detail-robot">
+    <button class="back-btn" onclick="showProjectsList()">← <span class="fr">Retour aux projets</span><span class="en" style="display:none">Back to projects</span></button>
+    <div class="project-detail-inner">
+      <div class="detail-section">
+        <div style="background:var(--primary); color:#fff; border-radius:12px; padding:2.5rem; border-bottom:3px solid var(--accent); margin-bottom:2rem;">
+          <p style="color:var(--accent); font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.8rem;">Robotique — 2026</p>
+          <h1 style="font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:900;" class="fr">Robot Mobile Autonome — Pick &amp; Place</h1>
+          <h1 style="font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:900;" class="en" style="display:none">Autonomous Mobile Robot — Pick &amp; Place</h1>
+          <p style="color:rgba(255,255,255,0.6); margin-top:0.8rem;" class="fr">Châssis à chenilles · RPi 4B · ESP32 · ROS2 · Vision</p>
+          <p style="color:rgba(255,255,255,0.6); margin-top:0.8rem;" class="en" style="display:none">Tracked chassis · RPi 4B · ESP32 · ROS2 · Vision</p>
+        </div>
+        <h2 class="fr">Objectif</h2>
+        <h2 class="en" style="display:none">Objective</h2>
+        <p class="fr">Construire un robot à chenilles capable de se déplacer de façon hybride (téléopéré et autonome), de se repérer dans l'espace, de détecter une balle par vision, de la saisir avec un bras robotique, et de la déposer à un point défini.</p>
+        <p class="en" style="display:none">Build a tracked robot capable of moving in hybrid mode (teleoperated and autonomous), localizing itself, detecting a ball by vision, grasping it with a robotic arm, and placing it at a defined point.</p>
+      </div>
 
-C'est un premier pas. 
+      <div class="detail-section">
+        <h2 class="fr">Feuille de route</h2>
+        <h2 class="en" style="display:none">Roadmap</h2>
+        <table class="phases-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th class="fr">Phase</th><th class="en" style="display:none">Phase</th>
+              <th class="fr">Description</th><th class="en" style="display:none">Description</th>
+              <th class="fr">Statut</th><th class="en" style="display:none">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="current">
+              <td>01</td>
+              <td class="fr"><strong>Base Hardware</strong></td><td class="en" style="display:none"><strong>Hardware Base</strong></td>
+              <td class="fr">Assemblage, câblage, architecture système</td><td class="en" style="display:none">Assembly, wiring, system architecture</td>
+              <td><span class="status-badge status-active fr">En cours</span><span class="status-badge status-active en" style="display:none">In progress</span></td>
+            </tr>
+            <tr><td>02</td>
+              <td class="fr">Téléopération Xbox</td><td class="en" style="display:none">Xbox Teleoperation</td>
+              <td class="fr">ESP32 Bluetooth → RPi → Hiwonder I2C</td><td class="en" style="display:none">ESP32 Bluetooth → RPi → Hiwonder I2C</td>
+              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
+            </tr>
+            <tr><td>03</td>
+              <td class="fr">Odométrie</td><td class="en" style="display:none">Odometry</td>
+              <td class="fr">Encodeurs + IMU — position (x, y, θ)</td><td class="en" style="display:none">Encoders + IMU — position (x, y, θ)</td>
+              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
+            </tr>
+            <tr><td>04</td>
+              <td class="fr">Évitement obstacles</td><td class="en" style="display:none">Obstacle avoidance</td>
+              <td class="fr">HC-SR04 — détection temps réel</td><td class="en" style="display:none">HC-SR04 — real-time detection</td>
+              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
+            </tr>
+            <tr><td>05</td>
+              <td class="fr">Navigation A→B</td><td class="en" style="display:none">A→B Navigation</td>
+              <td class="fr">Planification de trajectoire autonome</td><td class="en" style="display:none">Autonomous path planning</td>
+              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
+            </tr>
+            <tr><td>06</td>
+              <td class="fr">Vision</td><td class="en" style="display:none">Vision</td>
+              <td class="fr">Caméra RPi + OpenCV — détection balle HSV</td><td class="en" style="display:none">RPi Camera + OpenCV — HSV ball detection</td>
+              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
+            </tr>
+            <tr><td>07</td>
+              <td class="fr">Bras robotique 5-DOF</td><td class="en" style="display:none">5-DOF Robotic Arm</td>
+              <td class="fr">STM32 → servos, cinématique inverse</td><td class="en" style="display:none">STM32 → servos, inverse kinematics</td>
+              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
+            </tr>
+            <tr><td>08</td>
+              <td><strong>Pick &amp; Place</strong></td>
+              <td class="fr">Système intégré complet</td><td class="en" style="display:none">Full integrated system</td>
+              <td><span class="status-badge status-planned fr">Objectif final</span><span class="status-badge status-planned en" style="display:none">Final goal</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
+      <div class="detail-section">
+        <h2 class="fr">Hardware</h2>
+        <h2 class="en" style="display:none">Hardware</h2>
+        <table class="hw-table">
+          <thead>
+            <tr>
+              <th class="fr">Composant</th><th class="en" style="display:none">Component</th>
+              <th class="fr">Rôle</th><th class="en" style="display:none">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Raspberry Pi 4B 4GB</td><td class="fr">Cerveau central + ROS2 + Vision</td><td class="en" style="display:none">Central brain + ROS2 + Vision</td></tr>
+            <tr><td>ESP32 TTGO T-Display V1.1</td><td class="fr">Bluetooth Xbox + écran TFT 1.14"</td><td class="en" style="display:none">Xbox Bluetooth + 1.14" TFT screen</td></tr>
+            <tr><td>STM32</td><td class="fr">Contrôle bras robotique (Phase 7)</td><td class="en" style="display:none">Robotic arm control (Phase 7)</td></tr>
+            <tr><td>Hiwonder Chassis + Encoder Module V1.4</td><td class="fr">Châssis alu + moteurs DC encodeurs + driver I2C</td><td class="en" style="display:none">Aluminum chassis + DC motors with encoders + I2C driver</td></tr>
+            <tr><td>HC-SR04</td><td class="fr">Détection obstacles — diviseur tension sur ECHO</td><td class="en" style="display:none">Obstacle detection — voltage divider on ECHO</td></tr>
+            <tr><td>LiPo Zeee 7.4V 2200mAh</td><td class="fr">Alimentation moteurs</td><td class="en" style="display:none">Motor power supply</td></tr>
+            <tr><td>Manette Xbox</td><td class="fr">Téléopération Bluetooth</td><td class="en" style="display:none">Bluetooth teleoperation</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-## 🎯 Objectif du projet
+      <div class="detail-section">
+        <h2 class="fr">Architecture système</h2>
+        <h2 class="en" style="display:none">System architecture</h2>
+        <div class="arch-block">
+<span class="gold">Xbox Controller</span> (Bluetooth)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+<span class="gold">ESP32 TTGO</span> &nbsp;&nbsp;← Bluetooth + écran TFT dashboard<br>
+&nbsp;&nbsp;&nbsp;&nbsp;↓ UART<br>
+<span class="gold">Raspberry Pi 4B</span> ← Cerveau central + ROS2 + Vision<br>
+&nbsp;&nbsp;&nbsp;&nbsp;↓ I2C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ UART<br>
+<span class="green">Hiwonder Module</span> &nbsp;&nbsp;<span class="green">STM32</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;↓ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+<span class="green">Moteurs + Encodeurs</span> &nbsp;<span class="green">Bras 5-DOF</span>
+        </div>
+      </div>
 
-Construire un robot à chenilles capable de :
+      <div class="detail-section">
+        <h2 class="fr">Documentation</h2>
+        <h2 class="en" style="display:none">Documentation</h2>
+        <p class="fr">Le projet est entièrement documenté sur GitHub — logbook de chaque session, schémas de câblage, troubleshooting et code source.</p>
+        <p class="en" style="display:none">The project is fully documented on GitHub — session logbook, wiring diagrams, troubleshooting and source code.</p>
+        <br>
+        <a href="https://github.com/fatima02d/mobile-manipulator-robot" target="_blank" class="btn">GitHub →</a>
+      </div>
+    </div>
+  </div>
+</div>
 
-1. **Se déplacer** de façon hybride: autonome et contrôlée (téléopération via manette Xbox)
-2. **Se repérer** dans l'espace (odométrie + capteurs)
-3. **Détecter** un objet (vision par caméra)
-4. **Ramasser** cet objet (bras robotique)
-5. **Le déposer** à un point B défini (navigation autonome)
+<!-- COMPÉTENCES -->
+<div class="page" id="page-competences">
+  <div class="page-header">
+    <h1 class="fr">Compétences</h1>
+    <h1 class="en" style="display:none">Skills</h1>
+    <p class="fr">Techniques, outils et méthodes</p>
+    <p class="en" style="display:none">Technical skills, tools and methods</p>
+  </div>
+  <div class="skills-wrap">
+    <div class="skills-grid">
+      <div class="skill-card">
+        <h3 class="fr">Programmation</h3>
+        <h3 class="en" style="display:none">Programming</h3>
+        <ul>
+          <li>Python</li>
+          <li>C / C++</li>
+          <li>MATLAB</li>
+          <li>VHDL</li>
+          <li>ROS2</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <h3>Hardware</h3>
+        <ul>
+          <li>Raspberry Pi 4B</li>
+          <li>ESP32 / STM32</li>
+          <li>FPGA (Nexys A7)</li>
+          <li>I2C / UART / SPI</li>
+          <li>PWM &amp; Encodeurs</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <h3 class="fr">Mécatronique</h3>
+        <h3 class="en" style="display:none">Mechatronics</h3>
+        <ul>
+          <li>SolidWorks</li>
+          <li>Contrôle PID</li>
+          <li>Odométrie</li>
+          <li>OpenCV</li>
+          <li class="fr">Cinématique inverse</li>
+          <li class="en" style="display:none">Inverse kinematics</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <h3 class="fr">Outils</h3>
+        <h3 class="en" style="display:none">Tools</h3>
+        <ul>
+          <li>Git / GitHub</li>
+          <li>Linux</li>
+          <li>Vivado / Vitis</li>
+          <li class="fr">Documentation technique</li>
+          <li class="en" style="display:none">Technical documentation</li>
+          <li class="fr">Gestion de projet</li>
+          <li class="en" style="display:none">Project management</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <h3 class="fr">Formation</h3>
+        <h3 class="en" style="display:none">Education</h3>
+        <ul>
+          <li class="fr">B.Ing Génie Mécatronique — UQTR</li>
+          <li class="en" style="display:none">B.Eng Mechatronics — UQTR</li>
+          <li class="fr">Certificat en gestion de projet</li>
+          <li class="en" style="display:none">Project Management Certificate</li>
+                <li class="fr">Licence en génie systèmes insdutriels</li>
+          <li class="en" style="display:none">Bachelor in Industrial systems</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <h3 class="fr">Langues</h3>
+        <h3 class="en" style="display:none">Languages</h3>
+        <ul>
+          <li>Français</li>
+          <li>English</li>
+          <li>Seereer</li>
+          <li>Wolof</li>
+        </ul>
+      </div>
+    </div>
+    <div class="contact-section">
+      <h2>Contact</h2>
+      <p class="fr">Intéressé·e par mon profil ou mes projets ?</p>
+      <p class="en" style="display:none">Interested in my profile or projects?</p>
+      <div class="contact-links">
+        <a href="mailto:saidafatimazahraadiouf@gmail.com" class="contact-link">✉ Email</a>
+        <a href="https://github.com/fatima02d" target="_blank" class="contact-link">⌥ GitHub</a>
+        <a href="https://www.linkedin.com/in/saida-fatimatou-zahraa-diouf" target="_blank" class="contact-link">◈ LinkedIn</a>
+        <a href="https://fatima02d.github.io" target="_blank" class="contact-link">◉ Portfolio</a>
+      </div>
+    </div>
+  </div>
+</div>
 
----
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const navEl = document.getElementById('nav-' + name);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo(0, 0);
+    if (name === 'projets') showProjectsList();
+  }
 
-## 🛠️ Hardware utilisé
+  function showProject(id) {
+    document.getElementById('projects-list').classList.add('hidden');
+    document.querySelectorAll('.project-detail').forEach(d => d.classList.remove('active'));
+    document.getElementById('detail-' + id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
 
-| Composant | Rôle |
-|---|---|
-| Châssis Hiwonder à chenilles | Locomotion tout-terrain |
-| Raspberry Pi 4B 4GB | Cerveau central + ROS2 |
-| ESP32 TTGO T-Display | Communication Bluetooth + écran |
-| STM32 | Contrôle bras robotique (phase 2) |
-| Hiwonder Encoder Motor Module | Driver moteurs + encodeurs |
-| HC-SR04 | Détection d'obstacles |
-| LiPo 7.4V 2200mAh | Alimentation moteurs |
-| Manette Xbox | Téléopération |
-| Caméra RPi (phase 2) | Vision + détection balle |
-| Bras 5DOF (phase 2) | Manipulation |
+  function showProjectsList() {
+    document.getElementById('projects-list').classList.remove('hidden');
+    document.querySelectorAll('.project-detail').forEach(d => d.classList.remove('active'));
+  }
 
----
+  function setLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+    document.documentElement.lang = lang;
+    const hide = lang === 'fr' ? 'en' : 'fr';
+    document.querySelectorAll('.' + lang).forEach(el => el.style.display = '');
+    document.querySelectorAll('.' + hide).forEach(el => el.style.display = 'none');
+  }
 
-## 🗺️ Feuille de route
+  window.addEventListener('DOMContentLoaded', () => setLang('fr'));
+</script>
+</body>
+</html>
 
-```
-Phase 1 — Base hardware .............. ✅ EN COURS
-Phase 2 — Téléopération Xbox ......... ⏳ Prochaine
-Phase 3 — Odométrie + localisation ... 📅 Planifiée
-Phase 4 — Évitement d'obstacles ...... 📅 Planifiée
-Phase 5 — Navigation autonome A→B .... 📅 Planifiée
-Phase 6 — Vision (détection balle) ... 📅 Planifiée
-Phase 7 — Bras robotique ............. 📅 Planifiée
-Phase 8 — Pick & Place complet ....... 📅 Finale
-```
-
----
-
-## ⚙️ Architecture système
-
-```
-Xbox Controller (Bluetooth)
-        ↓
-      ESP32          ← communication + écran TFT
-        ↓ UART
-   Raspberry Pi 4    ← cerveau central + ROS2
-        ↓ I2C
-  Hiwonder Module    ← moteurs + encodeurs
-        ↓
-  Chenilles gauche / droite
-```
-
----
-
-## 📁 Structure du repo
-
-```
-mobile-manipulator-robot/
-├── README.md
-├── docs/
-│   ├── logbook.md        ← journal de bord
-│   ├── hardware.md       ← branchements + inventaire
-│   └── decisions.md      ← choix techniques justifiés
-├── firmware/
-│   ├── esp32/
-│   └── stm32/
-├── ros2_ws/              ← phase 2+
-├── vision/               ← phase 6+
-└── media/
-    └── photos/
-```
-
----
-
-## 📓 Journal de bord
-
-Chaque session est documentée dans [`docs/logbook.md`](docs/logbook.md).
-
-Format :
-```
-## YYYY-MM-DD
-Objectif :
-Accompli :
-Problèmes :
-Solution :
-Prochaine étape :
-```
-
----
-
-## 🔗 Contact
-
-**Portfolio :** [fatima02d.github.io](https://fatima02d.github.io)  
-**GitHub :** [github.com/fatima02d](https://github.com/fatima02d)  
-**LinkedIn :** [Saida Fatimatou Zahraa Diouf](https://www.linkedin.com/in/saida-fatimatou-zahraa-diouf)
-
----
-
-*
