@@ -1,0 +1,28 @@
+# Journal de Bord — Robot Mobile Autonome
+
+## 2026-04-27
+
+**Objectif :** Établir la base hardware complète du robot
+
+**Accompli :**
+- Châssis Hiwonder assemblé avec moteurs sur M1 et M2
+- RPi 4B → Hiwonder : SDA/SCL/5V/GND branchés (I2C)
+- HC-SR04 branché avec diviseur de tension 1kΩ/2kΩ sur ECHO
+- ESP32 TTGO T-Display identifié (TX=GPIO17, RX=GPIO2)
+- LiPo 7.4V 2200mAh identifiée comme source d'alimentation principale
+- Architecture système complète définie
+
+**Problèmes :**
+- Micro SD manquante → OS RPi pas encore installé
+- Adaptateur connecteur LiPo → Hiwonder manquant
+- Chargeur LiPo commandé (CHICIRIS TE3AC)
+
+**Solution :**
+-Faire les branchements entre le driver Hiwonder, RPi4, ESP32 et le HC-SRC04
+- Liste d'achats finalisée : micro SD 32GB + adaptateur XT30→JST
+
+**Prochaine étape :**
+- Acheter micro SD 32GB
+- Installer Raspberry Pi OS 64-bit
+- Tester communication I2C RPi → Hiwonder
+- Continuer le branchement
