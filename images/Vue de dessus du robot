@@ -1,7 +1,0 @@
-2026-04-27_vue_dessus_robot_complet.jpg
-
-Description : Vue du dessus du robot — meilleure photo 
-d'ensemble. RPi 4B à gauche, ESP32 TTGO T-Display sur 
-breadboard (écran TFT 1.14" visible), HC-SR04 en bas orienté 
-vers l'avant, Hiwonder Encoder Module en haut à droite. 
-Fils jumper I2C connectés.
