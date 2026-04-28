@@ -1,6 +1,0 @@
-2026-04-27_vue_avant_hcsr04.jpg
-
-Description : Vue de face du robot. HC-SR04 orienté vers 
-l'avant pour détection d'obstacles. Les deux "yeux" 
-(transducteurs ultrasoniques) bien visibles. Montage sur 
-breadboard avec diviseur de tension 1kΩ/2kΩ sur fil ECHO.
