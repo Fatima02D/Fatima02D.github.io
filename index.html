@@ -956,11 +956,11 @@ I've always been fascinated by how things work—and even more by how they could
         <div class="cs-sec-title"><span class="fr">FSM — le chef d'orchestre</span><span class="en" style="display:none">FSM — the conductor</span><hr/></div>
         <p class="fr">La FSM est une machine de Moore : ses sorties de contrôle (wr_en, rd_en, mov_en, alu_en) ne dépendent que de l'état courant. À partir de la table de transition, j'ai développé les équations booléennes des prochains états (D2, D1, D0) en fonction de Q2, Q1, Q0, puis je les ai câblées directement avec des bascules D, des comparateurs et des portes AND/OR dans Model Composer. Des compteurs C1 à C4 maintiennent la FSM dans l'état d'exécution jusqu'à ce que le bloc concerné ait terminé.</p>
         <p class="en" style="display:none">The FSM is a Moore machine: its control outputs (wr_en, rd_en, mov_en, alu_en) depend only on the current state. From the transition table I derived the boolean next-state equations (D2, D1, D0) in terms of Q2, Q1, Q0, then wired them directly with D flip-flops, comparators and AND/OR gates in Model Composer. Counters C1 to C4 hold the FSM in the execution state until the relevant block has finished.</p>
-        <div class="figslot">
-          <span class="fr">Diagramme d'état de la FSM (Load · Fetch · Decode · WR/READ/MOV/ALU)</span>
-          <span class="en" style="display:none">FSM state diagram (Load · Fetch · Decode · WR/READ/MOV/ALU)</span>
-          <span class="fn">fsm-diagramme.png</span>
-        </div>
+        <figure class="fig">
+          <img src="fsm-diagramme.png" alt="Diagramme d'état de la FSM du pseudo-processeur">
+          <figcaption class="fr">Diagramme d'état de la FSM — Load · Fetch · Decode · WR / READ / MOV / ALU</figcaption>
+          <figcaption class="en" style="display:none">FSM state diagram — Load · Fetch · Decode · WR / READ / MOV / ALU</figcaption>
+        </figure>
       </div>
 
       <!-- ALU -->
@@ -986,6 +986,11 @@ I've always been fascinated by how things work—and even more by how they could
           <figcaption class="fr">Schéma interne de l'ALU — opérations en parallèle, bloc DSP_MAC et mux piloté par SEL_ALU</figcaption>
           <figcaption class="en" style="display:none">Internal ALU schematic — parallel operations, DSP_MAC block and SEL_ALU-driven mux</figcaption>
         </figure>
+        <figure class="fig">
+          <img src="mac-interieur.png" alt="Intérieur du bloc DSP_MAC — compteur, ROMs, accumulateur et DSP48E1">
+          <figcaption class="fr">Intérieur du bloc MAC — compteur d'adresses, ROM_A/ROM_B, accumulateur et primitive DSP48E1</figcaption>
+          <figcaption class="en" style="display:none">Inside the MAC block — address counter, ROM_A/ROM_B, accumulator and the DSP48E1 primitive</figcaption>
+        </figure>
       </div>
 
       <!-- MINUTERIE -->
@@ -1007,11 +1012,11 @@ I've always been fascinated by how things work—and even more by how they could
         <p class="en" style="display:none">Serial communication follows a simple UART frame: a 0 start bit, 8 data bits, a 1 stop bit. The transmitter (TX) is built on a <strong>PISO</strong> shift register that serializes bits LSB first; the receiver (RX), designed from scratch, uses a <strong>SIPO</strong> register and its own FSM to rebuild the byte. Rather than slowing the clock, I kept the FPGA's 100 MHz clock and generated a <strong>baud_tick</strong> enable from a counter, calibrated for 115,200 baud — both FSMs only advance on that tick.</p>
         <p class="fr">Validation avec la valeur 85 (01010101) : le TX émet la trame <strong>0 | 1 0 1 0 1 0 1 0 | 1</strong> et le SIPO du RX reconstruit exactement 85 à la réception — la donnée reçue correspond bien à la donnée transmise.</p>
         <p class="en" style="display:none">Validated with the value 85 (01010101): the TX sends the frame <strong>0 | 1 0 1 0 1 0 1 0 | 1</strong> and the RX's SIPO rebuilds exactly 85 on reception — the received data matches the transmitted data.</p>
-        <div class="figslot">
-          <span class="fr">Schéma d'intégration UART (TX PISO + RX SIPO) ou chronogramme</span>
-          <span class="en" style="display:none">UART integration schematic (TX PISO + RX SIPO) or waveform</span>
-          <span class="fn">uart.png</span>
-        </div>
+        <figure class="fig">
+          <img src="uart.png" alt="Schéma du registre à décalage PISO du transmetteur UART">
+          <figcaption class="fr">Registre à décalage PISO du transmetteur — sérialisation LSB d'abord</figcaption>
+          <figcaption class="en" style="display:none">Transmitter PISO shift register — LSB-first serialization</figcaption>
+        </figure>
       </div>
 
       <!-- INTEGRATION FPGA -->
