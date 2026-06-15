@@ -3,446 +3,888 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Saida Fatimatou Zahraa Diouf — Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <title>Saida Fatimatou Zahraa Diouf — Engineering Portfolio</title>
   <style>
     :root {
-      --primary: #1a1a1a;
-      --accent: #d4af37;
-      --secondary: #2c5f2d;
-      --bg: #fafaf8;
-      --text: #2a2a2a;
-      --text-light: #666;
-      --border: #e0ddd5;
+      --ink: #0a0a0a;
+      --ink2: #444;
+      --ink3: #888;
+      --accent: #14B8A6;
+      --accent-light: #E7FAF7;
+      --bg: #EBF1F0;
+      --surface: #F5F8F8;
+      --border: #DDE6E5;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --warn-bg: #fef9c3;
+      --warn: #854d0e;
     }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Work Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-    nav {
-      position:fixed; top:0; width:100%; z-index:1000;
-      background:rgba(250,250,248,0.96); backdrop-filter:blur(10px);
-      border-bottom:1px solid var(--border);
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;font-size:112.5%;}
+    body{font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;}
+
+    /* ── NAV ── */
+    nav{position:fixed;top:0;width:100%;z-index:1000;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+    .nav-in{max-width:1120px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;height:64px;}
+    .logo{font-size:0.92rem;font-weight:700;color:var(--ink);cursor:pointer;letter-spacing:-0.01em;}
+    .nav-links{display:flex;gap:2.5rem;list-style:none;}
+    .nav-links a{color:var(--ink2);text-decoration:none;font-size:0.9rem;font-weight:500;cursor:pointer;transition:color 0.15s;padding-bottom:2px;border-bottom:2px solid transparent;}
+    .nav-links a:hover{color:var(--ink);}
+    .nav-links a.active{color:var(--ink);border-bottom-color:var(--accent);}
+    .nav-right{display:flex;align-items:center;gap:0.8rem;}
+    .lang-wrap{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+    .lang-btn{padding:0.28rem 0.75rem;border:none;background:transparent;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;font-size:0.78rem;font-weight:600;color:var(--ink3);cursor:pointer;transition:all 0.15s;}
+    .lang-btn.active{background:var(--ink);color:#fff;}
+    .talk-btn{padding:0.5rem 1.2rem;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;letter-spacing:-0.01em;transition:opacity 0.15s;}
+    .talk-btn:hover{opacity:0.85;}
+
+    /* ── PAGES ── */
+    .page{display:none;min-height:100vh;padding-top:64px;}
+    .page.active{display:block;}
+
+    /* ══════════════════════════════ HOME */
+    .hero-wrap{max-width:1080px;margin:0 auto;padding:5rem 2rem 4rem;display:flex;flex-direction:column;justify-content:center;min-height:calc(100vh - 64px);}
+    .hero-sub{font-size:0.8rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:1.2rem;}
+    .hero-h1{font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:900;line-height:1.04;letter-spacing:-0.03em;color:var(--ink);margin-bottom:1.4rem;}
+    .hero-h1 em{font-style:normal;color:var(--accent);}
+    .hero-p{font-size:1.18rem;color:var(--ink2);line-height:1.8;max-width:620px;margin-bottom:2rem;}
+    .hero-btns{display:flex;gap:0.8rem;flex-wrap:wrap;}
+    .btn-fill{padding:0.8rem 1.8rem;background:var(--ink);color:#fff;border:none;border-radius:7px;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;letter-spacing:-0.01em;transition:opacity 0.15s;}
+    .btn-fill:hover{opacity:0.8;}
+    .btn-outline{padding:0.8rem 1.8rem;background:transparent;color:var(--ink);border:1.5px solid var(--ink);border-radius:7px;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;letter-spacing:-0.01em;transition:all 0.15s;}
+    .btn-outline:hover{background:var(--ink);color:#fff;}
+    .hero-img{border-radius:18px;overflow:hidden;aspect-ratio:3/4;background:var(--surface);display:flex;align-items:center;justify-content:center;border:1px solid var(--border);}
+    .hero-img img{width:100%;height:100%;object-fit:cover;}
+    .img-ph{text-align:center;color:var(--ink3);font-size:0.85rem;padding:2rem;}
+    .img-ph-icon{font-size:2.5rem;margin-bottom:0.6rem;}
+
+    /* ABOUT SECTION */
+    .about-wrap{border-top:1px solid var(--border);background:var(--surface);}
+    .about-in{max-width:980px;margin:0 auto;padding:5rem 2rem;}
+    .about-img{border-radius:14px;overflow:hidden;aspect-ratio:3/4;background:var(--border);display:flex;align-items:center;justify-content:center;}
+    .about-img img{width:100%;height:100%;object-fit:cover;}
+    .about-img-ph{text-align:center;color:var(--ink3);font-size:0.82rem;padding:1.5rem;}
+    .about-h2{font-size:1.9rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:1rem;}
+    .about-p{color:var(--ink2);line-height:1.9;font-size:1.05rem;margin-bottom:0.9rem;}
+    .about-tabs{display:flex;gap:0;border-bottom:1.5px solid var(--border);margin:2rem 0 1.5rem;}
+    .tab-btn{padding:0.55rem 1.1rem;border:none;background:transparent;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;font-size:0.85rem;font-weight:600;color:var(--ink3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all 0.15s;}
+    .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+    .tab-pane{display:none;}
+    .tab-pane.active{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;}
+    .sk-chip{background:#fff;border:1px solid var(--border);border-radius:9px;padding:0.8rem 1rem;display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;font-weight:500;color:var(--ink);}
+    .sk-icon{width:34px;height:34px;background:var(--accent-light);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+
+    /* CTA BANNER */
+    .cta-banner{padding:5rem 2rem;background:var(--ink);text-align:center;}
+    .cta-banner h2{font-size:clamp(1.5rem,2.8vw,2rem);font-weight:800;color:#fff;letter-spacing:-0.02em;margin-bottom:1.5rem;max-width:600px;margin-left:auto;margin-right:auto;}
+    .btn-white{padding:0.8rem 1.8rem;background:#fff;color:var(--ink);border:none;border-radius:7px;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;transition:opacity 0.15s;}
+    .btn-white:hover{opacity:0.88;}
+
+    /* ══════════════════════════════ PROJECTS */
+    .proj-page-header{padding:4rem 2rem 2.5rem;text-align:center;border-bottom:1px solid var(--border);}
+    .proj-page-header h1{font-size:2.2rem;font-weight:900;letter-spacing:-0.03em;}
+    .proj-page-header p{color:var(--ink3);margin-top:0.5rem;font-size:0.97rem;}
+    .proj-grid{max-width:1120px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+    .pcard{border-radius:14px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all 0.25s;background:#fff;}
+    .pcard:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.08);}
+    .pcard-img{aspect-ratio:16/10;background:var(--surface);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+    .pcard-img img{width:100%;height:100%;object-fit:cover;}
+    .pcard-img-ph{text-align:center;color:var(--ink3);font-size:0.82rem;padding:1.5rem;}
+    .pcard-img-ph span{font-size:2.2rem;display:block;margin-bottom:0.4rem;}
+    .pcard-body{padding:1.3rem 1.4rem;}
+    .pcard-eye{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:0.45rem;}
+    .pcard-body h3{font-size:1.12rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:0.4rem;line-height:1.3;}
+    .pcard-body p{font-size:0.92rem;color:var(--ink3);line-height:1.6;}
+    .pcard-cs{border-top:1px solid var(--border);margin-top:0.9rem;padding-top:0.9rem;font-size:0.78rem;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:0.3rem;}
+    .pcard.soon{opacity:0.55;cursor:default;pointer-events:none;}
+
+    /* ── DETAIL ── */
+    .project-detail{display:none;}
+    .project-detail.active{display:block;}
+    .projects-list.hidden{display:none;}
+    .back-btn{display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:0.83rem;font-weight:600;color:var(--ink2);margin:1.5rem 2rem 0;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;transition:all 0.15s;}
+    .back-btn:hover{background:var(--border);}
+
+    /* CASE STUDY */
+    .cs{max-width:920px;margin:0 auto;padding:2rem 2rem 6rem;}
+    .cs-eye{font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:0.9rem;}
+    .cs-h1{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:900;letter-spacing:-0.03em;line-height:1.08;margin-bottom:1rem;}
+    .cs-context{display:inline-flex;align-items:center;gap:0.5rem;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:0.35rem 0.9rem;font-size:0.78rem;font-weight:600;color:var(--ink2);margin-bottom:1.3rem;}
+    .cs-tags{display:flex;flex-wrap:wrap;gap:0.45rem;margin-bottom:2.2rem;}
+    .cs-tag{padding:0.28rem 0.75rem;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:0.75rem;font-weight:600;color:var(--ink2);}
+
+    /* PROBLEM BOX */
+    .prob{background:var(--surface);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:1.4rem 1.6rem;margin:2rem 0;}
+    .prob-lbl{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:0.5rem;}
+    .prob h3{font-size:1.1rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:0.5rem;}
+    .prob p{color:var(--ink2);font-size:1.05rem;line-height:1.8;}
+
+    /* STATS */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.8rem 0;}
+    .stat{background:var(--surface);border-radius:10px;padding:1.2rem;text-align:center;border:1px solid var(--border);}
+    .stat-val{font-size:1.9rem;font-weight:900;color:var(--accent);letter-spacing:-0.03em;}
+    .stat-lbl{font-size:0.78rem;color:var(--ink3);margin-top:0.2rem;line-height:1.4;}
+
+    /* SECTION */
+    .cs-sec{margin:3rem 0;}
+    .cs-sec-title{display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;}
+    .cs-sec-title hr{flex:1;border:none;border-top:1px solid var(--border);}
+    .cs-sec-title span{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink);white-space:nowrap;}
+    .cs-sec h3{font-size:1.3rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:0.7rem;}
+    .cs-sec p{color:var(--ink2);line-height:1.85;font-size:1.05rem;margin-bottom:0.9rem;}
+    .cs-sec strong{color:var(--ink);}
+
+    /* METHOD GRID */
+    .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.2rem 0;}
+    .mcard{background:var(--surface);border-radius:10px;padding:1.2rem;border:1px solid var(--border);}
+    .mcard-num{font-size:1.3rem;font-weight:900;color:var(--accent);margin-bottom:0.4rem;letter-spacing:-0.02em;}
+    .mcard h4{font-size:0.92rem;font-weight:700;margin-bottom:0.35rem;}
+    .mcard p{font-size:0.92rem;color:var(--ink3);line-height:1.6;}
+    .formula{background:var(--ink);color:#e8e8e8;border-radius:7px;padding:0.7rem 1rem;font-family:monospace;font-size:0.82rem;margin-top:0.6rem;}
+    .formula .hi{color:#2DD4BF;}
+
+    /* TABLE */
+    .cs-tbl{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.98rem;}
+    .cs-tbl th{background:var(--ink);color:#fff;padding:0.65rem 0.9rem;text-align:left;font-weight:600;font-size:0.8rem;}
+    .cs-tbl td{padding:0.7rem 0.9rem;border-bottom:1px solid var(--border);color:var(--ink2);}
+    .cs-tbl td:first-child{color:var(--ink);font-weight:500;}
+    .cs-tbl tr.hl td{background:#E7FAF7;font-weight:700;color:var(--ink);}
+
+    /* VERDICT */
+    .verdicts{display:flex;flex-wrap:wrap;gap:0.6rem;margin:1rem 0;}
+    .vchip{padding:0.45rem 1rem;border-radius:7px;font-size:0.82rem;font-weight:700;}
+    .v-ok{background:var(--success-bg);color:var(--success);}
+    .v-warn{background:var(--warn-bg);color:var(--warn);}
+
+    /* OPTIMIZE */
+    .opt-track{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin:1.2rem 0;}
+    .opt-node{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.55rem 0.8rem;text-align:center;min-width:72px;}
+    .opt-node.best{background:var(--accent);border-color:var(--accent);color:#fff;}
+    .opt-node .nv{font-weight:800;font-size:0.88rem;}
+    .opt-node .nl{font-size:0.7rem;opacity:0.75;margin-top:1px;}
+    .opt-arr{color:var(--ink3);font-size:0.85rem;}
+
+    /* PHOTO GRID */
+    .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.8rem;margin:1rem 0;}
+    .pslot{aspect-ratio:4/3;background:var(--surface);border:1.5px dashed var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink3);font-size:0.78rem;text-align:center;padding:1rem;}
+    .pslot img{width:100%;height:100%;object-fit:cover;border-radius:8px;}
+    .pslot-note{font-size:0.72rem;color:var(--ink3);margin-top:0.3rem;font-family:monospace;}
+    .pslot-lbl{font-size:0.75rem;color:var(--ink3);margin-top:0.4rem;line-height:1.4;}
+    .pslot-icon{font-size:1.6rem;margin-bottom:0.3rem;}
+    .photo-tip{font-size:0.75rem;color:var(--ink3);margin-top:0.5rem;font-family:monospace;background:var(--surface);border-radius:6px;padding:0.5rem 0.8rem;}
+
+    /* FIGURE */
+    .fig{margin:1.6rem 0;}
+    .fig img{width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:10px;background:#fff;}
+    .fig figcaption{font-size:0.8rem;color:var(--ink3);text-align:center;margin-top:0.55rem;font-style:italic;}
+    .fig.narrow{max-width:360px;margin-left:auto;margin-right:auto;}
+
+    /* ROADMAP */
+    .rm{margin:1rem 0;}
+    .rm-row{display:flex;align-items:center;gap:1rem;padding:0.85rem 0;border-bottom:1px solid var(--border);}
+    .rm-row:last-child{border-bottom:none;}
+    .rm-num{font-size:0.75rem;font-weight:700;color:var(--ink3);width:20px;flex-shrink:0;}
+    .rm-body{flex:1;}
+    .rm-body strong{font-size:0.9rem;font-weight:700;display:block;letter-spacing:-0.01em;}
+    .rm-body span{font-size:0.8rem;color:var(--ink3);}
+    .rm-badge{font-size:0.7rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:20px;white-space:nowrap;}
+    .rb-done{background:var(--success-bg);color:var(--success);}
+    .rb-now{background:#fef9c3;color:#854d0e;}
+    .rb-plan{background:var(--surface);color:var(--ink3);}
+
+    /* HW TABLE */
+    .hw-tbl{width:100%;border-collapse:collapse;font-size:0.85rem;margin:1rem 0;}
+    .hw-tbl th{background:var(--ink);color:#fff;padding:0.6rem 0.9rem;text-align:left;font-weight:600;font-size:0.78rem;}
+    .hw-tbl td{padding:0.65rem 0.9rem;border-bottom:1px solid var(--border);color:var(--ink3);}
+    .hw-tbl td:first-child{color:var(--ink);font-weight:600;}
+
+    /* SKILLS PAGE */
+    .skills-pg{max-width:1120px;margin:0 auto;padding:3rem 2rem 5rem;}
+    .sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1rem;margin-bottom:2.5rem;}
+    .sk-card{background:var(--surface);border-radius:12px;padding:1.4rem;border:1px solid var(--border);}
+    .sk-card h3{font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.9rem;}
+    .sk-card ul{list-style:none;}
+    .sk-card li{padding:0.42rem 0;border-bottom:1px solid var(--border);color:var(--ink2);font-size:0.96rem;}
+    .sk-card li:last-child{border-bottom:none;}
+    .contact-blk{background:var(--ink);border-radius:16px;padding:3rem;color:#fff;text-align:center;}
+    .contact-blk h2{font-size:1.8rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.5rem;}
+    .contact-blk p{color:rgba(255,255,255,0.55);margin-bottom:2rem;font-size:0.95rem;}
+    .contact-links{display:flex;flex-wrap:wrap;gap:0.7rem;justify-content:center;}
+    .contact-link{padding:0.65rem 1.4rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:7px;color:#fff;text-decoration:none;font-size:0.87rem;font-weight:600;transition:all 0.2s;}
+    .contact-link:hover{background:var(--accent);border-color:var(--accent);}
+
+    @media(max-width:900px){
+      .hero-wrap,.about-in{grid-template-columns:1fr;}
+      .hero-img{display:none;}
+      .proj-grid{grid-template-columns:1fr 1fr;}
+      .mgrid,.stats,.pgrid{grid-template-columns:1fr;}
+      .tab-pane.active{grid-template-columns:1fr;}
     }
-    .nav-inner {
-      max-width:1200px; margin:0 auto; padding:1.2rem 2rem;
-      display:flex; justify-content:space-between; align-items:center;
-    }
-    .logo { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:var(--primary); cursor:pointer; }
-    .nav-links { display:flex; gap:2rem; list-style:none; }
-    .nav-links a { color:var(--text); text-decoration:none; font-weight:500; font-size:0.95rem; cursor:pointer; transition:color 0.2s; }
-    .nav-links a:hover, .nav-links a.active { color:var(--accent); }
-    .nav-links a.active { border-bottom:2px solid var(--accent); padding-bottom:2px; }
-    .lang-toggle { display:flex; gap:0.3rem; background:#f0ede6; border-radius:20px; padding:0.25rem; }
-    .lang-btn { padding:0.35rem 0.9rem; border:none; background:transparent; border-radius:16px; cursor:pointer; font-size:0.8rem; font-weight:600; color:var(--text-light); transition:all 0.2s; }
-    .lang-btn.active { background:var(--accent); color:#fff; }
-    .page { display:none; min-height:100vh; padding-top:70px; }
-    .page.active { display:block; }
-    .hero {
-      min-height:calc(100vh - 70px);
-      display:flex; align-items:center;
-      padding:4rem 2rem;
-      background:linear-gradient(135deg,#f5f5f0 0%,#e8e6db 100%);
-      border-bottom:3px solid var(--accent);
-    }
-    .hero-inner { max-width:900px; margin:0 auto; }
-    .hero h1 {
-      font-family:'Playfair Display',serif;
-      font-size:clamp(2.8rem,7vw,5rem);
-      font-weight:900; line-height:1.05;
-      color:var(--primary); margin-bottom:1.2rem;
-    }
-    .hero-sub { font-size:1.15rem; color:var(--text-light); margin-bottom:2rem; max-width:600px; }
-    .hero-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-top:2.5rem; }
-    .hero-card { background:#fff; border-radius:10px; padding:1.2rem 1.5rem; border-top:3px solid var(--accent); }
-    .hero-card .num { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--accent); }
-    .hero-card .label { font-size:0.85rem; color:var(--text-light); margin-top:0.2rem; }
-    .btn { display:inline-block; padding:0.9rem 2rem; background:var(--accent); color:#fff; font-weight:600; border:none; border-radius:6px; cursor:pointer; font-size:0.95rem; transition:all 0.3s; text-decoration:none; }
-    .btn:hover { background:var(--secondary); transform:translateY(-2px); }
-    .btn-outline { background:transparent; color:var(--accent); border:2px solid var(--accent); margin-left:1rem; }
-    .btn-outline:hover { background:var(--accent); color:#fff; }
-    .about-strip { max-width:1200px; margin:0 auto; padding:5rem 2rem; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
-    .about-strip h2 { font-family:'Playfair Display',serif; font-size:2rem; margin-bottom:1.5rem; }
-    .about-strip p { color:var(--text-light); line-height:1.9; margin-bottom:1rem; }
-    .about-strip strong { color:var(--text); }
-    .lang-tag { display:inline-block; background:#f0ede6; border-radius:20px; padding:0.3rem 0.9rem; font-size:0.85rem; color:var(--text); margin:0.2rem; }
-    .page-header { background:var(--primary); color:#fff; padding:5rem 2rem 3rem; }
-    .page-header h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:900; }
-    .page-header p { color:rgba(255,255,255,0.6); margin-top:0.5rem; }
-    .projects-grid { max-width:1200px; margin:0 auto; padding:4rem 2rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:2rem; }
-    .project-card { background:#fff; border-radius:14px; overflow:hidden; border:1px solid var(--border); transition:all 0.3s; cursor:pointer; }
-    .project-card:hover { transform:translateY(-6px); box-shadow:0 12px 40px rgba(0,0,0,0.12); }
-    .project-card-header { background:var(--primary); padding:2rem; color:#fff; border-bottom:3px solid var(--accent); }
-    .project-card-header .tag { font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); margin-bottom:0.8rem; }
-    .project-card-header h3 { font-family:'Playfair Display',serif; font-size:1.4rem; }
-    .project-card-body { padding:2rem; }
-    .project-card-body p { color:var(--text-light); font-size:0.95rem; line-height:1.8; margin-bottom:1.5rem; }
-    .tech-tags { display:flex; flex-wrap:wrap; gap:0.4rem; }
-    .tech-tag { background:var(--accent); color:#fff; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.78rem; }
-    .status-badge { display:inline-block; padding:0.3rem 0.9rem; border-radius:20px; font-size:0.78rem; font-weight:600; }
-    .status-active { background:#dcfce7; color:#166534; }
-    .status-planned { background:#e0e7ff; color:#3730a3; }
-    .status-completed { background:#fef3c7; color:#92400e; }
-    .project-detail { display:none; }
-    .project-detail.active { display:block; }
-    .projects-list { display:block; }
-    .projects-list.hidden { display:none; }
-    .back-btn { display:inline-flex; align-items:center; gap:0.5rem; padding:0.6rem 1.2rem; background:#f0ede6; border:none; border-radius:6px; cursor:pointer; font-size:0.9rem; color:var(--text); margin:1.5rem 2rem; font-family:'Work Sans',sans-serif; transition:background 0.2s; }
-    .back-btn:hover { background:var(--border); }
-    .project-detail-inner { max-width:1000px; margin:0 auto; padding:2rem; }
-    .detail-section { margin-bottom:3rem; }
-    .detail-section h2 { font-family:'Playfair Display',serif; font-size:1.8rem; margin-bottom:1.2rem; padding-bottom:0.5rem; border-bottom:2px solid var(--accent); display:inline-block; }
-    .detail-section p { color:var(--text-light); line-height:1.9; margin-bottom:1rem; }
-    .detail-section strong { color:var(--text); }
-    .phases-table { width:100%; border-collapse:collapse; }
-    .phases-table th { background:var(--primary); color:#fff; padding:0.8rem 1rem; text-align:left; font-weight:500; font-size:0.9rem; }
-    .phases-table td { padding:0.9rem 1rem; border-bottom:1px solid var(--border); font-size:0.9rem; }
-    .phases-table tr:hover td { background:#f9f7f2; }
-    .phases-table tr.current td { background:#fef3c7; }
-    .hw-table { width:100%; border-collapse:collapse; }
-    .hw-table th { background:var(--primary); color:#fff; padding:0.8rem 1rem; text-align:left; font-weight:500; font-size:0.9rem; }
-    .hw-table td { padding:0.9rem 1rem; border-bottom:1px solid var(--border); font-size:0.9rem; color:var(--text-light); }
-    .hw-table td:first-child { color:var(--text); font-weight:500; }
-    .arch-block { background:var(--primary); color:#e8e6e0; border-radius:10px; padding:2rem; font-family:monospace; font-size:0.9rem; line-height:2; }
-    .arch-block .gold { color:var(--accent); }
-    .arch-block .green { color:#52b788; }
-    .skills-wrap { max-width:1200px; margin:0 auto; padding:4rem 2rem; }
-    .skills-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1.5rem; margin-bottom:5rem; }
-    .skill-card { background:#fff; border-radius:12px; padding:1.5rem; border-top:3px solid var(--accent); }
-    .skill-card h3 { font-family:'Playfair Display',serif; font-size:1.1rem; margin-bottom:1rem; }
-    .skill-card ul { list-style:none; }
-    .skill-card li { padding:0.45rem 0; border-bottom:1px solid var(--border); color:var(--text-light); font-size:0.9rem; }
-    .skill-card li:last-child { border-bottom:none; }
-    .contact-section { background:var(--primary); border-radius:16px; padding:3rem; color:#fff; }
-    .contact-section h2 { font-family:'Playfair Display',serif; font-size:2rem; margin-bottom:0.5rem; }
-    .contact-section p { color:rgba(255,255,255,0.6); margin-bottom:2rem; }
-    .contact-links { display:flex; flex-wrap:wrap; gap:1rem; }
-    .contact-link { display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; text-decoration:none; font-size:0.9rem; transition:all 0.3s; }
-    .contact-link:hover { background:var(--accent); border-color:var(--accent); }
-    @media(max-width:768px) {
-      .about-strip { grid-template-columns:1fr; gap:2rem; }
-      .hero-cards { grid-template-columns:1fr; }
-      .btn-outline { margin-left:0; margin-top:0.8rem; }
+    @media(max-width:600px){
+      .proj-grid{grid-template-columns:1fr;}
+      .opt-track{flex-direction:column;align-items:flex-start;}
     }
   </style>
 </head>
 <body>
 
+<!-- ── NAV ── -->
 <nav>
-  <div class="nav-inner">
-    <div class="logo" onclick="showPage('accueil')">Saida Fatimatou Zahraa Diouf</div>
+  <div class="nav-in">
+    <div class="logo" onclick="showPage('home')">Engineering Portfolio</div>
     <ul class="nav-links">
-      <li><a onclick="showPage('accueil')" id="nav-accueil" class="active">
-        <span class="fr">Accueil</span><span class="en" style="display:none">Home</span>
-      </a></li>
-      <li><a onclick="showPage('projets')" id="nav-projets">
-        <span class="fr">Projets</span><span class="en" style="display:none">Projects</span>
-      </a></li>
-      <li><a onclick="showPage('competences')" id="nav-competences">
-        <span class="fr">Compétences</span><span class="en" style="display:none">Skills</span>
-      </a></li>
+      <li><a onclick="showPage('home')" id="nav-home" class="active"><span class="fr">Accueil</span><span class="en" style="display:none">Home</span></a></li>
+      <li><a onclick="showPage('projects')" id="nav-projects"><span class="fr">Projets</span><span class="en" style="display:none">Projects</span></a></li>
+      <li><a onclick="showPage('skills')" id="nav-skills"><span class="fr">Compétences</span><span class="en" style="display:none">Skills</span></a></li>
     </ul>
-    <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('fr')">FR</button>
-      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <div class="nav-right">
+      <div class="lang-wrap">
+        <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="talk-btn" onclick="showPage('skills')">
+        <span class="fr">Me contacter</span><span class="en" style="display:none">Let's Talk</span>
+      </button>
     </div>
   </div>
 </nav>
 
-<!-- ACCUEIL -->
-<div class="page active" id="page-accueil">
-  <div class="hero">
-    <div class="hero-inner">
-      <h1>
-        <span class="fr">Robotique &<br>Systèmes Autonomes</span>
-        <span class="en" style="display:none">Robotics &<br>Autonomous Systems</span>
-      </h1>
-      <p class="hero-sub">
-        <span class="fr">Saida Fatimatou Zahraa Diouf — Étudiante en génie mécatronique</span>
-        <span class="en" style="display:none">Saida Fatimatou Zahraa Diouf — Mechatronics Engineering Student</span>
-      </p>
-      <button class="btn" onclick="showPage('projets')">
-        <span class="fr">Voir mes projets</span>
-        <span class="en" style="display:none">View my projects</span>
-      </button>
-      <button class="btn btn-outline" onclick="showPage('competences')">
-        <span class="fr">Compétences</span>
-        <span class="en" style="display:none">Skills</span>
-      </button>
-      <div class="hero-cards" style="max-width:300px;">
-        <div class="hero-card">
-          <div class="num" style="font-size:1rem; padding-top:0.3rem;">
-            <span class="fr">Projet en cours</span>
-            <span class="en" style="display:none">Current project</span>
-          </div>
-          <div class="label fr">Robot autonome Pick &amp; Place</div>
-          <div class="label en" style="display:none">Autonomous Pick &amp; Place Robot</div>
+<!-- ══════════════════════════════════════ HOME -->
+<div class="page active" id="page-home">
+
+  <div class="hero-wrap">
+    <div>
+      <div class="hero-sub fr">Ingénieure mécatronique</div>
+      <div class="hero-sub en" style="display:none">Mechatronics Engineer</div>
+      <h1 class="hero-h1 fr">Bonjour, je suis <em>Saida Fatimatou<br>Zahraa Diouf</em>, et voici mon portfolio.</h1>
+      <h1 class="hero-h1 en" style="display:none">Hi, I'm <em>Saida Fatimatou<br>Zahraa Diouf</em>, and this is my portfolio.</h1>
+      <p class="hero-p fr">Je m'intéresse aux systèmes qui fonctionnent — et à ceux qui pourraient mieux fonctionner. Je conçois, analyse et construis à l'intersection de la mécanique, de l'électronique et du code, avec l'idée que la technologie n'a de valeur que si elle change quelque chose de réel.</p>
+      <p class="hero-p en" style="display:none">I'm drawn to systems that work — and to the ones that could work better. I design, analyze, and build at the intersection of mechanics, electronics, and code, with the belief that technology only matters if it changes something real.</p>
+      <div class="hero-btns">
+        <button class="btn-fill" onclick="showPage('projects')"><span class="fr">Voir mes projets</span><span class="en" style="display:none">View my projects</span></button>
+        <button class="btn-outline" onclick="showPage('skills')"><span class="fr">Me contacter</span><span class="en" style="display:none">Contact me</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-wrap">
+    <div class="about-in">
+      <div>
+        <h2 class="about-h2 fr">À propos de moi</h2>
+        <h2 class="about-h2 en" style="display:none">About me</h2>
+        <p class="about-p fr">Je suis Saida Fatimatou Zahraa Diouf, étudiante en génie mécatronique avec un parcours en gestion de projets. J'ai plusieurs passions — la robotique, l'analyse structurale, les systèmes embarqués — et ce qui les relie, c'est l'envie de découvrir comment les choses fonctionnent, puis de proposer des solutions qui auront un réel impact.</p>
+        <p class="about-p en" style="display:none">I'm Saida Fatimatou Zahraa Diouf, a mechatronics engineering student with a background in project management. I have many passions — robotics, structural analysis, embedded systems — and what connects them is a desire to understand how things work, then propose solutions that will have a real impact.</p>
+        <p class="about-p fr">Je parle français, anglais, wolof et seereer.</p>
+        <p class="about-p en" style="display:none">I speak French, English, Wolof, and Seereer.</p>
+
+        <div class="about-tabs">
+          <button class="tab-btn active" onclick="switchTab(event,'tab-skills')"><span class="fr">Compétences</span><span class="en" style="display:none">Skills</span></button>
+          <button class="tab-btn" onclick="switchTab(event,'tab-edu')"><span class="fr">Formation</span><span class="en" style="display:none">Education</span></button>
+        </div>
+
+        <div class="tab-pane active" id="tab-skills">
+          <div class="sk-chip"><span>SolidWorks / FEA</span></div>
+          <div class="sk-chip"><span>ROS2 · OpenCV</span></div>
+          <div class="sk-chip"><span>Python · C++ · MATLAB</span></div>
+          <div class="sk-chip"><span>RPi 4B · ESP32 · STM32</span></div>
+          <div class="sk-chip"><span>FPGA · VHDL · Vivado</span></div>
+          <div class="sk-chip"><span class="fr">Gestion de projet</span><span class="en" style="display:none">Project management</span></div>
+        </div>
+        <div class="tab-pane" id="tab-edu">
+          <div class="sk-chip"><span class="fr">B.Ing Génie Mécatronique — UQTR</span><span class="en" style="display:none">B.Eng Mechatronics — UQTR</span></div>
+          <div class="sk-chip"><span class="fr">Gestion de projets — HEC Montréal</span><span class="en" style="display:none">Project management — HEC Montréal</span></div>
         </div>
       </div>
     </div>
   </div>
-  <div class="about-strip">
-    <div>
-      <h2 class="fr">À propos</h2>
-      <h2 class="en" style="display:none">About</h2>
-      <p class="fr">Étudiante en <strong>génie mécatronique à l'UQTR</strong>, je développe des compétences en robotique, systèmes embarqués et intelligence artificielle à travers des projets concrets et documentés rigoureusement.</p>
-      <p class="en" style="display:none">Mechatronics engineering student at <strong>UQTR</strong>, I develop skills in robotics, embedded systems, and artificial intelligence through concrete, rigorously documented projects.</p>
-    </div>
-    <div>
-      <h2 class="fr">Langues</h2>
-      <h2 class="en" style="display:none">Languages</h2>
-      <p style="margin-bottom:1rem;">
-        <span class="lang-tag">Français</span>
-        <span class="lang-tag">English</span>
-        <span class="lang-tag">Seereer</span>
-        <span class="lang-tag">Wolof</span>
-      </p>
-      <h2 class="fr" style="margin-top:2rem;">Formation</h2>
-      <h2 class="en" style="display:none; margin-top:2rem;">Education</h2>
-      <p class="fr"><strong>B.Ing Génie Mécatronique</strong> — UQTR<br><strong>Certificat en gestion de projet</strong></p>
-      <p class="en" style="display:none"><strong>B.Eng Mechatronics Engineering</strong> — UQTR<br><strong>Project Management Certificate</strong></p>
-    </div>
+
+  <div class="cta-banner">
+    <h2 class="fr">Envie d'explorer mes projets et recherches ?</h2>
+    <h2 class="en" style="display:none">Want to explore my projects and research?</h2>
+    <button class="btn-white" onclick="showPage('projects')"><span class="fr">Voir les projets →</span><span class="en" style="display:none">Explore projects →</span></button>
   </div>
+
 </div>
 
-<!-- PROJETS -->
-<div class="page" id="page-projets">
+<!-- ══════════════════════════════════════ PROJECTS -->
+<div class="page" id="page-projects">
   <div class="projects-list" id="projects-list">
-    <div class="page-header">
-      <h1 class="fr">Projets</h1>
-      <h1 class="en" style="display:none">Projects</h1>
-      <p class="fr">Développement technique documenté et progressif</p>
-      <p class="en" style="display:none">Progressive and documented technical development</p>
+    <div class="proj-page-header">
+      <h1 class="fr">Projets & Recherche</h1>
+      <h1 class="en" style="display:none">Projects & Research</h1>
+      <p class="fr">Une collection de travaux techniques documentés, études de cas et expériences.</p>
+      <p class="en" style="display:none">A collection of documented technical work, case studies, and experiments.</p>
     </div>
-    <div class="projects-grid">
-      <div class="project-card" onclick="showProject('robot')">
-        <div class="project-card-header">
-          <div class="tag fr">Robotique — 2026</div>
-          <div class="tag en" style="display:none">Robotics — 2026</div>
-          <h3 class="fr">Robot Mobile Autonome<br>Pick &amp; Place</h3>
-          <h3 class="en" style="display:none">Autonomous Mobile Robot<br>Pick &amp; Place</h3>
+    <div class="proj-grid">
+
+      <!-- CARTE ROBOT -->
+      <div class="pcard" onclick="showProject('robot')">
+        <div class="pcard-img">
+          <img src="robot.jpeg" alt="Robot mobile autonome assemblé">
         </div>
-        <div class="project-card-body">
-          <p class="fr">Robot à chenilles capable de naviguer, détecter une balle et la déplacer d'un point A à un point B. Mode téléopéré (Xbox) et autonome.</p>
-          <p class="en" style="display:none">Tracked robot capable of navigating, detecting a ball, and moving it from point A to point B. Teleoperated (Xbox) and autonomous modes.</p>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div class="tech-tags">
-              <span class="tech-tag">RPi 4B</span>
-              <span class="tech-tag">ESP32</span>
-              <span class="tech-tag">ROS2</span>
-              <span class="tech-tag">OpenCV</span>
-            </div>
-            <span class="status-badge status-active fr">Complété</span>
-            <span class="status-badge status-active en" style="display:none">Done</span>
-          </div>
+        <div class="pcard-body">
+          <div class="pcard-eye fr">Robotique · 2026 · Phase 1/8</div>
+          <div class="pcard-eye en" style="display:none">Robotics · 2026 · Phase 1/8</div>
+          <h3 class="fr">Robot Mobile Autonome — Pick & Place</h3>
+          <h3 class="en" style="display:none">Autonomous Mobile Robot — Pick & Place</h3>
+          <p class="fr">Système multi-MCU à chenilles. Hardware assemblé, architecture multi-couche définie, code en cours.</p>
+          <p class="en" style="display:none">Multi-MCU tracked system. Hardware assembled, layered architecture defined, code in progress.</p>
+          <div class="pcard-cs fr">Lire l'étude de cas →</div>
+          <div class="pcard-cs en" style="display:none">Read the case study →</div>
         </div>
       </div>
+
+      <!-- CARTE FEA -->
+      <div class="pcard" onclick="showProject('fea')">
+        <div class="pcard-img">
+          <img src="fea-hero.png" alt="Analyse de contrainte par éléments finis">
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-eye fr">Analyse structurale</div>
+          <div class="pcard-eye en" style="display:none">Structural Analysis</div>
+          <h3 class="fr">Analyse de Contrainte par Éléments Finis</h3>
+          <h3 class="en" style="display:none">Finite Element Stress Analysis</h3>
+          <p class="fr">Validation analytique et numérique de deux structures mécaniques. Optimisation géométrique : −4.8% de contrainte.</p>
+          <p class="en" style="display:none">Analytical and numerical validation of two mechanical structures. Geometric optimization: −4.8% stress reduction.</p>
+          <div class="pcard-cs fr">Lire l'étude de cas →</div>
+          <div class="pcard-cs en" style="display:none">Read the case study →</div>
+        </div>
+      </div>
+
+      <!-- CARTE LOGICIEL FATIGUE -->
+      <div class="pcard" onclick="showProject('fatigue')">
+        <div class="pcard-img">
+          <img src="logiciel-hero.png" alt="Interface du logiciel de conception en fatigue">
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-eye fr">Logiciel & Fatigue</div>
+          <div class="pcard-eye en" style="display:none">Software & Fatigue</div>
+          <h3 class="fr">Logiciel de Conception en Fatigue</h3>
+          <h3 class="en" style="display:none">Fatigue Design Software</h3>
+          <p class="fr">Outil MATLAB App Designer calculant le facteur de sécurité et la durée de vie de plaques entaillées sous chargement combiné. Goodman + courbe S-N.</p>
+          <p class="en" style="display:none">MATLAB App Designer tool computing the safety factor and fatigue life of notched plates under combined loading. Goodman + S-N curve.</p>
+          <div class="pcard-cs fr">Lire l'étude de cas →</div>
+          <div class="pcard-cs en" style="display:none">Read the case study →</div>
+        </div>
+      </div>
+
+      <!-- COMING SOON -->
+      <div class="pcard soon">
+        <div class="pcard-img" style="background:#f0f0ee;"></div>
+        <div class="pcard-body">
+          <div class="pcard-eye fr">Bientôt</div>
+          <div class="pcard-eye en" style="display:none">Coming soon</div>
+          <h3 class="fr">Prochain projet</h3>
+          <h3 class="en" style="display:none">Next project</h3>
+          <p class="fr">En préparation.</p>
+          <p class="en" style="display:none">In preparation.</p>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="project-detail" id="detail-robot">
-    <button class="back-btn" onclick="showProjectsList()">← <span class="fr">Retour aux projets</span><span class="en" style="display:none">Back to projects</span></button>
-    <div class="project-detail-inner">
-      <div class="detail-section">
-        <div style="background:var(--primary); color:#fff; border-radius:12px; padding:2.5rem; border-bottom:3px solid var(--accent); margin-bottom:2rem;">
-          <p style="color:var(--accent); font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.8rem;">Robotique — 2026</p>
-          <h1 style="font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:900;" class="fr">Robot Mobile Autonome — Pick &amp; Place</h1>
-          <h1 style="font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:900;" class="en" style="display:none">Autonomous Mobile Robot — Pick &amp; Place</h1>
-          <p style="color:rgba(255,255,255,0.6); margin-top:0.8rem;" class="fr">Châssis à chenilles · RPi 4B · ESP32 · ROS2 · Vision</p>
-          <p style="color:rgba(255,255,255,0.6); margin-top:0.8rem;" class="en" style="display:none">Tracked chassis · RPi 4B · ESP32 · ROS2 · Vision</p>
-        </div>
-        <h2 class="fr">Objectif</h2>
-        <h2 class="en" style="display:none">Objective</h2>
-        <p class="fr">Construire un robot à chenilles capable de se déplacer de façon hybride (téléopéré et autonome), de se repérer dans l'espace, de détecter une balle par vision, de la saisir avec un bras robotique, et de la déposer à un point défini.</p>
-        <p class="en" style="display:none">Build a tracked robot capable of moving in hybrid mode (teleoperated and autonomous), localizing itself, detecting a ball by vision, grasping it with a robotic arm, and placing it at a defined point.</p>
+  <!-- ─────────────────────── DETAIL FEA ─────────────────────── -->
+  <div class="project-detail" id="detail-fea">
+    <button class="back-btn" onclick="showProjectsList()">← <span class="fr">Retour</span><span class="en" style="display:none">Back</span></button>
+    <div class="cs">
+
+      <div class="cs-eye fr">Analyse structurale</div>
+      <div class="cs-eye en" style="display:none">Structural Analysis</div>
+      <h1 class="cs-h1 fr">Analyse de Contrainte<br>par Éléments Finis</h1>
+      <h1 class="cs-h1 en" style="display:none">Finite Element<br>Stress Analysis</h1>
+
+      <div class="cs-tags">
+        <span class="cs-tag">SolidWorks Simulation</span>
+        <span class="cs-tag">RDM / Beam Theory</span>
+        <span class="cs-tag">Von Mises</span>
+        <span class="cs-tag">Tresca</span>
+        <span class="cs-tag">AISI 4340</span>
+        <span class="cs-tag fr">Optimisation paramétrique</span><span class="cs-tag en" style="display:none">Parametric optimization</span>
       </div>
 
-      <div class="detail-section">
-        <h2 class="fr">Feuille de route</h2>
-        <h2 class="en" style="display:none">Roadmap</h2>
-        <table class="phases-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th class="fr">Phase</th><th class="en" style="display:none">Phase</th>
-              <th class="fr">Description</th><th class="en" style="display:none">Description</th>
-              <th class="fr">Statut</th><th class="en" style="display:none">Status</th>
-            </tr>
-          </thead>
+      <!-- IMAGE DE PRÉSENTATION DU PROJET -->
+      <figure class="fig">
+        <img src="fea-hero.png" alt="Carte Von Mises du support — zone de contrainte">
+      </figure>
+
+      <div class="prob">
+        <div class="prob-lbl fr">Le problème</div>
+        <div class="prob-lbl en" style="display:none">The problem</div>
+        <h3 class="fr">Comment prouver qu'une pièce va tenir ?</h3>
+        <h3 class="en" style="display:none">How do you prove a part will hold?</h3>
+        <p class="fr">Concevoir une pièce mécanique ne suffit pas — il faut prouver qu'elle résiste sous charge. L'objectif de ce projet : analyser deux structures soumises à des charges combinées, valider les calculs analytiques par simulation numérique, puis améliorer le design pour réduire les zones critiques.</p>
+        <p class="en" style="display:none">Designing a mechanical part isn't enough — you need to prove it holds under load. The goal of this project: analyze two structures under combined loads, validate hand calculations through numerical simulation, then improve the design to reduce critical stress zones.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="stat-val">&lt;2%</div><div class="stat-lbl fr">Écart entre calcul analytique et simulation FEA sur toute la longueur de la poutre</div><div class="stat-lbl en" style="display:none">Deviation between hand calculations and FEA simulation along the full beam length</div></div>
+        <div class="stat"><div class="stat-val">−4.8%</div><div class="stat-lbl fr">Réduction de contrainte obtenue après optimisation géométrique du congé</div><div class="stat-lbl en" style="display:none">Stress reduction achieved after geometric fillet optimization</div></div>
+        <div class="stat"><div class="stat-val">3/3</div><div class="stat-lbl fr">Critères de rupture vérifiés — Von Mises, Tresca, endommagement</div><div class="stat-lbl en" style="display:none">Failure criteria verified — Von Mises, Tresca, fracture</div></div>
+      </div>
+
+      <!-- PARTIE I -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Partie I — Poutre creuse</span><span class="en" style="display:none">Part I — Hollow beam</span><hr/></div>
+        <p class="fr">Un tube carré creux en acier (L = 2 m, 105 × 105 mm, paroi 5 mm) soumis à trois chargements simultanés : pression verticale distribuée sur la dernière demi-longueur, compression axiale de 50 MPa, couple de torsion de 500 N·m. J'ai calculé l'ensemble analytiquement, puis reproduit le modèle dans SolidWorks pour comparer point par point.</p>
+        <p class="en" style="display:none">A hollow square steel tube (L = 2 m, 105 × 105 mm, 5 mm wall) under three simultaneous loads: distributed vertical pressure over the last half-span, 50 MPa axial compression, 500 N·m torque. I calculated everything analytically, then reproduced the model in SolidWorks to compare point by point.</p>
+
+        <!-- PHOTOS PARTIE I -->
+        <figure class="fig">
+          <img src="poutre-dcl.png" alt="Diagramme du corps libre de la poutre creuse">
+          <figcaption class="fr">DCL de la poutre creuse</figcaption>
+          <figcaption class="en" style="display:none">Free body diagram of the hollow beam</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="poutre-solidworks.png" alt="Modèle SolidWorks de la poutre — carte σz">
+          <figcaption class="fr">Modèle SolidWorks — carte de contrainte σz</figcaption>
+          <figcaption class="en" style="display:none">SolidWorks model — σz stress map</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="poutre-comparaison.png" alt="Comparaison RDM vs FEA de σz le long de la poutre">
+          <figcaption class="fr">Comparaison RDM vs FEA de σz le long de la poutre</figcaption>
+          <figcaption class="en" style="display:none">RDM vs FEA comparison of σz along the beam</figcaption>
+        </figure>
+
+        <div class="mgrid" style="margin-top:1.5rem;">
+          <div class="mcard">
+            <div class="mcard-num">01</div>
+            <h4 class="fr">Calcul analytique (RDM)</h4><h4 class="en" style="display:none">Hand calculation</h4>
+            <p class="fr">Superposition contrainte axiale + flexion, cisaillement de torsion, flèche par forces virtuelles.</p>
+            <p class="en" style="display:none">Superposition of axial stress + bending, torsional shear, deflection by virtual work.</p>
+            <div class="formula">σz = <span class="hi">N/A</span> + <span class="hi">Mc/I</span></div>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num">02</div>
+            <h4 class="fr">Simulation FEA (SolidWorks)</h4><h4 class="en" style="display:none">FEA Simulation</h4>
+            <p class="fr">Modèle 3D, maillage éléments finis, sondage nodal sur la ligne de séparation supérieure.</p>
+            <p class="en" style="display:none">3D model, finite element mesh, nodal probing along the upper split line.</p>
+            <div class="formula">MEF → σ, ε, Uy <span class="hi">∀ nœuds</span></div>
+          </div>
+        </div>
+
+        <table class="cs-tbl">
+          <thead><tr>
+            <th class="fr">Position</th><th class="en" style="display:none">Position</th>
+            <th class="fr">Calcul (MPa)</th><th class="en" style="display:none">Analytical (MPa)</th>
+            <th>FEA (MPa)</th>
+            <th class="fr">Écart</th><th class="en" style="display:none">Deviation</th>
+          </tr></thead>
           <tbody>
-            <tr class="current">
-              <td>01</td>
-              <td class="fr"><strong>Base Hardware</strong></td><td class="en" style="display:none"><strong>Hardware Base</strong></td>
-              <td class="fr">Assemblage, câblage, architecture système</td><td class="en" style="display:none">Assembly, wiring, system architecture</td>
-              <td><span class="status-badge status-active fr">En cours</span><span class="status-badge status-active en" style="display:none">In progress</span></td>
-            </tr>
-            <tr><td>02</td>
-              <td class="fr">Téléopération Xbox</td><td class="en" style="display:none">Xbox Teleoperation</td>
-              <td class="fr">ESP32 Bluetooth → RPi → Hiwonder I2C</td><td class="en" style="display:none">ESP32 Bluetooth → RPi → Hiwonder I2C</td>
-              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
-            </tr>
-            <tr><td>03</td>
-              <td class="fr">Odométrie</td><td class="en" style="display:none">Odometry</td>
-              <td class="fr">Encodeurs + IMU — position (x, y, θ)</td><td class="en" style="display:none">Encoders + IMU — position (x, y, θ)</td>
-              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
-            </tr>
-            <tr><td>04</td>
-              <td class="fr">Évitement obstacles</td><td class="en" style="display:none">Obstacle avoidance</td>
-              <td class="fr">HC-SR04 — détection temps réel</td><td class="en" style="display:none">HC-SR04 — real-time detection</td>
-              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
-            </tr>
-            <tr><td>05</td>
-              <td class="fr">Navigation A→B</td><td class="en" style="display:none">A→B Navigation</td>
-              <td class="fr">Planification de trajectoire autonome</td><td class="en" style="display:none">Autonomous path planning</td>
-              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
-            </tr>
-            <tr><td>06</td>
-              <td class="fr">Vision</td><td class="en" style="display:none">Vision</td>
-              <td class="fr">Caméra RPi + OpenCV — détection balle HSV</td><td class="en" style="display:none">RPi Camera + OpenCV — HSV ball detection</td>
-              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
-            </tr>
-            <tr><td>07</td>
-              <td class="fr">Bras robotique 5-DOF</td><td class="en" style="display:none">5-DOF Robotic Arm</td>
-              <td class="fr">STM32 → servos, cinématique inverse</td><td class="en" style="display:none">STM32 → servos, inverse kinematics</td>
-              <td><span class="status-badge status-planned fr">Planifiée</span><span class="status-badge status-planned en" style="display:none">Planned</span></td>
-            </tr>
-            <tr><td>08</td>
-              <td><strong>Pick &amp; Place</strong></td>
-              <td class="fr">Système intégré complet</td><td class="en" style="display:none">Full integrated system</td>
-              <td><span class="status-badge status-planned fr">Objectif final</span><span class="status-badge status-planned en" style="display:none">Final goal</span></td>
-            </tr>
+            <tr class="hl"><td class="fr">z = 0 (encastrement)</td><td class="en" style="display:none">z = 0 (fixed end)</td><td>194.3</td><td>195.0</td><td>+0.3%</td></tr>
+            <tr><td>z = 0.50 m</td><td>153.1</td><td>153.0</td><td>&lt;0.1%</td></tr>
+            <tr><td>z = 1.00 m</td><td>111.9</td><td>112.0</td><td>&lt;0.1%</td></tr>
+            <tr><td>z = 1.50 m</td><td>70.6</td><td>69.2</td><td>−2.0%</td></tr>
+            <tr><td class="fr">z = 2.00 m (bout libre)</td><td class="en" style="display:none">z = 2.00 m (free end)</td><td>50.0</td><td>47.2</td><td>−5.6%</td></tr>
           </tbody>
         </table>
+        <p class="fr"><strong>Principe de Saint-Venant confirmé.</strong> Les écarts dépassent 2% uniquement aux zones de conditions aux limites. Sur toute la partie centrale, les deux courbes coïncident presque parfaitement — exactement ce que prédit la théorie.</p>
+        <p class="en" style="display:none"><strong>Saint-Venant's Principle confirmed.</strong> Deviations exceed 2% only at boundary condition zones. Over the entire central span, both curves match almost perfectly — exactly what theory predicts.</p>
+        <p style="margin-top:0.7rem;" class="fr">Flèche analytique : <strong>17.96 mm</strong> · FEA : <strong>18.17 mm</strong> · écart : <strong>1.2%</strong></p>
+        <p style="margin-top:0.7rem;" class="en" style="display:none">Analytical deflection: <strong>17.96 mm</strong> · FEA: <strong>18.17 mm</strong> · deviation: <strong>1.2%</strong></p>
       </div>
 
-      <div class="detail-section">
-        <h2 class="fr">Hardware</h2>
-        <h2 class="en" style="display:none">Hardware</h2>
-        <table class="hw-table">
-          <thead>
-            <tr>
-              <th class="fr">Composant</th><th class="en" style="display:none">Component</th>
-              <th class="fr">Rôle</th><th class="en" style="display:none">Role</th>
-            </tr>
-          </thead>
+      <!-- PARTIE II -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Partie II — Support d'arbre 3D (AISI 4340)</span><span class="en" style="display:none">Part II — 3D shaft support bracket (AISI 4340)</span><hr/></div>
+        <p class="fr">La carte Von Mises identifie immédiatement la zone critique : la jonction entre le col cylindrique et la semelle. Ce changement brusque de section géométrique concentre les contraintes au nœud 51473 (σzz = −407.6 MPa), qui se trouve dans un état de compression triaxiale.</p>
+        <p class="en" style="display:none">The Von Mises map immediately identifies the critical zone: the junction between the cylindrical neck and the base flange. This abrupt cross-section change concentrates stress at node 51473 (σzz = −407.6 MPa), which is in a state of triaxial compression.</p>
+
+        <!-- PHOTOS PARTIE II -->
+        <figure class="fig">
+          <img src="support-noeud.png" alt="Localisation du nœud critique sur le support">
+          <figcaption class="fr">Localisation du nœud critique (zone de concentration)</figcaption>
+          <figcaption class="en" style="display:none">Critical node location (concentration zone)</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="support-conges.png" alt="Comparaison des congés de raccordement">
+          <figcaption class="fr">Comparaison des congés de raccordement</figcaption>
+          <figcaption class="en" style="display:none">Fillet radius comparison</figcaption>
+        </figure>
+
+        <div class="verdicts" style="margin-top:1.5rem;">
+          <div class="vchip v-ok">✓ Von Mises 395.8 MPa &lt; σy 470 MPa</div>
+          <div class="vchip v-ok">✓ Tresca 405.2 MPa &lt; σy 470 MPa</div>
+          <div class="vchip v-ok">✓ Rupture σ* 418.8 MPa &lt; σu 745 MPa</div>
+        </div>
+        <p class="fr">La pièce reste dans le domaine élastique sous les trois critères. Aucune rupture prévue dans les conditions de chargement imposées.</p>
+        <p class="en" style="display:none">The part remains in the elastic domain under all three criteria. No fracture expected under the imposed loading conditions.</p>
+      </div>
+
+      <!-- OPTIMISATION -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Optimisation du design</span><span class="en" style="display:none">Design optimization</span><hr/></div>
+        <p class="fr">Pour réduire la concentration de contraintes à la jonction col-semelle, j'ai mené une étude paramétrique sur le rayon du congé de raccordement, de 12.7 mm à 55.7 mm (limite géométrique), en relançant la simulation à chaque valeur.</p>
+        <p class="en" style="display:none">To reduce the stress concentration at the neck-flange junction, I ran a parametric study on the fillet radius, from 12.7 mm to 55.7 mm (geometric limit), re-running the simulation at each value.</p>
+        <div class="opt-track">
+          <div class="opt-node"><div class="nv">12.7 mm</div><div class="nl">395.8 MPa</div></div>
+          <div class="opt-arr">→</div>
+          <div class="opt-node"><div class="nv">20 mm</div><div class="nl">385.5</div></div>
+          <div class="opt-arr">→</div>
+          <div class="opt-node"><div class="nv">41 mm</div><div class="nl">382.3</div></div>
+          <div class="opt-arr">→</div>
+          <div class="opt-node best"><div class="nv">47 mm ★</div><div class="nl">376.9 MPa</div></div>
+          <div class="opt-arr">→</div>
+          <div class="opt-node"><div class="nv">55.7 mm</div><div class="nl">386.3</div></div>
+        </div>
+        <p class="fr"><strong>47 mm bat 55.7 mm</strong> — la limite maximale. Au-delà, le congé interfère avec la géométrie adjacente et redistribue les contraintes. L'optimum se trouve par analyse, pas par intuition.</p>
+        <p class="en" style="display:none"><strong>47 mm beats 55.7 mm</strong> — the geometric maximum. Beyond that, the fillet interferes with adjacent geometry and redistributes stress. The optimum is found through analysis, not intuition.</p>
+      </div>
+
+      <!-- CE QUE J'AI APPRIS -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Ce que ce projet m'a appris</span><span class="en" style="display:none">What I learned</span><hr/></div>
+        <p class="fr">Ce projet a rendu concrètes des formules apprises en cours. Calculer σz = N/A + Mc/I sur papier, puis voir exactement cette courbe apparaître dans SolidWorks avec moins de 2% d'écart — c'est le moment où la mécanique cesse d'être abstraite. Les équations décrivent vraiment ce qui se passe à l'intérieur de la matière.</p>
+        <p class="en" style="display:none">This project made classroom formulas concrete. Calculating σz = N/A + Mc/I on paper, then seeing that exact curve appear in SolidWorks with less than 2% deviation — that's the moment mechanics stops being abstract. The equations genuinely describe what happens inside the material.</p>
+        <p class="fr">L'étude paramétrique du congé m'a appris que l'ingénierie ne suit pas l'intuition : plus grand ne signifie pas toujours meilleur. Il faut analyser, itérer, comparer — et savoir lire ce que les données disent vraiment.</p>
+        <p class="en" style="display:none">The fillet parametric study taught me that engineering doesn't follow intuition: bigger doesn't always mean better. You need to analyze, iterate, compare — and know how to read what the data is actually telling you.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────────────────── DETAIL LOGICIEL FATIGUE ─────────────────────── -->
+  <div class="project-detail" id="detail-fatigue">
+    <button class="back-btn" onclick="showProjectsList()">← <span class="fr">Retour</span><span class="en" style="display:none">Back</span></button>
+    <div class="cs">
+
+      <div class="cs-eye fr">Logiciel & Analyse en fatigue</div>
+      <div class="cs-eye en" style="display:none">Software & Fatigue Analysis</div>
+      <h1 class="cs-h1 fr">Logiciel de Conception<br>en Fatigue</h1>
+      <h1 class="cs-h1 en" style="display:none">Fatigue Design<br>Software</h1>
+
+      <div class="cs-tags">
+        <span class="cs-tag">MATLAB App Designer</span>
+        <span class="cs-tag fr">Fatigue</span><span class="cs-tag en" style="display:none">Fatigue</span>
+        <span class="cs-tag fr">Critère de Goodman</span><span class="cs-tag en" style="display:none">Goodman criterion</span>
+        <span class="cs-tag">Courbe S-N (Basquin)</span>
+        <span class="cs-tag">Kt / Kf</span>
+        <span class="cs-tag fr">Acier · Aluminium · Fonte</span><span class="cs-tag en" style="display:none">Steel · Aluminum · Cast iron</span>
+        <span class="cs-tag fr">Architecture modulaire</span><span class="cs-tag en" style="display:none">Modular architecture</span>
+      </div>
+
+      <!-- IMAGE HERO LOGICIEL -->
+      <figure class="fig">
+        <img src="logiciel-hero.png" alt="Interface du logiciel de conception en fatigue">
+      </figure>
+
+      <div class="prob">
+        <div class="prob-lbl fr">Le problème</div>
+        <div class="prob-lbl en" style="display:none">The problem</div>
+        <h3 class="fr">Des calculs de fatigue longs, répétitifs et faciles à rater</h3>
+        <h3 class="en" style="display:none">Fatigue calculations are long, repetitive and easy to get wrong</h3>
+        <p class="fr">Vérifier une pièce en fatigue demande d'enchaîner concentration de contraintes, sensibilité à l'entaille, correction de la limite d'endurance, critère de Goodman et courbe S-N — à la main, et à recommencer à chaque itération de design. L'objectif : un logiciel qui automatise toute la chaîne et reste utilisable sans aucune connaissance en programmation, pour tester rapidement différentes alternatives et trouver la configuration la plus viable.</p>
+        <p class="en" style="display:none">Checking a part in fatigue means chaining stress concentration, notch sensitivity, endurance-limit correction, the Goodman criterion and the S-N curve — by hand, and starting over for every design iteration. The goal: software that automates the whole chain while staying usable with zero programming knowledge, so different alternatives can be tested quickly to find the most viable configuration.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="stat-val">3</div><div class="stat-lbl fr">Géométries supportées — plaque trouée, encoche, épaulement</div><div class="stat-lbl en" style="display:none">Supported geometries — holed, notched, shouldered plate</div></div>
+        <div class="stat"><div class="stat-val">2</div><div class="stat-lbl fr">Modes de calcul — FS à partir de N, et N à partir de FS</div><div class="stat-lbl en" style="display:none">Calculation modes — FS from N, and N from FS</div></div>
+        <div class="stat"><div class="stat-val">6</div><div class="stat-lbl fr">Facteurs correctifs de la limite d'endurance (kₐ → k_f)</div><div class="stat-lbl en" style="display:none">Endurance-limit correction factors (kₐ → k_f)</div></div>
+      </div>
+
+      <!-- DEUX OBJECTIFS -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Deux objectifs de conception</span><span class="en" style="display:none">Two design objectives</span><hr/></div>
+        <p class="fr">Le logiciel répond aux deux questions que se pose un concepteur face à une pièce sollicitée de façon cyclique. À partir des mêmes données de géométrie, de chargement et de matériau, l'utilisateur choisit le sens du calcul :</p>
+        <p class="en" style="display:none">The software answers the two questions a designer faces with a cyclically loaded part. From the same geometry, loading and material data, the user picks the direction of the calculation:</p>
+        <div class="mgrid">
+          <div class="mcard">
+            <div class="mcard-num fr">Mode 1</div><div class="mcard-num en" style="display:none">Mode 1</div>
+            <h4 class="fr">FS imposé → durée de vie N</h4><h4 class="en" style="display:none">FS imposed → life N</h4>
+            <p class="fr">L'utilisateur fixe un facteur de sécurité cible et le logiciel calcule le nombre de cycles correspondant.</p>
+            <p class="en" style="display:none">The user sets a target safety factor and the software computes the matching number of cycles.</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num fr">Mode 2</div><div class="mcard-num en" style="display:none">Mode 2</div>
+            <h4 class="fr">N imposé → facteur de sécurité FS</h4><h4 class="en" style="display:none">N imposed → safety factor FS</h4>
+            <p class="fr">L'utilisateur fixe une durée de vie visée et le logiciel calcule le facteur de sécurité obtenu.</p>
+            <p class="en" style="display:none">The user sets a target life and the software computes the resulting safety factor.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAINE DE CALCUL -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">La chaîne de calcul</span><span class="en" style="display:none">The calculation pipeline</span><hr/></div>
+        <p class="fr">Chaque calcul suit la même progression rigoureuse, de la géométrie de la section jusqu'au résultat final. Toutes les formules proviennent du manuel <em>Éléments de machines</em> (Drouin et al.) et des notions vues en cours.</p>
+        <p class="en" style="display:none">Every calculation follows the same rigorous progression, from the section geometry to the final result. All formulas come from the textbook <em>Éléments de machines</em> (Drouin et al.) and from material covered in class.</p>
+        <div class="mgrid">
+          <div class="mcard">
+            <div class="mcard-num">01</div>
+            <h4 class="fr">Propriétés géométriques</h4><h4 class="en" style="display:none">Section properties</h4>
+            <p class="fr">Section nette A, inertie I, distance c et rayon local d'entaille, calculés selon le cas (trou, encoche, épaulement).</p>
+            <p class="en" style="display:none">Net section A, inertia I, distance c and local notch radius, computed per case (hole, notch, shoulder).</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num">02</div>
+            <h4 class="fr">Contraintes nominales</h4><h4 class="en" style="display:none">Nominal stresses</h4>
+            <p class="fr">Contrainte axiale F/A et de flexion Mc/I, évaluées en valeurs max et min du chargement.</p>
+            <p class="en" style="display:none">Axial stress F/A and bending stress Mc/I, evaluated at the max and min of the loading.</p>
+            <div class="formula">σ = <span class="hi">F/A</span> + <span class="hi">Mc/I</span></div>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num">03</div>
+            <h4 class="fr">Concentration & fatigue</h4><h4 class="en" style="display:none">Concentration & fatigue</h4>
+            <p class="fr">Kt lu sur les abaques C1–C6, sensibilité q, puis Kf — le plus défavorable entre axial et flexion est retenu.</p>
+            <p class="en" style="display:none">Kt read from charts C1–C6, sensitivity q, then Kf — the worst of axial and bending is kept.</p>
+            <div class="formula">Kf = 1 + <span class="hi">q</span>(Kt − 1)</div>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num">04</div>
+            <h4 class="fr">Endurance corrigée</h4><h4 class="en" style="display:none">Corrected endurance</h4>
+            <p class="fr">La limite d'endurance de base Se′ est corrigée par six facteurs : surface, dimension, fiabilité, température, fatigue et effets divers.</p>
+            <p class="en" style="display:none">The base endurance limit Se′ is corrected by six factors: surface, size, reliability, temperature, fatigue and miscellaneous effects.</p>
+            <div class="formula">Se = <span class="hi">kₐkᵦk_ck_dk_ek_f</span>·Se′</div>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num">05</div>
+            <h4 class="fr">Goodman + courbe S-N</h4><h4 class="en" style="display:none">Goodman + S-N curve</h4>
+            <p class="fr">Le critère de Goodman relie contraintes moyenne et alternée ; la vie finie passe par une courbe S-N de type Basquin.</p>
+            <p class="en" style="display:none">The Goodman criterion links mean and alternating stress; finite life goes through a Basquin-type S-N curve.</p>
+            <div class="formula">1/FS = <span class="hi">σa/Sf</span> + σm/Sut</div>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num">06</div>
+            <h4 class="fr">Résultat</h4><h4 class="en" style="display:none">Result</h4>
+            <p class="fr">FS ou N selon le mode choisi, avec l'indication du régime : vie finie ou vie infinie.</p>
+            <p class="en" style="display:none">FS or N depending on the chosen mode, with the regime indicated: finite or infinite life.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXEMPLE CONCRET -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Un exemple concret</span><span class="en" style="display:none">A worked example</span><hr/></div>
+        <p class="fr">Une plaque en acier trouée (w = 50, d = 10, t = 7,8 mm), chargée en combiné axial + flexion non complètement renversé (Fmax = 1500 N, Fmin = −6500 N ; Mmax = 100, Mmin = −50 N·mm), acier Sut = 550 / Sy = 460 MPa, surface usinée, fiabilité 0,99, 50 °C, pour un facteur de sécurité imposé de 4. Le logiciel renvoie :</p>
+        <p class="en" style="display:none">A holed steel plate (w = 50, d = 10, t = 7.8 mm), under non-fully-reversed combined axial + bending loading (Fmax = 1500 N, Fmin = −6500 N; Mmax = 100, Mmin = −50 N·mm), steel Sut = 550 / Sy = 460 MPa, machined surface, reliability 0.99, 50 °C, for an imposed safety factor of 4. The software returns:</p>
+        <table class="cs-tbl">
+          <thead><tr>
+            <th class="fr">Grandeur</th><th class="en" style="display:none">Quantity</th>
+            <th class="fr">Valeur</th><th class="en" style="display:none">Value</th>
+          </tr></thead>
           <tbody>
-            <tr><td>Raspberry Pi 4B 4GB</td><td class="fr">Cerveau central + ROS2 + Vision</td><td class="en" style="display:none">Central brain + ROS2 + Vision</td></tr>
-            <tr><td>ESP32 TTGO T-Display V1.1</td><td class="fr">Bluetooth Xbox + écran TFT 1.14"</td><td class="en" style="display:none">Xbox Bluetooth + 1.14" TFT screen</td></tr>
-            <tr><td>STM32</td><td class="fr">Contrôle bras robotique (Phase 7)</td><td class="en" style="display:none">Robotic arm control (Phase 7)</td></tr>
-            <tr><td>Hiwonder Chassis + Encoder Module V1.4</td><td class="fr">Châssis alu + moteurs DC encodeurs + driver I2C</td><td class="en" style="display:none">Aluminum chassis + DC motors with encoders + I2C driver</td></tr>
-            <tr><td>HC-SR04</td><td class="fr">Détection obstacles — diviseur tension sur ECHO</td><td class="en" style="display:none">Obstacle detection — voltage divider on ECHO</td></tr>
-            <tr><td>LiPo Zeee 7.4V 2200mAh</td><td class="fr">Alimentation moteurs</td><td class="en" style="display:none">Motor power supply</td></tr>
+            <tr><td>Kt axial / flexion</td><td>2,50 / 1,84</td></tr>
+            <tr><td class="fr">Sensibilité q</td><td class="en" style="display:none">Sensitivity q</td><td>0,86</td></tr>
+            <tr><td class="fr">Kf effectif</td><td class="en" style="display:none">Effective Kf</td><td>2,30</td></tr>
+            <tr><td class="fr">Se′ / Se (corrigée)</td><td class="en" style="display:none">Se′ / Se (corrected)</td><td>275 / 63,6 MPa</td></tr>
+            <tr><td>σa / σm</td><td>48,9 / 2,03 MPa</td></tr>
+            <tr class="hl"><td class="fr">Durée de vie N</td><td class="en" style="display:none">Fatigue life N</td><td class="fr">≈ 21 700 cycles · vie finie</td><td class="en" style="display:none">≈ 21,700 cycles · finite life</td></tr>
+          </tbody>
+        </table>
+        <p class="fr">N restant sous le seuil de 10⁶ cycles, la pièce est en régime de vie finie : pour une durée de vie plus longue, il faut modifier dimensions, matériau ou chargement — et le logiciel permet de le retester en quelques secondes.</p>
+        <p class="en" style="display:none">Since N stays below the 10⁶-cycle threshold, the part is in the finite-life regime: for a longer life, dimensions, material or loading must change — and the software lets you retest it in seconds.</p>
+      </div>
+
+      <!-- INTERFACE -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Interface App Designer</span><span class="en" style="display:none">App Designer interface</span><hr/></div>
+        <p class="fr">L'interface se divise en deux zones : à gauche, toutes les entrées (configuration, dimensions, chargement, matériau, paramètres de fatigue) ; à droite, le résultat principal en grand, accompagné de tous les résultats intermédiaires (Kt, q, Kf, σa, σm, Se′, Se). Les champs apparaissent et disparaissent selon la géométrie et le mode choisis — par exemple le rayon r n'apparaît que pour l'encoche et l'épaulement — ce qui réduit les risques d'erreur de saisie.</p>
+        <p class="en" style="display:none">The interface is split in two zones: on the left, all inputs (configuration, dimensions, loading, material, fatigue parameters); on the right, the main result in large type alongside every intermediate value (Kt, q, Kf, σa, σm, Se′, Se). Fields appear and disappear based on the chosen geometry and mode — the radius r only shows for notch and shoulder cases, for instance — which cuts down input errors.</p>
+        <figure class="fig">
+          <img src="logiciel-canvas.png" alt="Construction de l'interface dans MATLAB App Designer">
+          <figcaption class="fr">Construction de l'interface dans MATLAB App Designer</figcaption>
+          <figcaption class="en" style="display:none">Building the interface in MATLAB App Designer</figcaption>
+        </figure>
+      </div>
+
+      <!-- ARCHITECTURE -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Sous le capot — architecture modulaire</span><span class="en" style="display:none">Under the hood — modular architecture</span><hr/></div>
+        <p class="fr">Plutôt qu'un seul gros script, le moteur de calcul est découpé en une vingtaine de fonctions isolées et testables : <strong>section_props</strong>, <strong>nominal_stress</strong>, <strong>getKt_C1</strong> à <strong>getKt_C6</strong>, <strong>get_q</strong>, <strong>get_Kf</strong>, <strong>get_ka</strong> à <strong>get_kd</strong>, <strong>calc_Se</strong>, <strong>build_SN_params</strong>, et enfin <strong>calc_FS_from_N</strong> / <strong>calc_N_from_FS</strong>. Le tout est orchestré par <strong>run_case.m</strong>, qui relie l'interface au calcul.</p>
+        <p class="en" style="display:none">Rather than one large script, the calculation engine is broken into around twenty isolated, testable functions: <strong>section_props</strong>, <strong>nominal_stress</strong>, <strong>getKt_C1</strong> through <strong>getKt_C6</strong>, <strong>get_q</strong>, <strong>get_Kf</strong>, <strong>get_ka</strong> to <strong>get_kd</strong>, <strong>calc_Se</strong>, <strong>build_SN_params</strong>, and finally <strong>calc_FS_from_N</strong> / <strong>calc_N_from_FS</strong>. All of it is orchestrated by <strong>run_case.m</strong>, which links the interface to the calculation.</p>
+        <p class="fr">Les abaques de concentration de contraintes ont été numérisés à partir des figures du manuel, ce qui permet au logiciel de lire un Kt continu pour n'importe quel ratio géométrique au lieu de se limiter à des valeurs tabulées.</p>
+        <p class="en" style="display:none">The stress-concentration charts were digitized from the textbook figures, letting the software read a continuous Kt for any geometric ratio instead of being limited to tabulated values.</p>
+      </div>
+
+      <!-- VALIDATION -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Validation</span><span class="en" style="display:none">Validation</span><hr/></div>
+        <p class="fr">Chaque cas a d'abord été exécuté directement via un script de test pour obtenir des valeurs de référence, puis rejoué dans l'interface graphique pour comparer. Les trois géométries et les deux modes ont été couverts.</p>
+        <p class="en" style="display:none">Each case was first run directly through a test script to obtain reference values, then replayed in the GUI to compare. All three geometries and both modes were covered.</p>
+        <div class="verdicts">
+          <div class="vchip v-ok">✓ <span class="fr">Plaque trouée — résultats identiques</span><span class="en" style="display:none">Holed plate — results match</span></div>
+          <div class="vchip v-ok">✓ <span class="fr">Plaque avec encoche (C3/C4)</span><span class="en" style="display:none">Notched plate (C3/C4)</span></div>
+          <div class="vchip v-ok">✓ <span class="fr">Plaque avec épaulement (C5/C6)</span><span class="en" style="display:none">Shouldered plate (C5/C6)</span></div>
+          <div class="vchip v-ok">✓ <span class="fr">Mode FS ↔ N</span><span class="en" style="display:none">FS ↔ N mode</span></div>
+        </div>
+        <p class="fr">Les valeurs affichées par l'interface sont identiques à celles du moteur de calcul, et les champs conditionnels apparaissent correctement selon les sélections — confirmant la fiabilité de l'outil.</p>
+        <p class="en" style="display:none">The values displayed by the interface are identical to those of the calculation engine, and conditional fields appear correctly based on selections — confirming the tool's reliability.</p>
+      </div>
+
+      <!-- CE QUE J'AI APPRIS -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Ce que ce projet m'a appris</span><span class="en" style="display:none">What I learned</span><hr/></div>
+        <p class="fr">Construire cet outil m'a appris à transformer une méthode de calcul manuelle en logiciel fiable : découper le problème en fonctions isolées et testables, numériser des abaques, et valider chaque résultat contre une référence avant de faire confiance à l'interface. J'ai aussi vu la valeur d'une interface qui adapte ses champs au contexte — moins d'options visibles, moins d'erreurs de saisie.</p>
+        <p class="en" style="display:none">Building this tool taught me how to turn a manual calculation method into reliable software: break the problem into isolated, testable functions, digitize charts, and validate every result against a reference before trusting the interface. I also saw the value of an interface that adapts its fields to context — fewer visible options, fewer input errors.</p>
+        <p class="fr">Réalisé en équipe de quatre, le projet a utilisé l'IA générative au niveau 2 autorisé (structure du code et débogage uniquement), les formules et résultats restant entièrement ancrés dans le manuel de référence et vérifiés à la main.</p>
+        <p class="en" style="display:none">Done as a team of four, the project used generative AI at the permitted level 2 (code structure and debugging only), with formulas and results staying entirely anchored in the reference textbook and hand-verified.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────────────────── DETAIL ROBOT ─────────────────────── -->
+  <div class="project-detail" id="detail-robot">
+    <button class="back-btn" onclick="showProjectsList()">← <span class="fr">Retour</span><span class="en" style="display:none">Back</span></button>
+    <div class="cs">
+
+      <div class="cs-eye fr">Robotique · UQTR · 2026 — Phase 1 sur 8</div>
+      <div class="cs-eye en" style="display:none">Robotics · UQTR · 2026 — Phase 1 of 8</div>
+      <h1 class="cs-h1 fr">Robot Mobile Autonome<br>Pick & Place</h1>
+      <h1 class="cs-h1 en" style="display:none">Autonomous Mobile Robot<br>Pick & Place</h1>
+
+      <div class="cs-context fr">Projet personnel · En cours de développement</div>
+      <div class="cs-context en" style="display:none">Personal project · In active development</div>
+
+      <div class="cs-tags">
+        <span class="cs-tag">RPi 4B</span>
+        <span class="cs-tag">ESP32</span>
+        <span class="cs-tag">STM32</span>
+        <span class="cs-tag">ROS2</span>
+        <span class="cs-tag">OpenCV</span>
+        <span class="cs-tag">I2C · UART</span>
+        <span class="cs-tag fr">Hardware assemblé</span><span class="cs-tag en" style="display:none">Hardware assembled</span>
+      </div>
+
+      <div class="prob">
+        <div class="prob-lbl fr">L'objectif</div>
+        <div class="prob-lbl en" style="display:none">The goal</div>
+        <h3 class="fr">Un robot qui trouve une balle et la déplace — de façon autonome</h3>
+        <h3 class="en" style="display:none">A robot that finds a ball and moves it — autonomously</h3>
+        <p class="fr">Concevoir et construire un robot à chenilles capable de naviguer dans un environnement, de localiser une balle par vision, de la saisir avec un bras 5-DOF, et de la déposer à un point cible. Le système intègre trois MCU coordonnés, un mode téléopéré Xbox, et une architecture logicielle basée sur ROS2.</p>
+        <p class="en" style="display:none">Design and build a tracked robot capable of navigating an environment, locating a ball by vision, grasping it with a 5-DOF arm, and placing it at a target point. The system integrates three coordinated MCUs, an Xbox teleoperated mode, and a ROS2-based software architecture.</p>
+      </div>
+
+      <!-- PHOTOS HARDWARE -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Phase 1 — Hardware assemblé</span><span class="en" style="display:none">Phase 1 — Hardware assembled</span><hr/></div>
+        <p class="fr">Le châssis, les moteurs, les trois cartes électroniques et le câblage sont en place. L'architecture physique a été validée.</p>
+        <p class="en" style="display:none">The chassis, motors, three electronic boards, and wiring are all in place. The physical architecture has been validated.</p>
+        <figure class="fig narrow">
+          <img src="robot.jpeg" alt="Robot mobile à chenilles assemblé">
+          <figcaption class="fr">Robot assemblé — châssis, RPi et capteur ultrason (Phase 1)</figcaption>
+          <figcaption class="en" style="display:none">Assembled robot — chassis, RPi and ultrasonic sensor (Phase 1)</figcaption>
+        </figure>
+      </div>
+
+      <!-- ARCHITECTURE -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Architecture système</span><span class="en" style="display:none">System architecture</span><hr/></div>
+        <div class="mgrid">
+          <div class="mcard">
+            <div class="mcard-num" style="font-size:1rem;">ESP32</div>
+            <h4 class="fr">Interface & téléopération</h4><h4 class="en" style="display:none">Interface & teleoperation</h4>
+            <p class="fr">Bluetooth Xbox · Dashboard TFT 1.14" · Transmission UART vers RPi</p>
+            <p class="en" style="display:none">Xbox Bluetooth · 1.14" TFT dashboard · UART to RPi</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num" style="font-size:1rem;">RPi 4B</div>
+            <h4 class="fr">Cerveau central</h4><h4 class="en" style="display:none">Central brain</h4>
+            <p class="fr">ROS2 · OpenCV · Coordination I2C (Hiwonder) + UART (STM32)</p>
+            <p class="en" style="display:none">ROS2 · OpenCV · I2C (Hiwonder) + UART (STM32)</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num" style="font-size:1rem;">Hiwonder</div>
+            <h4 class="fr">Motricité</h4><h4 class="en" style="display:none">Locomotion</h4>
+            <p class="fr">Driver I2C · Moteurs DC + encodeurs · Châssis aluminium à chenilles</p>
+            <p class="en" style="display:none">I2C driver · DC motors + encoders · Tracked aluminum chassis</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num" style="font-size:1rem;">STM32</div>
+            <h4 class="fr">Bras robotique</h4><h4 class="en" style="display:none">Robotic arm</h4>
+            <p class="fr">Contrôle 5-DOF · Servomoteurs · Cinématique inverse (Phase 7)</p>
+            <p class="en" style="display:none">5-DOF control · Servomotors · Inverse kinematics (Phase 7)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- HARDWARE TABLE -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Composants</span><span class="en" style="display:none">Components</span><hr/></div>
+        <table class="hw-tbl">
+          <thead><tr><th class="fr">Composant</th><th class="en" style="display:none">Component</th><th class="fr">Rôle</th><th class="en" style="display:none">Role</th></tr></thead>
+          <tbody>
+            <tr><td>Raspberry Pi 4B 4 GB</td><td class="fr">Cerveau central · ROS2 · Vision · Coordination</td><td class="en" style="display:none">Central brain · ROS2 · Vision · Coordination</td></tr>
+            <tr><td>ESP32 TTGO T-Display V1.1</td><td class="fr">Xbox Bluetooth · Dashboard TFT 1.14"</td><td class="en" style="display:none">Xbox Bluetooth · 1.14" TFT dashboard</td></tr>
+            <tr><td>STM32</td><td class="fr">Contrôle bras 5-DOF · Servomoteurs</td><td class="en" style="display:none">5-DOF arm control · Servomotors</td></tr>
+            <tr><td>Hiwonder Chassis + Encoder V1.4</td><td class="fr">Châssis alu · Moteurs DC encodeurs · Driver I2C</td><td class="en" style="display:none">Aluminum chassis · DC motors + encoders · I2C driver</td></tr>
+            <tr><td>HC-SR04</td><td class="fr">Détection obstacles · Diviseur de tension sur ECHO</td><td class="en" style="display:none">Obstacle detection · Voltage divider on ECHO</td></tr>
+            <tr><td>LiPo Zeee 7.4V 2200 mAh</td><td class="fr">Alimentation moteurs</td><td class="en" style="display:none">Motor power supply</td></tr>
             <tr><td>Manette Xbox</td><td class="fr">Téléopération Bluetooth</td><td class="en" style="display:none">Bluetooth teleoperation</td></tr>
           </tbody>
         </table>
       </div>
 
-      <div class="detail-section">
-        <h2 class="fr">Architecture système</h2>
-        <h2 class="en" style="display:none">System architecture</h2>
-        <div class="arch-block">
-<span class="gold">Xbox Controller</span> (Bluetooth)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
-<span class="gold">ESP32 TTGO</span> &nbsp;&nbsp;← Bluetooth + écran TFT dashboard<br>
-&nbsp;&nbsp;&nbsp;&nbsp;↓ UART<br>
-<span class="gold">Raspberry Pi 4B</span> ← Cerveau central + ROS2 + Vision<br>
-&nbsp;&nbsp;&nbsp;&nbsp;↓ I2C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ UART<br>
-<span class="green">Hiwonder Module</span> &nbsp;&nbsp;<span class="green">STM32</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;↓ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
-<span class="green">Moteurs + Encodeurs</span> &nbsp;<span class="green">Bras 5-DOF</span>
+      <!-- ROADMAP -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Feuille de route — 8 phases</span><span class="en" style="display:none">Roadmap — 8 phases</span><hr/></div>
+        <div class="rm">
+          <div class="rm-row"><div class="rm-num">01</div><div class="rm-body"><strong class="fr">Hardware & architecture</strong><strong class="en" style="display:none">Hardware & architecture</strong><span class="fr"> — Assemblage, câblage, validation physique</span><span class="en" style="display:none"> — Assembly, wiring, physical validation</span></div><span class="rm-badge rb-done fr">✓ Complété</span><span class="rm-badge rb-done en" style="display:none">✓ Done</span></div>
+          <div class="rm-row"><div class="rm-num">02</div><div class="rm-body"><strong class="fr">Téléopération Xbox</strong><strong class="en" style="display:none">Xbox teleoperation</strong><span> — ESP32 → RPi → Hiwonder I2C</span></div><span class="rm-badge rb-now fr">En cours</span><span class="rm-badge rb-now en" style="display:none">In progress</span></div>
+          <div class="rm-row"><div class="rm-num">03</div><div class="rm-body"><strong class="fr">Odométrie</strong><strong class="en" style="display:none">Odometry</strong><span> — Encodeurs + IMU → (x, y, θ)</span></div><span class="rm-badge rb-plan fr">Planifiée</span><span class="rm-badge rb-plan en" style="display:none">Planned</span></div>
+          <div class="rm-row"><div class="rm-num">04</div><div class="rm-body"><strong class="fr">Évitement obstacles</strong><strong class="en" style="display:none">Obstacle avoidance</strong><span> — HC-SR04</span></div><span class="rm-badge rb-plan fr">Planifiée</span><span class="rm-badge rb-plan en" style="display:none">Planned</span></div>
+          <div class="rm-row"><div class="rm-num">05</div><div class="rm-body"><strong class="fr">Navigation A→B</strong><strong class="en" style="display:none">A→B navigation</strong><span class="fr"> — Trajectoire autonome</span><span class="en" style="display:none"> — Autonomous path planning</span></div><span class="rm-badge rb-plan fr">Planifiée</span><span class="rm-badge rb-plan en" style="display:none">Planned</span></div>
+          <div class="rm-row"><div class="rm-num">06</div><div class="rm-body"><strong>Vision</strong><span> — RPi Camera + OpenCV · HSV</span></div><span class="rm-badge rb-plan fr">Planifiée</span><span class="rm-badge rb-plan en" style="display:none">Planned</span></div>
+          <div class="rm-row"><div class="rm-num">07</div><div class="rm-body"><strong class="fr">Bras 5-DOF</strong><strong class="en" style="display:none">5-DOF arm</strong><span class="fr"> — STM32 · Cinématique inverse</span><span class="en" style="display:none"> — STM32 · Inverse kinematics</span></div><span class="rm-badge rb-plan fr">Planifiée</span><span class="rm-badge rb-plan en" style="display:none">Planned</span></div>
+          <div class="rm-row"><div class="rm-num">08</div><div class="rm-body"><strong>Pick & Place</strong><span class="fr"> — Intégration système complète</span><span class="en" style="display:none"> — Full system integration</span></div><span class="rm-badge rb-plan fr">Objectif final</span><span class="rm-badge rb-plan en" style="display:none">Final goal</span></div>
         </div>
+        <br>
+        <a href="https://github.com/fatima02d/mobile-manipulator-robot" target="_blank" class="btn-fill" style="display:inline-block;text-decoration:none;padding:0.7rem 1.5rem;">GitHub →</a>
       </div>
 
-      <div class="detail-section">
-        <h2 class="fr">Documentation</h2>
-        <h2 class="en" style="display:none">Documentation</h2>
-        <p class="fr">Le projet est entièrement documenté sur GitHub — logbook de chaque session, schémas de câblage, troubleshooting et code source.</p>
-        <p class="en" style="display:none">The project is fully documented on GitHub — session logbook, wiring diagrams, troubleshooting and source code.</p>
-        <br>
-        <a href="https://github.com/fatima02d/mobile-manipulator-robot" target="_blank" class="btn">GitHub →</a>
-      </div>
     </div>
   </div>
 </div>
 
-<!-- COMPÉTENCES -->
-<div class="page" id="page-competences">
-  <div class="page-header">
+<!-- ══════════════════════════════════════ SKILLS -->
+<div class="page" id="page-skills">
+  <div class="proj-page-header">
     <h1 class="fr">Compétences</h1>
     <h1 class="en" style="display:none">Skills</h1>
     <p class="fr">Techniques, outils et méthodes</p>
     <p class="en" style="display:none">Technical skills, tools and methods</p>
   </div>
-  <div class="skills-wrap">
-    <div class="skills-grid">
-      <div class="skill-card">
-        <h3 class="fr">Programmation</h3>
-        <h3 class="en" style="display:none">Programming</h3>
-        <ul>
-          <li>Python</li>
-          <li>C / C++</li>
-          <li>MATLAB</li>
-          <li>VHDL</li>
-          <li>ROS2</li>
-        </ul>
+  <div class="skills-pg">
+    <div class="sk-grid">
+      <div class="sk-card">
+        <h3 class="fr">Programmation</h3><h3 class="en" style="display:none">Programming</h3>
+        <ul><li>Python</li><li>C / C++</li><li>MATLAB</li><li>VHDL</li><li>ROS2</li></ul>
       </div>
-      <div class="skill-card">
+      <div class="sk-card">
         <h3>Hardware</h3>
+        <ul><li>Raspberry Pi 4B</li><li>ESP32 / STM32</li><li>FPGA (Nexys A7)</li><li>I2C / UART / SPI</li><li class="fr">Encodeurs / PWM</li><li class="en" style="display:none">Encoders / PWM</li></ul>
+      </div>
+      <div class="sk-card">
+        <h3 class="fr">Mécatronique</h3><h3 class="en" style="display:none">Mechatronics</h3>
         <ul>
-          <li>Raspberry Pi 4B</li>
-          <li>ESP32 / STM32</li>
-          <li>FPGA (Nexys A7)</li>
-          <li>I2C / UART / SPI</li>
-          <li>PWM &amp; Encodeurs</li>
+          <li>SolidWorks / FEA</li>
+          <li class="fr">Analyse de contrainte</li><li class="en" style="display:none">Stress analysis</li>
+          <li class="fr">Analyse en fatigue · Goodman</li><li class="en" style="display:none">Fatigue analysis · Goodman</li>
+          <li>Contrôle PID</li><li>OpenCV</li>
+          <li class="fr">Cinématique inverse</li><li class="en" style="display:none">Inverse kinematics</li>
         </ul>
       </div>
-      <div class="skill-card">
-        <h3 class="fr">Mécatronique</h3>
-        <h3 class="en" style="display:none">Mechatronics</h3>
-        <ul>
-          <li>SolidWorks</li>
-          <li>Contrôle PID</li>
-          <li>Odométrie</li>
-          <li>OpenCV</li>
-          <li class="fr">Cinématique inverse</li>
-          <li class="en" style="display:none">Inverse kinematics</li>
+      <div class="sk-card">
+        <h3 class="fr">Outils</h3><h3 class="en" style="display:none">Tools</h3>
+        <ul><li>Git / GitHub</li><li>Linux</li><li>Vivado / Vitis</li>
+          <li class="fr">Documentation technique</li><li class="en" style="display:none">Technical documentation</li>
+          <li class="fr">Gestion de projet</li><li class="en" style="display:none">Project management</li>
         </ul>
       </div>
-      <div class="skill-card">
-        <h3 class="fr">Outils</h3>
-        <h3 class="en" style="display:none">Tools</h3>
+      <div class="sk-card">
+        <h3 class="fr">Formation</h3><h3 class="en" style="display:none">Education</h3>
         <ul>
-          <li>Git / GitHub</li>
-          <li>Linux</li>
-          <li>Vivado / Vitis</li>
-          <li class="fr">Documentation technique</li>
-          <li class="en" style="display:none">Technical documentation</li>
-          <li class="fr">Gestion de projet</li>
-          <li class="en" style="display:none">Project management</li>
+          <li class="fr">B.Ing Génie Mécatronique — UQTR</li><li class="en" style="display:none">B.Eng Mechatronics — UQTR</li>
+          <li class="fr">Gestion de projets — HEC Montréal</li><li class="en" style="display:none">Project management — HEC Montréal</li>
         </ul>
       </div>
-      <div class="skill-card">
-        <h3 class="fr">Formation</h3>
-        <h3 class="en" style="display:none">Education</h3>
-        <ul>
-          <li class="fr">B.Ing Génie Mécatronique — UQTR</li>
-          <li class="en" style="display:none">B.Eng Mechatronics — UQTR</li>
-          <li class="fr">Certificat en gestion de projet</li>
-          <li class="en" style="display:none">Project Management Certificate</li>
-                <li class="fr">Licence en génie systèmes insdutriels</li>
-          <li class="en" style="display:none">Bachelor in Industrial systems</li>
-        </ul>
-      </div>
-      <div class="skill-card">
-        <h3 class="fr">Langues</h3>
-        <h3 class="en" style="display:none">Languages</h3>
-        <ul>
-          <li>Français</li>
-          <li>English</li>
-          <li>Seereer</li>
-          <li>Wolof</li>
-        </ul>
+      <div class="sk-card">
+        <h3 class="fr">Langues</h3><h3 class="en" style="display:none">Languages</h3>
+        <ul><li>Français</li><li>English</li><li>Wolof</li><li>Seereer</li></ul>
       </div>
     </div>
-    <div class="contact-section">
+    <div class="contact-blk">
       <h2>Contact</h2>
       <p class="fr">Intéressé·e par mon profil ou mes projets ?</p>
       <p class="en" style="display:none">Interested in my profile or projects?</p>
@@ -450,46 +892,45 @@
         <a href="mailto:saidafatimazahraadiouf@gmail.com" class="contact-link">✉ Email</a>
         <a href="https://github.com/fatima02d" target="_blank" class="contact-link">⌥ GitHub</a>
         <a href="https://www.linkedin.com/in/saida-fatimatou-zahraa-diouf" target="_blank" class="contact-link">◈ LinkedIn</a>
-        <a href="https://fatima02d.github.io" target="_blank" class="contact-link">◉ Portfolio</a>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  function showPage(name) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-    const navEl = document.getElementById('nav-' + name);
-    if (navEl) navEl.classList.add('active');
-    window.scrollTo(0, 0);
-    if (name === 'projets') showProjectsList();
+  function showPage(n){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+n).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+    const el=document.getElementById('nav-'+n);
+    if(el)el.classList.add('active');
+    window.scrollTo(0,0);
+    if(n==='projects')showProjectsList();
   }
-
-  function showProject(id) {
+  function showProject(id){
     document.getElementById('projects-list').classList.add('hidden');
-    document.querySelectorAll('.project-detail').forEach(d => d.classList.remove('active'));
-    document.getElementById('detail-' + id).classList.add('active');
-    window.scrollTo(0, 0);
+    document.querySelectorAll('.project-detail').forEach(d=>d.classList.remove('active'));
+    document.getElementById('detail-'+id).classList.add('active');
+    window.scrollTo(0,0);
   }
-
-  function showProjectsList() {
+  function showProjectsList(){
     document.getElementById('projects-list').classList.remove('hidden');
-    document.querySelectorAll('.project-detail').forEach(d => d.classList.remove('active'));
+    document.querySelectorAll('.project-detail').forEach(d=>d.classList.remove('active'));
   }
-
-  function setLang(lang) {
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  function switchTab(e,id){
+    document.querySelectorAll('.tab-pane').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    e.currentTarget.classList.add('active');
+  }
+  function setLang(lang){
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
     document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
-    document.documentElement.lang = lang;
-    const hide = lang === 'fr' ? 'en' : 'fr';
-    document.querySelectorAll('.' + lang).forEach(el => el.style.display = '');
-    document.querySelectorAll('.' + hide).forEach(el => el.style.display = 'none');
+    const hide=lang==='fr'?'en':'fr';
+    document.querySelectorAll('.'+lang).forEach(el=>el.style.display='');
+    document.querySelectorAll('.'+hide).forEach(el=>el.style.display='none');
   }
-
-  window.addEventListener('DOMContentLoaded', () => setLang('fr'));
+  window.addEventListener('DOMContentLoaded',()=>setLang('fr'));
 </script>
 </body>
 </html>
-
