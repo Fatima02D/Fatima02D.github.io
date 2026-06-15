@@ -388,13 +388,7 @@ I've always been fascinated by how things work—and even more by how they could
       <!-- CARTE PSEUDO-CPU FPGA -->
       <div class="pcard" onclick="showProject('fpga')">
         <div class="pcard-img">
-          <!--
-            IMAGE DE PRÉSENTATION DU PROJET FPGA :
-            Idéalement le diagramme d'état FSM, le schéma de l'ALU/MAC,
-            ou une capture des chronogrammes de simulation.
-            <img src="fpga-hero.png" alt="Pseudo-CPU FPGA">
-          -->
-          <div class="pcard-img-ph"><div class="fr">Schéma à venir</div><div class="en" style="display:none">Diagram coming</div></div>
+          <img src="fpga-hero.jpeg" alt="Carte FPGA Nexys A7 avec affichage 7 segments">
         </div>
         <div class="pcard-body">
           <div class="pcard-eye fr">Conception numérique · FPGA</div>
@@ -897,11 +891,11 @@ I've always been fascinated by how things work—and even more by how they could
       </div>
 
       <!-- IMAGE HERO FPGA -->
-      <div class="figslot">
-        <span class="fr">Visuel principal du projet — par ex. le diagramme d'état FSM ou le schéma système</span>
-        <span class="en" style="display:none">Main project visual — e.g. the FSM state diagram or the system schematic</span>
-        <span class="fn">fpga-hero.png</span>
-      </div>
+      <figure class="fig">
+        <img src="fpga-hero.jpeg" alt="Carte FPGA Nexys A7 avec le résultat affiché sur les afficheurs 7 segments">
+        <figcaption class="fr">Le CPU implémenté sur carte Nexys A7 (Artix-7) — résultats sur les afficheurs 7 segments</figcaption>
+        <figcaption class="en" style="display:none">The CPU running on a Nexys A7 board (Artix-7) — results on the 7-segment displays</figcaption>
+      </figure>
 
       <div class="prob">
         <div class="prob-lbl fr">L'objectif</div>
@@ -998,11 +992,6 @@ I've always been fascinated by how things work—and even more by how they could
         <div class="cs-sec-title"><span class="fr">Minuterie programmable</span><span class="en" style="display:none">Programmable timer</span><hr/></div>
         <p class="fr">La minuterie est un périphérique mappé en mémoire : le CPU la configure avec les instructions normales WR et READ, sans jeu d'instructions dédié. Un diviseur d'horloge synchrone ralentit l'horloge du FPGA pour générer une impulsion lente <strong>tick_div</strong> ; un compteur 10 bits (0 à 1023) compte jusqu'à une limite puis se recharge. À partir de cette valeur, la minuterie produit une lecture du temps, une impulsion de comparaison à une valeur précise, et un signal PWM dont le rapport cyclique se règle dynamiquement.</p>
         <p class="en" style="display:none">The timer is a memory-mapped peripheral: the CPU configures it with the normal WR and READ instructions, with no dedicated opcodes. A synchronous clock divider slows the FPGA clock to generate a slow <strong>tick_div</strong> pulse; a 10-bit counter (0 to 1023) counts up to a limit then reloads. From that value, the timer produces a time reading, a compare pulse at a precise value, and a PWM signal whose duty cycle can be tuned on the fly.</p>
-        <div class="figslot">
-          <span class="fr">Chronogrammes de la minuterie — TIME_REG, COMP_REG, PWM_REG</span>
-          <span class="en" style="display:none">Timer waveforms — TIME_REG, COMP_REG, PWM_REG</span>
-          <span class="fn">minuterie-chronogramme.png</span>
-        </div>
       </div>
 
       <!-- UART -->
