@@ -47,6 +47,7 @@
     .hero-sub{font-size:0.8rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:1.2rem;}
     .hero-h1{font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:900;line-height:1.04;letter-spacing:-0.03em;color:var(--ink);margin-bottom:1.4rem;}
     .hero-h1 em{font-style:normal;color:var(--accent);}
+    .hero-title{font-size:clamp(1.4rem,2.6vw,2rem);font-weight:700;line-height:1.2;letter-spacing:-0.02em;color:var(--accent);margin-bottom:1.4rem;}
     .hero-p{font-size:1.18rem;color:var(--ink2);line-height:1.8;max-width:620px;margin-bottom:2rem;}
     .hero-btns{display:flex;gap:0.8rem;flex-wrap:wrap;}
     .btn-fill{padding:0.8rem 1.8rem;background:var(--ink);color:#fff;border:none;border-radius:7px;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;letter-spacing:-0.01em;transition:opacity 0.15s;}
@@ -178,6 +179,10 @@
     .fig img{width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:10px;background:#fff;}
     .fig figcaption{font-size:0.8rem;color:var(--ink3);text-align:center;margin-top:0.55rem;font-style:italic;}
     .fig.narrow{max-width:360px;margin-left:auto;margin-right:auto;}
+
+    /* FIGURE PLACEHOLDER (image à venir) */
+    .figslot{border:1.5px dashed var(--border);border-radius:10px;background:var(--surface);padding:2.4rem 1.2rem;text-align:center;color:var(--ink3);font-size:0.88rem;margin:1.6rem 0;line-height:1.6;}
+    .figslot .fn{font-family:monospace;font-size:0.78rem;color:var(--ink3);margin-top:0.45rem;display:block;}
 
     /* ROADMAP */
     .rm{margin:1rem 0;}
@@ -375,6 +380,29 @@ I've always been fascinated by how things work—and even more by how they could
           <h3 class="en" style="display:none">Fatigue Design Software</h3>
           <p class="fr">Outil MATLAB App Designer calculant le facteur de sécurité et la durée de vie de plaques entaillées sous chargement combiné. Goodman + courbe S-N.</p>
           <p class="en" style="display:none">MATLAB App Designer tool computing the safety factor and fatigue life of notched plates under combined loading. Goodman + S-N curve.</p>
+          <div class="pcard-cs fr">Lire l'étude de cas →</div>
+          <div class="pcard-cs en" style="display:none">Read the case study →</div>
+        </div>
+      </div>
+
+      <!-- CARTE PSEUDO-CPU FPGA -->
+      <div class="pcard" onclick="showProject('fpga')">
+        <div class="pcard-img">
+          <!--
+            IMAGE DE PRÉSENTATION DU PROJET FPGA :
+            Idéalement le diagramme d'état FSM, le schéma de l'ALU/MAC,
+            ou une capture des chronogrammes de simulation.
+            <img src="fpga-hero.png" alt="Pseudo-CPU FPGA">
+          -->
+          <div class="pcard-img-ph"><div class="fr">Schéma à venir</div><div class="en" style="display:none">Diagram coming</div></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-eye fr">Conception numérique · FPGA</div>
+          <div class="pcard-eye en" style="display:none">Digital Design · FPGA</div>
+          <h3 class="fr">Pseudo-Processeur sur FPGA</h3>
+          <h3 class="en" style="display:none">Pseudo-Processor on FPGA</h3>
+          <p class="fr">Processeur conçu bloc par bloc dans Vitis Model Composer — FSM, ALU avec MAC (DSP48E1), minuterie et UART — puis implémenté sur carte FPGA via Vivado.</p>
+          <p class="en" style="display:none">Processor built block by block in Vitis Model Composer — FSM, ALU with MAC (DSP48E1), timer and UART — then deployed to FPGA via Vivado.</p>
           <div class="pcard-cs fr">Lire l'étude de cas →</div>
           <div class="pcard-cs en" style="display:none">Read the case study →</div>
         </div>
@@ -728,7 +756,7 @@ I've always been fascinated by how things work—and even more by how they could
       <div class="cs-sec">
         <div class="cs-sec-title"><span class="fr">Ce que ce projet m'a appris</span><span class="en" style="display:none">What I learned</span><hr/></div>
         <p class="fr">Construire cet outil m'a appris à transformer une méthode de calcul manuelle en logiciel fiable : découper le problème en fonctions isolées et testables, numériser des abaques, et valider chaque résultat contre une référence avant de faire confiance à l'interface. J'ai aussi vu la valeur d'une interface qui adapte ses champs au contexte — moins d'options visibles, moins d'erreurs de saisie.</p>
-        <p class="en" style="display:none">Building this tool taught me how to turn a manual calculation method into reliable software: break the problem into isolated, testable functions, digitize charts, and validate every result against a reference before trusting the interface. I also saw the value of an interface that adapts its fields to context — fewer visible options, fewer input errors.</p
+        <p class="en" style="display:none">Building this tool taught me how to turn a manual calculation method into reliable software: break the problem into isolated, testable functions, digitize charts, and validate every result against a reference before trusting the interface. I also saw the value of an interface that adapts its fields to context — fewer visible options, fewer input errors.</p>
       </div>
 
     </div>
@@ -845,6 +873,202 @@ I've always been fascinated by how things work—and even more by how they could
 
     </div>
   </div>
+
+  <!-- ─────────────────────── DETAIL PSEUDO-CPU FPGA ─────────────────────── -->
+  <div class="project-detail" id="detail-fpga">
+    <button class="back-btn" onclick="showProjectsList()">← <span class="fr">Retour</span><span class="en" style="display:none">Back</span></button>
+    <div class="cs">
+
+      <div class="cs-eye fr">Conception numérique · FPGA</div>
+      <div class="cs-eye en" style="display:none">Digital Design · FPGA</div>
+      <h1 class="cs-h1 fr">Pseudo-Processeur<br>sur FPGA</h1>
+      <h1 class="cs-h1 en" style="display:none">Pseudo-Processor<br>on FPGA</h1>
+
+      <div class="cs-tags">
+        <span class="cs-tag">Vitis Model Composer</span>
+        <span class="cs-tag">Simulink</span>
+        <span class="cs-tag">Vivado</span>
+        <span class="cs-tag">VHDL</span>
+        <span class="cs-tag">FSM (Moore)</span>
+        <span class="cs-tag">ALU · DSP48E1</span>
+        <span class="cs-tag">UART</span>
+        <span class="cs-tag fr">Minuterie · PWM</span><span class="cs-tag en" style="display:none">Timer · PWM</span>
+        <span class="cs-tag fr">Afficheurs 7 segments</span><span class="cs-tag en" style="display:none">7-segment display</span>
+      </div>
+
+      <!-- IMAGE HERO FPGA -->
+      <div class="figslot">
+        <span class="fr">Visuel principal du projet — par ex. le diagramme d'état FSM ou le schéma système</span>
+        <span class="en" style="display:none">Main project visual — e.g. the FSM state diagram or the system schematic</span>
+        <span class="fn">fpga-hero.png</span>
+      </div>
+
+      <div class="prob">
+        <div class="prob-lbl fr">L'objectif</div>
+        <div class="prob-lbl en" style="display:none">The goal</div>
+        <h3 class="fr">Construire un processeur, bloc par bloc, jusqu'au FPGA</h3>
+        <h3 class="en" style="display:none">Build a processor, block by block, all the way to the FPGA</h3>
+        <p class="fr">Concevoir un pseudo-processeur capable d'exécuter un petit jeu d'instructions (WR, READ, MOV, ALU), en assemblant à la main chaque sous-système — unité de contrôle, unité arithmétique, minuterie, communication série — dans Vitis Model Composer / Simulink, puis en l'implémentant réellement sur une carte FPGA via Vivado avec affichage sur afficheurs 7 segments.</p>
+        <p class="en" style="display:none">Design a pseudo-processor able to execute a small instruction set (WR, READ, MOV, ALU), hand-assembling each subsystem — control unit, arithmetic unit, timer, serial communication — in Vitis Model Composer / Simulink, then actually deploying it to an FPGA board through Vivado with a 7-segment display.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="stat-val">4</div><div class="stat-lbl fr">Sous-systèmes intégrés — FSM, ALU, minuterie, UART</div><div class="stat-lbl en" style="display:none">Integrated subsystems — FSM, ALU, timer, UART</div></div>
+        <div class="stat"><div class="stat-val">4</div><div class="stat-lbl fr">Opérations ALU — addition, soustraction, multiplication, MAC</div><div class="stat-lbl en" style="display:none">ALU operations — add, subtract, multiply, MAC</div></div>
+        <div class="stat"><div class="stat-val">2</div><div class="stat-lbl fr">Niveaux de validation — simulation puis FPGA réel</div><div class="stat-lbl en" style="display:none">Validation levels — simulation then real FPGA</div></div>
+      </div>
+
+      <!-- ARCHITECTURE -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Architecture du système</span><span class="en" style="display:none">System architecture</span><hr/></div>
+        <p class="fr">Le cœur du processeur est une machine à états finis (FSM) qui orchestre tout : elle lit une instruction, la décode, active le bon bloc, puis attend la fin de l'exécution avant de passer à la suivante. Autour d'elle gravitent trois sous-systèmes, tous pilotés par les instructions du CPU.</p>
+        <p class="en" style="display:none">The heart of the processor is a finite-state machine (FSM) that orchestrates everything: it fetches an instruction, decodes it, activates the right block, then waits for execution to finish before moving on. Around it sit three subsystems, all driven by the CPU's instructions.</p>
+        <div class="mgrid">
+          <div class="mcard">
+            <div class="mcard-num" style="font-size:1rem;">FSM</div>
+            <h4 class="fr">Unité de contrôle</h4><h4 class="en" style="display:none">Control unit</h4>
+            <p class="fr">Machine de Moore à 7 états : Load → Fetch → Decode → WR / READ / MOV / ALU.</p>
+            <p class="en" style="display:none">7-state Moore machine: Load → Fetch → Decode → WR / READ / MOV / ALU.</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num" style="font-size:1rem;">ALU</div>
+            <h4 class="fr">Unité arithmétique</h4><h4 class="en" style="display:none">Arithmetic unit</h4>
+            <p class="fr">Addition, soustraction, multiplication et MAC vectoriel, sélectionnés par un mux 4 entrées.</p>
+            <p class="en" style="display:none">Addition, subtraction, multiplication and vector MAC, selected by a 4-input mux.</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num fr" style="font-size:1rem;">Minuterie</div><div class="mcard-num en" style="font-size:1rem;display:none">Timer</div>
+            <h4 class="fr">Périphérique temporel</h4><h4 class="en" style="display:none">Timing peripheral</h4>
+            <p class="fr">Diviseur d'horloge, compteur 10 bits, impulsion de comparaison et génération PWM, mappés en mémoire.</p>
+            <p class="en" style="display:none">Clock divider, 10-bit counter, compare pulse and PWM generation, memory-mapped.</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num" style="font-size:1rem;">UART</div>
+            <h4 class="fr">Communication série</h4><h4 class="en" style="display:none">Serial communication</h4>
+            <p class="fr">Transmetteur PISO et récepteur SIPO, chacun piloté par sa propre FSM et son compteur.</p>
+            <p class="en" style="display:none">PISO transmitter and SIPO receiver, each driven by its own FSM and counter.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FSM -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">FSM — le chef d'orchestre</span><span class="en" style="display:none">FSM — the conductor</span><hr/></div>
+        <p class="fr">La FSM est une machine de Moore : ses sorties de contrôle (wr_en, rd_en, mov_en, alu_en) ne dépendent que de l'état courant. À partir de la table de transition, j'ai développé les équations booléennes des prochains états (D2, D1, D0) en fonction de Q2, Q1, Q0, puis je les ai câblées directement avec des bascules D, des comparateurs et des portes AND/OR dans Model Composer. Des compteurs C1 à C4 maintiennent la FSM dans l'état d'exécution jusqu'à ce que le bloc concerné ait terminé.</p>
+        <p class="en" style="display:none">The FSM is a Moore machine: its control outputs (wr_en, rd_en, mov_en, alu_en) depend only on the current state. From the transition table I derived the boolean next-state equations (D2, D1, D0) in terms of Q2, Q1, Q0, then wired them directly with D flip-flops, comparators and AND/OR gates in Model Composer. Counters C1 to C4 hold the FSM in the execution state until the relevant block has finished.</p>
+        <div class="figslot">
+          <span class="fr">Diagramme d'état de la FSM (Load · Fetch · Decode · WR/READ/MOV/ALU)</span>
+          <span class="en" style="display:none">FSM state diagram (Load · Fetch · Decode · WR/READ/MOV/ALU)</span>
+          <span class="fn">fsm-diagramme.png</span>
+        </div>
+      </div>
+
+      <!-- ALU -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">ALU & MAC vectoriel (DSP48E1)</span><span class="en" style="display:none">ALU & vector MAC (DSP48E1)</span><hr/></div>
+        <p class="fr">Les quatre opérations sont calculées en permanence et en parallèle ; un multiplexeur choisit laquelle envoyer en sortie selon les deux bits de sélection. L'opération la plus intéressante est le MAC (Multiply-Accumulate), qui calcule la somme des produits de deux vecteurs en exploitant la primitive matérielle DSP48E1 du FPGA — une cellule capable de multiplier et d'accumuler en un seul cycle d'horloge. Un compteur parcourt deux ROMs internes (vecteurs A et B) et réinjecte l'accumulateur à chaque cycle.</p>
+        <p class="en" style="display:none">The four operations are computed continuously and in parallel; a multiplexer picks which one to output based on the two selection bits. The most interesting one is the MAC (Multiply-Accumulate), which sums the products of two vectors using the FPGA's DSP48E1 hardware primitive — a cell able to multiply and accumulate in a single clock cycle. A counter walks two internal ROMs (vectors A and B) and feeds the accumulator back each cycle.</p>
+        <table class="cs-tbl">
+          <thead><tr>
+            <th>SEL_ALU</th>
+            <th class="fr">Opération</th><th class="en" style="display:none">Operation</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>00</td><td class="fr">Addition</td><td class="en" style="display:none">Addition</td></tr>
+            <tr><td>01</td><td class="fr">Soustraction</td><td class="en" style="display:none">Subtraction</td></tr>
+            <tr><td>10</td><td class="fr">Multiplication</td><td class="en" style="display:none">Multiplication</td></tr>
+            <tr class="hl"><td>11</td><td class="fr">MAC vectoriel (DSP48E1)</td><td class="en" style="display:none">Vector MAC (DSP48E1)</td></tr>
+          </tbody>
+        </table>
+        <div class="formula">C(n+1) = <span class="hi">A × B</span> + C(n)</div>
+        <figure class="fig" style="margin-top:1.4rem;">
+          <img src="alu-mac.png" alt="Schéma interne de l'ALU avec addition, soustraction, multiplication, DSP_MAC et mux de sélection">
+          <figcaption class="fr">Schéma interne de l'ALU — opérations en parallèle, bloc DSP_MAC et mux piloté par SEL_ALU</figcaption>
+          <figcaption class="en" style="display:none">Internal ALU schematic — parallel operations, DSP_MAC block and SEL_ALU-driven mux</figcaption>
+        </figure>
+      </div>
+
+      <!-- MINUTERIE -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Minuterie programmable</span><span class="en" style="display:none">Programmable timer</span><hr/></div>
+        <p class="fr">La minuterie est un périphérique mappé en mémoire : le CPU la configure avec les instructions normales WR et READ, sans jeu d'instructions dédié. Un diviseur d'horloge synchrone ralentit l'horloge du FPGA pour générer une impulsion lente <strong>tick_div</strong> ; un compteur 10 bits (0 à 1023) compte jusqu'à une limite puis se recharge. À partir de cette valeur, la minuterie produit une lecture du temps, une impulsion de comparaison à une valeur précise, et un signal PWM dont le rapport cyclique se règle dynamiquement.</p>
+        <p class="en" style="display:none">The timer is a memory-mapped peripheral: the CPU configures it with the normal WR and READ instructions, with no dedicated opcodes. A synchronous clock divider slows the FPGA clock to generate a slow <strong>tick_div</strong> pulse; a 10-bit counter (0 to 1023) counts up to a limit then reloads. From that value, the timer produces a time reading, a compare pulse at a precise value, and a PWM signal whose duty cycle can be tuned on the fly.</p>
+        <div class="figslot">
+          <span class="fr">Chronogrammes de la minuterie — TIME_REG, COMP_REG, PWM_REG</span>
+          <span class="en" style="display:none">Timer waveforms — TIME_REG, COMP_REG, PWM_REG</span>
+          <span class="fn">minuterie-chronogramme.png</span>
+        </div>
+      </div>
+
+      <!-- UART -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">UART — émission & réception</span><span class="en" style="display:none">UART — transmit & receive</span><hr/></div>
+        <p class="fr">La communication série suit une trame UART simple : un bit de départ à 0, 8 bits de données, un bit d'arrêt à 1. Le transmetteur (TX) repose sur un registre à décalage <strong>PISO</strong> qui sérialise les bits LSB d'abord ; le récepteur (RX), conçu de zéro, utilise un registre <strong>SIPO</strong> et sa propre FSM pour reconstruire l'octet. Plutôt que de ralentir l'horloge, j'ai conservé l'horloge 100 MHz du FPGA et généré un signal d'activation <strong>baud_tick</strong> à partir d'un compteur, calibré pour 115 200 bauds — les deux FSM n'avancent que sur ce tick.</p>
+        <p class="en" style="display:none">Serial communication follows a simple UART frame: a 0 start bit, 8 data bits, a 1 stop bit. The transmitter (TX) is built on a <strong>PISO</strong> shift register that serializes bits LSB first; the receiver (RX), designed from scratch, uses a <strong>SIPO</strong> register and its own FSM to rebuild the byte. Rather than slowing the clock, I kept the FPGA's 100 MHz clock and generated a <strong>baud_tick</strong> enable from a counter, calibrated for 115,200 baud — both FSMs only advance on that tick.</p>
+        <p class="fr">Validation avec la valeur 85 (01010101) : le TX émet la trame <strong>0 | 1 0 1 0 1 0 1 0 | 1</strong> et le SIPO du RX reconstruit exactement 85 à la réception — la donnée reçue correspond bien à la donnée transmise.</p>
+        <p class="en" style="display:none">Validated with the value 85 (01010101): the TX sends the frame <strong>0 | 1 0 1 0 1 0 1 0 | 1</strong> and the RX's SIPO rebuilds exactly 85 on reception — the received data matches the transmitted data.</p>
+        <div class="figslot">
+          <span class="fr">Schéma d'intégration UART (TX PISO + RX SIPO) ou chronogramme</span>
+          <span class="en" style="display:none">UART integration schematic (TX PISO + RX SIPO) or waveform</span>
+          <span class="fn">uart.png</span>
+        </div>
+      </div>
+
+      <!-- INTEGRATION FPGA -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Intégration sur FPGA</span><span class="en" style="display:none">FPGA integration</span><hr/></div>
+        <p class="fr">Une fois chaque bloc validé en simulation, le CPU complet a été assemblé dans un Block Design Vivado : l'IP du processeur, l'UART et un décodeur 7 segments ont été interconnectés, l'horloge 100 MHz distribuée, et les broches reliées via le fichier de contraintes. L'affichage montre le résultat de l'ALU sur 4 digits hexadécimaux et la donnée reçue par l'UART RX sur 2 digits. Après synthèse, implémentation et génération du bitstream, le système a été validé sur la carte.</p>
+        <p class="en" style="display:none">Once each block was validated in simulation, the full CPU was assembled in a Vivado Block Design: the processor IP, the UART and a 7-segment decoder were interconnected, the 100 MHz clock distributed, and the pins wired through the constraints file. The display shows the ALU result on 4 hex digits and the UART RX data on 2 digits. After synthesis, implementation and bitstream generation, the system was validated on the board.</p>
+        <div class="verdicts">
+          <div class="vchip v-ok">✓ <span class="fr">ALU — add, sous, mult, MAC</span><span class="en" style="display:none">ALU — add, sub, mult, MAC</span></div>
+          <div class="vchip v-ok">✓ <span class="fr">Minuterie — comptage, comparaison, PWM</span><span class="en" style="display:none">Timer — counting, compare, PWM</span></div>
+          <div class="vchip v-ok">✓ <span class="fr">UART — donnée reconstruite</span><span class="en" style="display:none">UART — data reconstructed</span></div>
+          <div class="vchip v-ok">✓ <span class="fr">Affichage 7 segments sur FPGA</span><span class="en" style="display:none">7-segment display on FPGA</span></div>
+        </div>
+      </div>
+
+      <!-- DEBOGAGE -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Le vrai défi : l'intégration</span><span class="en" style="display:none">The real challenge: integration</span><hr/></div>
+        <p class="fr">Chaque bloc fonctionnait isolément, mais c'est leur assemblage qui a posé les vraies difficultés — exactement comme dans un système réel. La plupart des bogues venaient non pas des blocs, mais de leur synchronisation temporelle.</p>
+        <p class="en" style="display:none">Each block worked in isolation, but it was assembling them that raised the real difficulties — exactly like in a real system. Most bugs came not from the blocks themselves, but from their timing.</p>
+        <div class="mgrid">
+          <div class="mcard">
+            <div class="mcard-num">01</div>
+            <h4 class="fr">Types HDL incompatibles</h4><h4 class="en" style="display:none">Mismatched HDL types</h4>
+            <p class="fr">Mélange booléen / UFix_1_0 dans Model Composer → normalisation du contrôle en booléen et blocs Convert sur les données.</p>
+            <p class="en" style="display:none">Boolean / UFix_1_0 mixing in Model Composer → control normalized to boolean and Convert blocks on the data.</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num">02</div>
+            <h4 class="fr">Diviseur d'horloge instable</h4><h4 class="en" style="display:none">Unstable clock divider</h4>
+            <p class="fr">Les bascules D en cascade créaient des problèmes de propagation → réécriture en architecture purement synchrone (registres, comparateurs, mux).</p>
+            <p class="en" style="display:none">Cascaded D flip-flops caused propagation issues → rewritten as a purely synchronous architecture (registers, comparators, mux).</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num">03</div>
+            <h4 class="fr">Latences parasites</h4><h4 class="en" style="display:none">Spurious latencies</h4>
+            <p class="fr">Des latences sur la logique combinatoire de contrôle provoquaient de mauvaises transitions d'état → latence imposée à zéro.</p>
+            <p class="en" style="display:none">Latencies on the combinational control logic caused wrong state transitions → latency forced to zero.</p>
+          </div>
+          <div class="mcard">
+            <div class="mcard-num">04</div>
+            <h4 class="fr">Reset à l'intégration</h4><h4 class="en" style="display:none">Reset at integration</h4>
+            <p class="fr">L'UART seul fonctionnait, mais un reset mal géré figeait ses registres une fois intégré → correction du reset.</p>
+            <p class="en" style="display:none">The UART worked alone, but a mishandled reset froze its registers once integrated → reset fixed.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CE QUE J'AI APPRIS -->
+      <div class="cs-sec">
+        <div class="cs-sec-title"><span class="fr">Ce que ce projet m'a appris</span><span class="en" style="display:none">What I learned</span><hr/></div>
+        <p class="fr">Ce projet m'a fait descendre jusqu'au niveau matériel : transformer une table de transition en équations booléennes, puis en portes logiques réelles, et voir une FSM piloter un vrai processeur sur FPGA. La leçon la plus marquante n'est pas dans les blocs eux-mêmes — c'est que l'intégration est un problème à part entière. Synchronisation, types de signaux, reset, latences : autant de détails invisibles en simulation isolée qui décident du bon fonctionnement du système complet.</p>
+        <p class="en" style="display:none">This project took me down to the hardware level: turning a transition table into boolean equations, then into real logic gates, and watching an FSM drive an actual processor on an FPGA. The biggest lesson isn't in the blocks themselves — it's that integration is a problem in its own right. Timing, signal types, reset, latencies: invisible details in isolated simulation that decide whether the full system works.</p>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════ SKILLS -->
@@ -863,7 +1087,7 @@ I've always been fascinated by how things work—and even more by how they could
       </div>
       <div class="sk-card">
         <h3>Hardware</h3>
-        <ul><li>Raspberry Pi 4B</li><li>ESP32 / STM32</li><li>FPGA (Nexys A7)</li><li>I2C / UART / SPI</li><li class="fr">Encodeurs / PWM</li><li class="en" style="display:none">Encoders / PWM</li></ul>
+        <ul><li>Raspberry Pi 4B</li><li>ESP32 / STM32</li><li>FPGA (Nexys A7)</li><li>I2C / UART / SPI</li><li class="fr">Conception numérique (FSM, ALU)</li><li class="en" style="display:none">Digital design (FSM, ALU)</li><li class="fr">Encodeurs / PWM</li><li class="en" style="display:none">Encoders / PWM</li></ul>
       </div>
       <div class="sk-card">
         <h3 class="fr">Mécatronique</h3><h3 class="en" style="display:none">Mechatronics</h3>
