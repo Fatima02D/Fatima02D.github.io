@@ -48,7 +48,7 @@
 - I2C activé via `sudo raspi-config`
 - Hiwonder détectée à l'adresse **0x34** via `i2cdetect -y 1`
 - Script Python de test moteurs créé et exécuté
-- **Robot avance, recule et tourne** — Phase 1 complète 
+- **Robot avance, recule et tourne** — Phase 1 complète ✅
 
 **Problèmes rencontrés :**
 - SSH non fonctionnel au premier flash → SSH n'était pas activé correctement → reflasher en vérifiant la case "Accès à distance"
@@ -112,3 +112,37 @@ bus.write_i2c_block_data(I2C_ADDR, MOTOR_FIXED_SPEED_ADDR, [100, 100, 0, 0])
 **Prochaine étape :**
 -
 ```
+
+---
+
+## 2026-06-15
+
+**Objectif :** Programmer l'ESP32 pour recevoir les commandes Xbox via Bluetooth et les transmettre au RPi via UART
+
+**Accompli :**
+- Projet PlatformIO créé dans VS Code (board : lilygo-t-display-s3)
+- Versions de librairies correctes identifiées via ancien projet GEI-1049 :
+  - XboxSeriesXControllerESP32_asukiaaa@^1.1.1
+  - NimBLE-Arduino@^2.3.6
+- Code ESP32 écrit avec FreeRTOS (XboxTask a 50Hz)
+- Manette Xbox connectée via Bluetooth a l'ESP32
+- Valeurs joysticks varient correctement dans le Serial Monitor quand on bouge les joysticks
+- Branchements UART confirmes : ESP32 GPIO17(TX) -> RPi Pin10(RX), GPIO2(RX) -> RPi Pin8(TX), GND -> RPi Pin14
+
+**Problemes rencontres :**
+- ESP32-BLE-Gamepad incompatible avec NimBLE -> supprimee
+- Bluepad32 non disponible via lib_deps PlatformIO -> abandonnee
+- XboxSeriesXControllerESP32 incompatible avec NimBLE 1.4.x et 2.5.x -> solution : NimBLE 2.3.6 (version du projet GEI-1049)
+- Board incorrecte (lilygo-t-display vs lilygo-t-display-s3) -> corrigee dans platformio.ini
+- Warning "REMOTE HOST IDENTIFICATION HAS CHANGED" au reconnexion SSH -> solution : ssh-keygen -R indigowing.local
+
+**Solutions :**
+- platformio.ini final :
+  board = lilygo-t-display-s3
+  lib_deps = h2zero/NimBLE-Arduino@^2.3.6 + asukiaaa/XboxSeriesXControllerESP32_asukiaaa@^1.1.1
+- Code ESP32 base sur architecture FreeRTOS de l'ancien projet GEI-1049, adapte pour UART au lieu de I2C vers STM32
+
+**Prochaine etape :**
+- Installer pyserial sur RPi
+- Ecrire script Python RPi pour recevoir UART et envoyer I2C a Hiwonder
+- Tester controle complet Xbox -> ESP32 -> RPi -> Hiwonder -> moteurs
