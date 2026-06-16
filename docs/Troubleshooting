@@ -1,8 +1,8 @@
 # Phase 1 — Problèmes & Solutions
 
-**Projet :** Robot Mobile Autonome Pick & Place  
-**Auteure :** Saida Fatimatou Zahraa Diouf  
-**Période :** Janvier — Avril 2026  
+**Projet :** Robot Mobile Autonome Pick & Place
+**Auteure :** Saida Fatimatou Zahraa Diouf
+**Période :** Janvier — Juin 2026
 
 ---
 
@@ -12,15 +12,17 @@ En ingénierie, un problème n'est pas un échec. C'est une donnée. Chaque obst
 
 ---
 
-# PARTIE A — Plateforme 2WD (Plaque en bois) — Janvier-Avril 2026
+# PARTIE A — Plateforme 2WD (Plaque en bois) — Janvier 2026
 
 ---
 
 ## Problème A1 — Moteurs ne tournaient pas au départ
 
-**Statut :** ✅ Résolu  
+**Statut :** Résolu
 
-**Problème :** Code uploadé avec succès, Serial Monitor affiche les messages, mais aucun mouvement des moteurs.
+**Symptômes :**
+- Code uploadé avec succès, Serial Monitor affiche les messages
+- Aucun mouvement des moteurs, aucun bruit
 
 **Diagnostic méthodique :**
 
@@ -33,20 +35,27 @@ En ingénierie, un problème n'est pas un échec. C'est une donnée. Chaque obst
 
 **Solution :** Connecter batterie 7.4V sur L298N + ajouter fil GND commun entre Arduino et L298N.
 
-**Leçon fondamentale :**
+**Configuration finale fonctionnelle :**
 ```
-Alimentation logique (Arduino USB) ≠ Alimentation moteurs (batterie)
-GND commun = obligatoire pour que les signaux PWM aient une référence
+LiPo 7.4V
+├── (+) → L298N Vmotor
+├── (-) → L298N GND
+└── GND → Arduino GND (masse commune OBLIGATOIRE)
 ```
+
+**Leçon :**
+- Alimentation logique (Arduino USB) ≠ Alimentation moteurs (batterie)
+- GND commun = obligatoire pour que les signaux PWM aient une référence
+- Séparation puissance/logique : règle #1 en robotique
 
 ---
 
 ## Problème A2 — Confusion fils moteur vs fils encodeur
 
-**Statut :** ✅ Résolu  
-**Sévérité :** Modérée  
+**Statut :** ✅ Résolu
+**Sévérité :** Modérée
 
-**Symptôme :** Tentative de brancher les fils Hall (encodeur) sur le L298N — aucun mouvement logiquement.
+**Symptôme :** Tentative de brancher les fils Hall (encodeur) sur le L298N — aucun mouvement.
 
 **Cause :** Mélange entre circuit de puissance (2 fils moteur) et circuit de mesure (4-6 fils encodeur).
 
@@ -71,10 +80,10 @@ Encodeur (→ microcontrôleur) :
 
 ## Problème A3 — Canal B du L298N défectueux
 
-**Statut :** ⚠️ Non résolvable — composant grillé  
-**Sévérité :** Haute  
+**Statut :** ⚠️ Non résolvable — composant grillé
+**Sévérité :** Haute
 
-**Symptôme :** Moteur gauche fonctionne parfaitement, moteur droit immobile.
+**Symptôme :** Moteur gauche fonctionne, moteur droit immobile.
 
 **Diagnostic :**
 1. Swap des moteurs physiquement → le moteur "défectueux" fonctionne sur canal A ✅
@@ -83,27 +92,16 @@ Encodeur (→ microcontrôleur) :
 
 **Cause probable :** Surtension ou court-circuit lors du branchement initial.
 
-**Décision :** Ce problème, combiné aux autres limitations de la plateforme bois, a accéléré la migration vers le châssis Hiwonder à chenilles.
+**Décision :** Migration vers châssis Hiwonder à chenilles avec driver intégré.
 
 ---
 
 ## Problème A4 — Châssis en bois trop flexible
 
-**Statut :** ✅ Résolu par migration  
-**Sévérité :** Haute  
+**Statut :** ✅ Résolu par migration
+**Sévérité :** Haute
 
-**Symptôme :** Flexion visible de 2-3mm au centre du châssis avec 200g de charge. Vibrations lors des démarrages et arrêts.
-
-**Impact :**
-```
-Flexion châssis
-    ↓
-Désalignement des moteurs
-    ↓
-Forces non parallèles
-    ↓
-Déviation trajectoire + instabilité
-```
+**Symptôme :** Flexion de 2-3mm au centre avec 200g. Vibrations lors des démarrages.
 
 **Données :**
 - Module de Young bois MDF : ~4000 MPa
@@ -112,7 +110,7 @@ Déviation trajectoire + instabilité
 
 **Tentatives :**
 - Serrage entretoises → amélioration < 10%
-- Redistribution masse → flexion réduite à 1-2mm seulement
+- Redistribution masse → flexion réduite à 1-2mm
 - Limitation charge < 300g → incompatible avec bras robotique
 
 **Conclusion :** Non résolvable sans changement de matériau.
@@ -121,21 +119,10 @@ Déviation trajectoire + instabilité
 
 ## Problème A5 — Roue folle non-déterministe
 
-**Statut :** ✅ Résolu par migration  
-**Sévérité :** Critique — cause racine de la déviation  
+**Statut :** ✅ Résolu par migration
+**Sévérité :** Critique — cause racine de la déviation
 
 **Symptôme :** Robot dévie de 13.4cm en moyenne sur 2 mètres. Déviation non reproductible.
-
-**Mécanisme :**
-```
-La roue folle a une "mémoire" de direction
-    ↓
-Hystérésis directionnelle
-    ↓
-Friction latérale asymétrique et variable
-    ↓
-Comportement imprévisible
-```
 
 **Données empiriques :**
 
@@ -147,51 +134,40 @@ Comportement imprévisible
 | 4 | 3cm droite |
 | 5 | 18cm gauche |
 
-Variance : ±18° → comportement non reproductible
+Variance : ±18° → comportement imprévisible
 
 **Tentatives de compensation logicielle :**
 - Offset PWM fixe → déviation 13cm → 8cm (insuffisant)
 - Courbe PWM/vitesse → ~5cm (toujours insuffisant)
 - PID sans encodeurs → impossible (pas de feedback)
 
-**Pourquoi insoluble logiciellement :** La friction de la roue folle varie à chaque instant et n'est pas observable. La compensation est toujours en retard, jamais préventive.
+**Pourquoi insoluble :** La friction de la roue folle varie à chaque instant et n'est pas observable. La compensation est toujours en retard.
 
-**Solution :** Éliminer l'élément passif. Skid steering (chenilles) = zéro roue folle.
+**Solution :** Skid steering (chenilles) = zéro roue folle.
 
 ---
 
 ## Problème A6 — Moteurs non synchronisés
 
-**Statut :** ⚠️ Partiellement résolu, résolu par migration  
-**Sévérité :** Haute  
+**Statut :** ⚠️ Partiellement résolu, résolu par migration
+**Sévérité :** Haute
 
-**Symptôme :** À PWM identique, moteur droit ~5-6% plus rapide que moteur gauche.
+**Symptôme :** À PWM identique, un moteur ~5-6% plus rapide que l'autre.
 
-**Causes :**
-- Tolérance de fabrication des moteurs DC (±5% normale)
-- Friction asymétrique roue folle
-- Charge déséquilibrée
+**Cause :** Tolérance de fabrication des moteurs DC (±5% normale).
 
-**Tentative :**
-```cpp
-// Compensation offset fixe
-analogWrite(ENA, vitesse);
-analogWrite(ENB, vitesse * 0.95);
-```
-Résultat : amélioration partielle, offset varie avec la vitesse.
-
-**Solution définitive :** Encodeurs + PID en boucle fermée (Phase 2, nouveau châssis).
+**Solution définitive :** Encodeurs + PID en boucle fermée (Phase 3, nouveau châssis).
 
 ---
 
 ## Problème A7 — Bruit électrique et parasites
 
-**Statut :** ✅ Atténué  
-**Sévérité :** Modérée  
+**Statut :** ✅ Atténué
+**Sévérité :** Modérée
 
-**Symptôme :** Lectures encodeurs erratiques, reset Arduino spontané lors du démarrage des moteurs.
+**Symptôme :** Lectures encodeurs erratiques, reset Arduino spontané.
 
-**Cause :** Interférence électromagnétique (EMI) des moteurs DC et commutations L298N.
+**Cause :** Interférence électromagnétique (EMI) des moteurs DC.
 
 **Solutions :**
 - Séparation physique câbles puissance / signal (min 3cm)
@@ -202,23 +178,14 @@ Résultat : amélioration partielle, offset varie avec la vitesse.
 
 ## Décision stratégique — Migration vers chenilles
 
-**Date :** Mars 2026
-
-**Bilan :**
+**Date :** Janvier 2026
 
 | Catégorie | Nb problèmes |
 |---|---|
 | Résolvables logiciellement | 2/7 (29%) |
 | Nécessitent upgrade hardware | 5/7 (71%) |
 
-**Comparaison :**
-
-| Option | Coût | Probabilité succès Phase 8 |
-|---|---|---|
-| Continuer plateforme bois | 0$ + ~40h debug | < 20% |
-| Migration châssis chenilles | ~120$ + 1 semaine | > 80% |
-
-**Décision : Migration.**
+**Décision : Migration vers châssis Hiwonder à chenilles.**
 
 **Composants récupérés :**
 - Arduino UNO → réserve
@@ -227,58 +194,119 @@ Résultat : amélioration partielle, offset varie avec la vitesse.
 
 ---
 
-# PARTIE B — Plateforme Chenilles Hiwonder — Avril 2026
+# PARTIE B — Plateforme Chenilles Hiwonder — Avril/Juin 2026
 
 ---
 
 ## Problème B1 — Connecteur LiPo incompatible avec Hiwonder
 
-**Statut :** ⏳ En attente d'achat  
-**Sévérité :** Bloquant pour tests moteurs  
+**Statut :** ✅ Résolu
+**Sévérité :** Bloquant pour tests moteurs
 
 **Symptôme :** Connecteur XT30/XT60 de la LiPo Zeee ne rentre pas dans le port PWR Hiwonder (JST).
 
-**Solution :** Adaptateur XT30 → JST (~8$). Ne pas couper/souder les fils LiPo.
-
-**Temporaire :** Piles AA du châssis pour premiers tests.
+**Solution :** Adaptateur Deans → JST inclus avec le chargeur LiPo CHICIRIS.
 
 ---
 
 ## Problème B2 — Micro SD incompatible RPi
 
-**Statut :** ✅ Identifié, solution claire  
-**Sévérité :** Bloquant pour OS  
+**Statut :** ✅ Résolu
+**Sévérité :** Bloquant pour OS
 
 **Symptôme :** Carte SD standard ne rentre pas dans le slot RPi 4B.
 
 **Cause :** RPi 4B utilise une **micro SD** exclusivement.
 
-**Solution :** SanDisk micro SD 32GB Class 10 (~15$).
+**Solution :** SanDisk micro SD 32GB achetée.
 
 ---
 
-## Problème B3 — Alimentation RPi en mobilité
+## Problème B3 — SSH non fonctionnel après premier flash
 
-**Statut :** ✅ Solution temporaire en place  
+**Statut :** ✅ Résolu
+**Sévérité :** Haute
 
-**Options évaluées :**
+**Symptôme :** RPi démarre (LED verte) mais SSH refuse toutes les connexions.
 
-| Option | Courant | Verdict |
-|---|---|---|
-| Powerbank Podoru | ~2A | ✅ Tests statiques OK |
-| Résistance | N/A | ❌ Dissipe en chaleur |
-| Condensateur | N/A | ❌ Stocke, ne convertit pas |
-| LM2596 buck converter | 3A | ✅ Solution finale (~5$) |
+**Cause :** SSH n'était pas correctement activé lors du premier flash dans Raspberry Pi Imager.
 
-**Temporaire :** Powerbank Podoru.  
-**Final :** LM2596 alimenté par LiPo → single-battery.
+**Diagnostic :**
+- `Connection refused` → RPi répond mais SSH fermé
+- `Connection timed out` → RPi ne répond pas du tout
+
+**Solution :** Reflasher la micro SD en vérifiant visuellement que la case **"Enable SSH"** est cochée dans Raspberry Pi Imager → "Accès à distance".
+
+**Leçon :** Toujours vérifier l'activation SSH avant d'écrire l'image.
 
 ---
 
-## Problème B4 — Signal ECHO HC-SR04 incompatible GPIO RPi
+## Problème B4 — SSH non résolvable via hostname
 
-**Statut :** ✅ Résolu  
-**Sévérité :** Critique — risque griller GPIO  
+**Statut :** ✅ Résolu
+**Sévérité :** Modérée
+
+**Symptôme :**
+```
+ssh: Could not resolve hostname indigowing.local: Hôte inconnu
+```
+
+**Cause :** L'ordi et le RPi étaient sur des réseaux différents (WiFi maison vs hotspot mobile).
+
+**Solution :** Se connecter en utilisant les **données mobiles** comme hotspot — RPi et ordi sur le même réseau.
+
+**Commande qui a fonctionné :**
+```bash
+ssh indigozafa@indigowing.local
+```
+
+---
+
+## Problème B5 — Avertissement "Host key has changed" après reflash
+
+**Statut :** ✅ Résolu
+**Sévérité :** Faible
+
+**Symptôme :**
+```
+WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+Host key verification failed.
+```
+
+**Cause :** Reflasher la micro SD génère une nouvelle clé SSH — l'ordi garde l'ancienne en mémoire.
+
+**Solution :**
+```bash
+ssh-keygen -R indigowing.local
+ssh indigozafa@indigowing.local
+```
+
+---
+
+## Problème B6 — Court-circuit RPi lors branchement fils
+
+**Statut :** ✅ Résolu
+**Sévérité :** Critique
+
+**Symptôme :** RPi s'éteint dès qu'on branche des fils sur le GPIO.
+
+**Cause :** Le 5V de la Hiwonder et la Powerbank alimentaient le RPi **en même temps** → court-circuit.
+
+**Règle fondamentale établie :**
+```
+❌ Powerbank + Hiwonder 5V → RPi = COURT-CIRCUIT
+✅ Powerbank → RPi UNIQUEMENT
+✅ Hiwonder 5V → ESP32 + HC-SR04 UNIQUEMENT
+```
+
+**Méthode de diagnostic utilisée :** Test un fil à la fois — brancher SDA, puis SCL, puis GND, puis 5V séparément pour isoler le problème.
+
+---
+
+## Problème B7 — Signal ECHO HC-SR04 incompatible GPIO RPi
+
+**Statut :** ✅ Résolu
+**Sévérité :** Critique — risque griller GPIO
 
 **Cause :** HC-SR04 sort 5V sur ECHO, RPi GPIO accepte max 3.3V.
 
@@ -293,40 +321,141 @@ ECHO (5V) ──── 1kΩ ──── RPi Pin 13 (GPIO27)
 Résultat = 5V × (2kΩ / 3kΩ) = 3.33V ✅
 ```
 
-Seul ECHO nécessite ce traitement. TRIG est accepté nativement par le HC-SR04.
+---
+
+## Problème B8 — I2C non détecté au premier essai
+
+**Statut :** ✅ Résolu
+**Sévérité :** Haute
+
+**Symptôme :**
+```
+Error: Could not open file `/dev/i2c-1'
+```
+
+**Cause :** I2C désactivé par défaut sur Raspberry Pi OS. Nécessite activation manuelle à chaque nouveau flash.
+
+**Solution :**
+```bash
+sudo raspi-config
+→ Interface Options → I2C → Enable → Reboot
+```
+
+**Vérification :**
+```bash
+i2cdetect -y 1
+# Résultat attendu : adresse 0x34 visible
+```
 
 ---
 
-## Problème B5 — Identification pins GPIO RPi
+## Problème B9 — Mauvais registres I2C → moteurs ne bougent pas
 
-**Statut :** ✅ Résolu  
+**Statut :** ✅ Résolu
+**Sévérité :** Haute
 
-**Règle :**
-- Rangée gauche = pins impairs (1, 3, 5...)
-- Rangée droite = pins pairs (2, 4, 6...)
-- Pin 1 = coin côté port Display/Caméra (pad carré visible sous la carte)
+**Symptôme :** Script Python s'exécute sans erreur mais les moteurs ne bougent pas.
+
+**Cause :** Registre I2C incorrect utilisé (0x01 au lieu des vrais registres Hiwonder).
+
+**Diagnostic :**
+- `i2cdetect -y 1` → adresse 0x34 confirmée ✅
+- Moteurs font un bruit mais ne tournent pas → vitesse trop faible ou mauvais registre
+
+**Solution — registres corrects trouvés via documentation Hiwonder + repo GitHub communautaire :**
+
+```python
+I2C_ADDR = 0x34
+MOTOR_TYPE_ADDR = 20          # type de moteur
+MOTOR_ENCODER_POLARITY_ADDR = 21  # polarité encodeurs
+MOTOR_FIXED_SPEED_ADDR = 51   # commande vitesse
+```
+
+**Commandes de mouvement :**
+```python
+# [M1, M2, M3, M4] — positif = avant, négatif = arrière
+[100, 100, 0, 0]   # Avancer
+[-100, -100, 0, 0] # Reculer
+[-100, 100, 0, 0]  # Tourner gauche
+[100, -100, 0, 0]  # Tourner droite
+[0, 0, 0, 0]       # Stop
+```
 
 ---
 
-## Problème B6 — L298N et Arduino non nécessaires
+## Problème B10 — Fils moteurs débranchés
 
-**Statut :** ✅ Décision documentée  
+**Statut :** ✅ Résolu
+**Sévérité :** Modérée
 
-| Composant | Remplacé par | Raison |
+**Symptôme :** Script fonctionne, moteurs font du bruit mais le robot ne bouge pas.
+
+**Cause :** Les fils d'alimentation des moteurs (M+ et M-) s'étaient débranchés des ports M1/M2 de la Hiwonder.
+
+**Solution :** Rebrancher les connecteurs JST moteurs fermement dans M1 et M2.
+
+**Résultat :** ✅ Robot avance, recule et tourne — Phase 1 complète !
+
+---
+
+## Résumé global des achats déclenchés par les problèmes
+
+| Problème | Achat | Prix |
 |---|---|---|
-| L298N | Hiwonder Encoder Module | Driver I2C intégré au châssis |
-| Arduino UNO | RPi 4B + ESP32 | Architecture plus adaptée |
-
-Gardés en réserve pour projets futurs.
+| Micro SD incompatible | SanDisk micro SD 32GB | ~15$ |
+| Connecteur LiPo incompatible | Adaptateur Deans → JST (inclus chargeur) | 0$ |
+| Alimentation insuffisante RPi | Chargeur CHICIRIS LiPo (inclut câble) | ~43$ |
+| Fils insuffisants | Jumper M-F 40pcs | ~8$ |
+| **Total** | | **~66$** |
 
 ---
 
-## Résumé des achats déclenchés par les problèmes
+## Leçons d'ingénierie — Synthèse Phase 1
 
-| Problème | Achat |
-|---|---|
-| Connecteur LiPo incompatible | Adaptateur XT30 → JST | 
-| Micro SD manquante | SanDisk micro SD 32GB |
-| Fils insuffisants | Jumper M-F 40pcs | 
-| LiPo sans chargeur | Chargeur CHICIRIS TE3AC | 
+1. **GND commun = fondation de tout système électronique**
+2. **Tester un composant à la fois** — isolation systématique des variables
+3. **SSH nécessite vérification explicite** — ne pas supposer qu'il est activé
+4. **Les registres I2C sont spécifiques au hardware** — toujours chercher la documentation officielle ou des exemples communautaires
+5. **Vérifier les connexions physiques avant de debugger le code** — un fil débranché ressemble à un bug logiciel
+6. **Décisions data-driven** — la migration vers chenilles justifiée par 5/7 problèmes nécessitant hardware upgrade
 
+---
+
+**Document Version :** 3.0
+**Date :** Juin 2026
+**Auteure :** Saida Fatimatou Zahraa Diouf
+**Projet :** Plateforme Robotique Mobile Autonome
+
+**Statut Phase 1 :** ✅ COMPLÉTÉE — Robot avance, recule et tourne via commandes I2C RPi → Hiwonder
+
+---
+
+## Probleme B11 — Warning "REMOTE HOST IDENTIFICATION HAS CHANGED"
+
+**Statut :** Resolu (commande a retenir)
+**Severite :** Faible — bloque juste la connexion SSH
+
+**Symptome :**
+```
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Host key verification failed.
+```
+
+**Pourquoi ca arrive :**
+Chaque fois que le RPi est reflashe, il genere une nouvelle cle SSH. Ton ordi garde l'ancienne cle en memoire dans le fichier `known_hosts`. Quand les deux ne correspondent pas, SSH refuse la connexion par securite.
+
+Ce n'est pas une vraie attaque — c'est juste que le RPi a change d'identite apres le reflash.
+
+**Solution — une seule commande :**
+```bash
+ssh-keygen -R indigowing.local
+```
+
+Puis reconnecte normalement :
+```bash
+ssh indigozafa@indigowing.local
+```
+
+**A faire a chaque fois que tu reflashes la micro SD.**
