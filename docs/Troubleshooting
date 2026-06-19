@@ -419,17 +419,6 @@ MOTOR_FIXED_SPEED_ADDR = 51   # commande vitesse
 5. **Vérifier les connexions physiques avant de debugger le code** — un fil débranché ressemble à un bug logiciel
 6. **Décisions data-driven** — la migration vers chenilles justifiée par 5/7 problèmes nécessitant hardware upgrade
 
----
-
-**Document Version :** 3.0
-**Date :** Juin 2026
-**Auteure :** Saida Fatimatou Zahraa Diouf
-**Projet :** Plateforme Robotique Mobile Autonome
-
-**Statut Phase 1 :** ✅ COMPLÉTÉE — Robot avance, recule et tourne via commandes I2C RPi → Hiwonder
-
----
-
 ## Probleme B11 — Warning "REMOTE HOST IDENTIFICATION HAS CHANGED"
 
 **Statut :** Resolu (commande a retenir)
@@ -458,4 +447,4 @@ Puis reconnecte normalement :
 ssh indigozafa@indigowing.local
 ```
 
-**A faire a chaque fois que tu reflashes la micro SD.**
+**A faire a chaque fois qu'on reflashe la micro SD.**
