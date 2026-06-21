@@ -448,3 +448,107 @@ ssh indigozafa@indigowing.local
 ```
 
 **A faire a chaque fois qu'on reflashe la micro SD.**
+
+# PARTIE C — Phase 2 : Liaison ESP32 -> RPi -> Hiwonder (Juin 2026)
+ 
+---
+ 
+## Probleme C1 — GPIO43/44 bloquent toute communication UART
+ 
+**Statut :** Resolu
+**Severite :** Haute
+ 
+**Symptome :** Avec Serial2 configure sur GPIO43 (TX) et GPIO44 (RX), aucune donnee n'arrive jamais sur le RPi, meme du bruit (`cat /dev/ttyS0` reste vide).
+ 
+**Cause :** GPIO43 et GPIO44 sont les pins UART0 natifs (U0TXD/U0RXD) du ESP32-S3, deja reserves par le systeme meme quand le Serial standard utilise l'USB CDC. Le GPIO matrix ne peut pas overrider correctement cette connexion fixe (IOMUX) pour un usage Serial2.
+ 
+**Solution :** Revenir aux pins GPIO17 (TX) et GPIO2 (RX), qui ne sont pas lies a une fonction UART0 fixe sur la variante non-touch du T-Display S3.
+ 
+**Lecon :** Sur ESP32-S3, toujours verifier quelles pins sont liees a des peripheriques natifs (UART0, USB, strapping) avant de les assigner a un usage custom.
+ 
+---
+ 
+## Probleme C2 — Donnees UART corrompues (erreur decodage UTF-8)
+ 
+**Statut :** Resolu
+**Severite :** Haute
+ 
+**Symptome :**
+```
+Erreur: 'utf-8' codec can't decode byte 0xfe in position 1: invalid start byte
+```
+ 
+**Cause :** GND non connecte entre l'ESP32 et le RPi. Sans masse commune, les niveaux logiques TX/RX n'ont pas de reference stable, causant des erreurs de bits aleatoires.
+ 
+**Solution :** Verifier et reconnecter physiquement :
+```
+ESP32 GND -> RPi Pin 14 (GND)
+```
+ 
+**Lecon :** Meme principe qu'en Phase 1 avec les moteurs — la masse commune est la base de toute communication electronique, peu importe le protocole (I2C, UART, etc).
+ 
+---
+ 
+## Probleme C3 — Joystick non centre sur zero au repos
+ 
+**Statut :** Resolu
+**Severite :** Haute — cause le mouvement involontaire du robot
+ 
+**Symptome :** Le robot avance ou tourne tout seul sans toucher la manette.
+ 
+**Diagnostic :** Affichage des valeurs brutes des joysticks (`Serial.print`) a revele que joyV se stabilise autour de 200-300 et joyH autour de -1488 au repos — proche de zero mais pas exactement zero, et certaines lectures intermediaires montrent des valeurs beaucoup plus elevees (32537, -31407) lors de transitoires de connexion.
+ 
+**Solution :** Augmenter le deadzone de 200 a 2000 :
+```cpp
+if (abs(joyV) < 2000) joyV = 0;
+if (abs(joyH) < 2000) joyH = 0;
+```
+ 
+**Lecon :** Les valeurs analogiques d'un joystick ne sont jamais exactement a zero au repos — toujours prevoir une zone morte (deadzone) suffisamment large.
+ 
+---
+ 
+## Probleme C4 — Confusion entre code de test et code reel
+ 
+**Statut :** Resolu
+**Severite :** Moyenne — a cause une fausse alerte de bug
+ 
+**Symptome :** Le robot bouge en boucle automatique (avance, recule, tourne) sans manette connectee.
+ 
+**Cause :** Le code de test fixe (boucle infinie envoyant 50,50 / -50,-50 / -50,50 / 50,-50 toutes les 2 secondes, ecrit pour isoler le probleme de communication UART) etait toujours actif sur l'ESP32 au lieu du vrai code de lecture manette Xbox.
+ 
+**Solution :** Reuploader explicitement le code Xbox complet (avec xboxController.onLoop() et lecture des joysticks reels) apres chaque test de diagnostic.
+ 
+**Lecon :** Toujours confirmer quel code est actuellement flashe sur le microcontroleur avant d'interpreter un comportement comme un bug — particulierement apres une session de debug avec plusieurs versions de code testees successivement.
+ 
+---
+ 
+## Probleme C5 — Suspicion sur le masquage de bits negatifs (& 0xFF)
+ 
+**Statut :** Investigue, cause non confirmee comme reelle
+**Severite :** Faible
+ 
+**Symptome initial :** Le robot semblait toujours avancer/tourner a droite peu importe la direction du joystick.
+ 
+**Hypothese testee :** `left & 0xFF` sur une valeur Python negative pourrait etre mal interprete par le registre I2C de la Hiwonder.
+ 
+**Test de validation :** Un test manuel direct envoyant des listes Python avec valeurs negatives explicites (`[-50, -50, 0, 0]`) sans aucun masquage a fonctionne correctement (avance, recule, tourne gauche, tourne droite, dans le bon ordre).
+ 
+**Conclusion :** Le masquage `& 0xFF` n'etait probablement pas la cause reelle du bug observe — celui-ci venait plutot du Probleme C4 (code de test actif par erreur). Le retrait du `& 0xFF` est conserve par precaution et simplicite du code, mais n'etait pas necessairement la correction determinante.
+ 
+**Lecon :** Isoler chaque variable separement avant de conclure sur la cause d'un bug — plusieurs problemes peuvent se chevaucher et donner l'illusion qu'une correction a regle le souci alors qu'un autre probleme etait la vraie cause.
+ 
+---
+ 
+## Resume des fichiers de code Phase 2
+ 
+**ESP32 (`main.cpp`) — pins definitifs :**
+```cpp
+#define RPI_TX 17
+#define RPI_RX 2
+```
+ 
+**RPi (`xbox_receiver.py`) — emplacement et acces :**
+```bash
+nano ~/xbox_receiver.py    # editer
+python3 ~/xbox_receiver.py # executer
