@@ -146,3 +146,32 @@ bus.write_i2c_block_data(I2C_ADDR, MOTOR_FIXED_SPEED_ADDR, [100, 100, 0, 0])
 - Installer pyserial sur RPi
 - Ecrire script Python RPi pour recevoir UART et envoyer I2C a Hiwonder
 - Tester controle complet Xbox -> ESP32 -> RPi -> Hiwonder -> moteurs
+
+## 2026-06-20
+ 
+**Objectif :** Connecter le flux complet Xbox -> ESP32 -> RPi -> Hiwonder et corriger les bugs de direction
+ 
+**Accomplii :**
+- Test loopback RPi (Pin8 -> Pin10) confirme que le port serie /dev/ttyS0 fonctionne correctement
+- Test avec code ESP32 minimal (boucle HELLO) confirme que la liaison UART ESP32 -> RPi fonctionne quand le GND est bien connecte
+- Diagnostic du joystick : valeurs au repos non centrees sur 0 (joyV repos ~32537, joyH repos ~-31407) -> deadzone ajuste a 2000 pour filtrer le bruit
+- Script Python xbox_receiver.py cree et fonctionnel : lit l'UART, parse les valeurs gauche/droite, envoie au bus I2C Hiwonder
+- Test manuel sequentiel (avancer/reculer/tourner gauche/tourner droite) via script Python direct -> fonctionne correctement
+- Ajout d'un delai de 20ms apres chaque ecriture I2C pour stabiliser la communication
+
+**Problemes rencontres :**
+1. GPIO43/44 (suggere comme alternative a 17/2) sont en fait les pins UART0 natifs du chip -> aucune donnee ne passait. Retour aux pins 17/2.
+2. GND non connecte entre ESP32 et RPi -> donnees recues corrompues (erreur de decodage UTF-8)
+3. Joystick non centre sur 0 au repos -> deadzone mal calibre causait un mouvement constant
+4. Confusion de test : code de test fixe (boucle 50,50/-50,-50/etc) laisse sur l'ESP32 par erreur au lieu du vrai code Xbox -> mouvement automatique du robot sans toucher la manette
+5. left & 0xFF sur valeurs negatives suspecte comme source de bug de direction -> retire, remplace par envoi direct des valeurs signees
+
+**Solutions retenues :**
+- Pins UART definitifs : ESP32 GPIO17 (TX) -> RPi Pin10 (RX), GPIO2 (RX) -> RPi Pin8 (TX), GND -> GND obligatoire
+- Deadzone joystick : abs(joyV) < 2000 et abs(joyH) < 2000
+- Script RPi final avec delai 20ms apres chaque commande I2C
+
+**Prochaine etape :**
+- Confirmer que le vrai code Xbox (pas le test fixe) corrige le mouvement automatique
+- Valider les 4 directions avec la manette en conditions reelles
+- Si stable : Phase 2 terminee, passer a la Phase 3 (odometrie)
