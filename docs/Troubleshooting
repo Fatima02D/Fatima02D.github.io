@@ -1,14 +1,14 @@
-# Phase 1 — Problèmes & Solutions
+# Phase 1 — Problemes & Solutions
 
 **Projet :** Robot Mobile Autonome Pick & Place
 **Auteure :** Saida Fatimatou Zahraa Diouf
-**Période :** Janvier — Juin 2026
+**Periode :** Janvier — Juin 2026
 
 ---
 
 ## Philosophie
 
-En ingénierie, un problème n'est pas un échec. C'est une donnée. Chaque obstacle rencontré ici a mené à une meilleure décision.
+En ingenierie, un probleme n'est pas un echec. C'est une donnee. Chaque obstacle rencontre ici a mene a une meilleure decision.
 
 ---
 
@@ -16,117 +16,117 @@ En ingénierie, un problème n'est pas un échec. C'est une donnée. Chaque obst
 
 ---
 
-## Problème A1 — Moteurs ne tournaient pas au départ
+## Probleme A1 — Moteurs ne tournaient pas au depart
 
-**Statut :** Résolu
+**Statut :** Resolu
 
-**Symptômes :**
-- Code uploadé avec succès, Serial Monitor affiche les messages
+**Symptomes :**
+- Code uploade avec succes, Serial Monitor affiche les messages
 - Aucun mouvement des moteurs, aucun bruit
 
-**Diagnostic méthodique :**
+**Diagnostic methodique :**
 
-| Hypothèse testée | Résultat | Conclusion |
+| Hypothese testee | Resultat | Conclusion |
 |---|---|---|
-| Problème logiciel | Code simplifié → même résultat | ❌ Pas le code |
-| Pins PWM incorrectes | digitalWrite HIGH au lieu de analogWrite | ❌ Pas le PWM |
-| Batterie non connectée au L298N | Voltage mesuré sur Vmotor = 0V | ✅ Cause racine |
-| GND non commun Arduino/L298N | Pas de continuité mesurée | ✅ Cause secondaire |
+| Probleme logiciel | Code simplifie -> meme resultat | Rejete |
+| Pins PWM incorrectes | digitalWrite HIGH au lieu de analogWrite | Rejete |
+| Batterie non connectee au L298N | Voltage mesure sur Vmotor = 0V | Cause racine |
+| GND non commun Arduino/L298N | Pas de continuite mesuree | Cause secondaire |
 
 **Solution :** Connecter batterie 7.4V sur L298N + ajouter fil GND commun entre Arduino et L298N.
 
 **Configuration finale fonctionnelle :**
 ```
 LiPo 7.4V
-├── (+) → L298N Vmotor
-├── (-) → L298N GND
-└── GND → Arduino GND (masse commune OBLIGATOIRE)
+- (+) -> L298N Vmotor
+- (-) -> L298N GND
+- GND -> Arduino GND (masse commune obligatoire)
 ```
 
-**Leçon :**
-- Alimentation logique (Arduino USB) ≠ Alimentation moteurs (batterie)
-- GND commun = obligatoire pour que les signaux PWM aient une référence
-- Séparation puissance/logique : règle #1 en robotique
+**Lecon :**
+- Alimentation logique (Arduino USB) differente de l'alimentation moteurs (batterie)
+- GND commun obligatoire pour que les signaux PWM aient une reference
+- Separation puissance/logique : regle numero un en robotique
 
 ---
 
-## Problème A2 — Confusion fils moteur vs fils encodeur
+## Probleme A2 — Confusion fils moteur vs fils encodeur
 
-**Statut :** ✅ Résolu
-**Sévérité :** Modérée
+**Statut :** Resolu
+**Severite :** Moderee
 
-**Symptôme :** Tentative de brancher les fils Hall (encodeur) sur le L298N — aucun mouvement.
+**Symptome :** Tentative de brancher les fils Hall (encodeur) sur le L298N — aucun mouvement.
 
-**Cause :** Mélange entre circuit de puissance (2 fils moteur) et circuit de mesure (4-6 fils encodeur).
+**Cause :** Melange entre circuit de puissance (2 fils moteur) et circuit de mesure (4-6 fils encodeur).
 
 **Clarification :**
 ```
 Moteur DC avec encodeur = 6 fils au total
 
-Puissance (→ L298N) :
+Puissance (vers L298N) :
   Rouge  = Moteur+
   Noir   = Moteur-
 
-Encodeur (→ microcontrôleur) :
+Encodeur (vers microcontroleur) :
   VCC    = 3.3V ou 5V
   GND    = Masse
   Hall A = Signal encodeur
   Hall B = Signal encodeur (sens de rotation)
 ```
 
-**Leçon :** Puissance et mesure sont toujours deux circuits séparés en robotique.
+**Lecon :** Puissance et mesure sont toujours deux circuits separes en robotique.
 
 ---
 
-## Problème A3 — Canal B du L298N défectueux
+## Probleme A3 — Canal B du L298N defectueux
 
-**Statut :** ⚠️ Non résolvable — composant grillé
-**Sévérité :** Haute
+**Statut :** Non resolvable — composant grille
+**Severite :** Haute
 
-**Symptôme :** Moteur gauche fonctionne, moteur droit immobile.
+**Symptome :** Moteur gauche fonctionne, moteur droit immobile.
 
 **Diagnostic :**
-1. Swap des moteurs physiquement → le moteur "défectueux" fonctionne sur canal A ✅
-2. Moteur fonctionnel placé sur canal B → ne tourne pas ❌
-3. Conclusion : Canal B du L298N grillé
+1. Swap des moteurs physiquement -> le moteur "defectueux" fonctionne sur canal A
+2. Moteur fonctionnel place sur canal B -> ne tourne pas
+3. Conclusion : Canal B du L298N grille
 
 **Cause probable :** Surtension ou court-circuit lors du branchement initial.
 
-**Décision :** Migration vers châssis Hiwonder à chenilles avec driver intégré.
+**Decision :** Migration vers chassis Hiwonder a chenilles avec driver integre.
 
 ---
 
-## Problème A4 — Châssis en bois trop flexible
+## Probleme A4 — Chassis en bois trop flexible
 
-**Statut :** ✅ Résolu par migration
-**Sévérité :** Haute
+**Statut :** Resolu par migration
+**Severite :** Haute
 
-**Symptôme :** Flexion de 2-3mm au centre avec 200g. Vibrations lors des démarrages.
+**Symptome :** Flexion de 2-3mm au centre avec 200g. Vibrations lors des demarrages.
 
-**Données :**
-- Module de Young bois MDF : ~4000 MPa
-- Module de Young aluminium : ~69000 MPa
-- Châssis bois = 17x moins rigide que métal
+**Donnees :**
+- Module de Young bois MDF : environ 4000 MPa
+- Module de Young aluminium : environ 69000 MPa
+- Chassis bois environ 17 fois moins rigide que le metal
 
 **Tentatives :**
-- Serrage entretoises → amélioration < 10%
-- Redistribution masse → flexion réduite à 1-2mm
-- Limitation charge < 300g → incompatible avec bras robotique
+- Serrage entretoises -> amelioration inferieure a 10%
+- Redistribution masse -> flexion reduite a 1-2mm
+- Limitation charge inferieure a 300g -> incompatible avec bras robotique
 
-**Conclusion :** Non résolvable sans changement de matériau.
+**Conclusion :** Non resolvable sans changement de materiau.
 
 ---
 
-## Problème A5 — Roue folle non-déterministe
+## Probleme A5 — Roue folle non-deterministe
 
-**Statut :** ✅ Résolu par migration
-**Sévérité :** Critique — cause racine de la déviation
+**Statut :** Resolu par migration
+**Severite :** Critique — cause racine de la deviation
 
-**Symptôme :** Robot dévie de 13.4cm en moyenne sur 2 mètres. Déviation non reproductible.
+**Symptome :** Robot devie de 13.4cm en moyenne sur 2 metres. Deviation non reproductible.
 
-**Données empiriques :**
+**Donnees empiriques :**
 
-| Essai | Déviation sur 2m |
+| Essai | Deviation sur 2m |
 |---|---|
 | 1 | 15cm gauche |
 | 2 | 8cm droite |
@@ -134,63 +134,63 @@ Encodeur (→ microcontrôleur) :
 | 4 | 3cm droite |
 | 5 | 18cm gauche |
 
-Variance : ±18° → comportement imprévisible
+Variance d'environ 18 degres -> comportement imprevisible
 
 **Tentatives de compensation logicielle :**
-- Offset PWM fixe → déviation 13cm → 8cm (insuffisant)
-- Courbe PWM/vitesse → ~5cm (toujours insuffisant)
-- PID sans encodeurs → impossible (pas de feedback)
+- Offset PWM fixe -> deviation 13cm vers 8cm (insuffisant)
+- Courbe PWM/vitesse -> environ 5cm (toujours insuffisant)
+- PID sans encodeurs -> impossible (pas de feedback)
 
-**Pourquoi insoluble :** La friction de la roue folle varie à chaque instant et n'est pas observable. La compensation est toujours en retard.
+**Pourquoi insoluble :** La friction de la roue folle varie a chaque instant et n'est pas observable. La compensation est toujours en retard.
 
-**Solution :** Skid steering (chenilles) = zéro roue folle.
-
----
-
-## Problème A6 — Moteurs non synchronisés
-
-**Statut :** ⚠️ Partiellement résolu, résolu par migration
-**Sévérité :** Haute
-
-**Symptôme :** À PWM identique, un moteur ~5-6% plus rapide que l'autre.
-
-**Cause :** Tolérance de fabrication des moteurs DC (±5% normale).
-
-**Solution définitive :** Encodeurs + PID en boucle fermée (Phase 3, nouveau châssis).
+**Solution :** Skid steering (chenilles) elimine la roue folle.
 
 ---
 
-## Problème A7 — Bruit électrique et parasites
+## Probleme A6 — Moteurs non synchronises
 
-**Statut :** ✅ Atténué
-**Sévérité :** Modérée
+**Statut :** Partiellement resolu, resolu par migration
+**Severite :** Haute
 
-**Symptôme :** Lectures encodeurs erratiques, reset Arduino spontané.
+**Symptome :** A PWM identique, un moteur environ 5-6% plus rapide que l'autre.
 
-**Cause :** Interférence électromagnétique (EMI) des moteurs DC.
+**Cause :** Tolerance de fabrication des moteurs DC (plus ou moins 5% normale).
+
+**Solution definitive :** Encodeurs + PID en boucle fermee (Phase 3, nouveau chassis).
+
+---
+
+## Probleme A7 — Bruit electrique et parasites
+
+**Statut :** Attenue
+**Severite :** Moderee
+
+**Symptome :** Lectures encodeurs erratiques, reset Arduino spontane.
+
+**Cause :** Interference electromagnetique (EMI) des moteurs DC.
 
 **Solutions :**
-- Séparation physique câbles puissance / signal (min 3cm)
-- Condensateurs découplage 100µF sur Vmotor
-- Arduino alimenté par USB séparément pendant tests
+- Separation physique cables puissance / signal (minimum 3cm)
+- Condensateurs decouplage 100uF sur Vmotor
+- Arduino alimente par USB separement pendant tests
 
 ---
 
-## Décision stratégique — Migration vers chenilles
+## Decision strategique — Migration vers chenilles
 
 **Date :** Janvier 2026
 
-| Catégorie | Nb problèmes |
+| Categorie | Nb problemes |
 |---|---|
-| Résolvables logiciellement | 2/7 (29%) |
-| Nécessitent upgrade hardware | 5/7 (71%) |
+| Resolvables logiciellement | 2 sur 7 (29%) |
+| Necessitent upgrade hardware | 5 sur 7 (71%) |
 
-**Décision : Migration vers châssis Hiwonder à chenilles.**
+**Decision : Migration vers chassis Hiwonder a chenilles.**
 
-**Composants récupérés :**
-- Arduino UNO → réserve
-- L298N (canal A fonctionnel) → réserve
-- Câbles, résistances → réutilisés
+**Composants recuperes :**
+- Arduino UNO -> reserve
+- L298N (canal A fonctionnel) -> reserve
+- Cables, resistances -> reutilises
 
 ---
 
@@ -198,357 +198,469 @@ Variance : ±18° → comportement imprévisible
 
 ---
 
-## Problème B1 — Connecteur LiPo incompatible avec Hiwonder
+## Probleme B1 — Connecteur LiPo incompatible avec Hiwonder
 
-**Statut :** ✅ Résolu
-**Sévérité :** Bloquant pour tests moteurs
+**Statut :** Resolu
+**Severite :** Bloquant pour tests moteurs
 
-**Symptôme :** Connecteur XT30/XT60 de la LiPo Zeee ne rentre pas dans le port PWR Hiwonder (JST).
+**Symptome :** Connecteur XT30/XT60 de la LiPo Zeee ne rentre pas dans le port PWR Hiwonder (JST).
 
-**Solution :** Adaptateur Deans → JST inclus avec le chargeur LiPo CHICIRIS.
-
----
-
-## Problème B2 — Micro SD incompatible RPi
-
-**Statut :** ✅ Résolu
-**Sévérité :** Bloquant pour OS
-
-**Symptôme :** Carte SD standard ne rentre pas dans le slot RPi 4B.
-
-**Cause :** RPi 4B utilise une **micro SD** exclusivement.
-
-**Solution :** SanDisk micro SD 32GB achetée.
+**Solution :** Adaptateur Deans vers JST inclus avec le chargeur LiPo CHICIRIS.
 
 ---
 
-## Problème B3 — SSH non fonctionnel après premier flash
+## Probleme B2 — Micro SD incompatible RPi
 
-**Statut :** ✅ Résolu
-**Sévérité :** Haute
+**Statut :** Resolu
+**Severite :** Bloquant pour OS
 
-**Symptôme :** RPi démarre (LED verte) mais SSH refuse toutes les connexions.
+**Symptome :** Carte SD standard ne rentre pas dans le slot RPi 4B.
 
-**Cause :** SSH n'était pas correctement activé lors du premier flash dans Raspberry Pi Imager.
+**Cause :** RPi 4B utilise une micro SD exclusivement.
+
+**Solution :** SanDisk micro SD 32GB achetee.
+
+---
+
+## Probleme B3 — SSH non fonctionnel apres premier flash
+
+**Statut :** Resolu
+**Severite :** Haute
+
+**Symptome :** RPi demarre (LED verte) mais SSH refuse toutes les connexions.
+
+**Cause :** SSH n'etait pas correctement active lors du premier flash dans Raspberry Pi Imager.
 
 **Diagnostic :**
-- `Connection refused` → RPi répond mais SSH fermé
-- `Connection timed out` → RPi ne répond pas du tout
+- "Connection refused" -> RPi repond mais SSH ferme
+- "Connection timed out" -> RPi ne repond pas du tout
 
-**Solution :** Reflasher la micro SD en vérifiant visuellement que la case **"Enable SSH"** est cochée dans Raspberry Pi Imager → "Accès à distance".
+**Solution :** Reflasher la micro SD en verifiant visuellement que la case "Enable SSH" est cochee dans Raspberry Pi Imager, section "Acces a distance".
 
-**Leçon :** Toujours vérifier l'activation SSH avant d'écrire l'image.
+**Lecon :** Toujours verifier l'activation SSH avant d'ecrire l'image.
 
 ---
 
-## Problème B4 — SSH non résolvable via hostname
+## Probleme B4 — SSH non resolvable via hostname
 
-**Statut :** ✅ Résolu
-**Sévérité :** Modérée
+**Statut :** Resolu
+**Severite :** Moderee
 
-**Symptôme :**
+**Symptome :**
 ```
-ssh: Could not resolve hostname indigowing.local: Hôte inconnu
+ssh: Could not resolve hostname indigowing.local: Hote inconnu
 ```
 
-**Cause :** L'ordi et le RPi étaient sur des réseaux différents (WiFi maison vs hotspot mobile).
+**Cause :** L'ordi et le RPi etaient sur des reseaux differents (WiFi maison vs hotspot mobile).
 
-**Solution :** Se connecter en utilisant les **données mobiles** comme hotspot — RPi et ordi sur le même réseau.
+**Solution :** Se connecter en utilisant les donnees mobiles comme hotspot — RPi et ordi sur le meme reseau.
 
-**Commande qui a fonctionné :**
+**Commande qui a fonctionne :**
 ```bash
 ssh indigozafa@indigowing.local
 ```
 
 ---
 
-## Problème B5 — Avertissement "Host key has changed" après reflash
+## Probleme B5 — Avertissement "Host key has changed" apres reflash
 
-**Statut :** ✅ Résolu
-**Sévérité :** Faible
+**Statut :** Resolu
+**Severite :** Faible
 
-**Symptôme :**
+**Symptome :**
 ```
 WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
 Host key verification failed.
 ```
 
-**Cause :** Reflasher la micro SD génère une nouvelle clé SSH — l'ordi garde l'ancienne en mémoire.
+**Cause :** Reflasher la micro SD genere une nouvelle cle SSH — l'ordi garde l'ancienne en memoire.
 
 **Solution :**
 ```bash
 ssh-keygen -R indigowing.local
-ssh indigozafa@indigowing.local
-```
-
----
-
-## Problème B6 — Court-circuit RPi lors branchement fils
-
-**Statut :** ✅ Résolu
-**Sévérité :** Critique
-
-**Symptôme :** RPi s'éteint dès qu'on branche des fils sur le GPIO.
-
-**Cause :** Le 5V de la Hiwonder et la Powerbank alimentaient le RPi **en même temps** → court-circuit.
-
-**Règle fondamentale établie :**
-```
-❌ Powerbank + Hiwonder 5V → RPi = COURT-CIRCUIT
-✅ Powerbank → RPi UNIQUEMENT
-✅ Hiwonder 5V → ESP32 + HC-SR04 UNIQUEMENT
-```
-
-**Méthode de diagnostic utilisée :** Test un fil à la fois — brancher SDA, puis SCL, puis GND, puis 5V séparément pour isoler le problème.
-
----
-
-## Problème B7 — Signal ECHO HC-SR04 incompatible GPIO RPi
-
-**Statut :** ✅ Résolu
-**Sévérité :** Critique — risque griller GPIO
-
-**Cause :** HC-SR04 sort 5V sur ECHO, RPi GPIO accepte max 3.3V.
-
-**Solution — diviseur de tension :**
-```
-ECHO (5V) ──── 1kΩ ──── RPi Pin 13 (GPIO27)
-                    |
-                   2kΩ
-                    |
-                   GND
-
-Résultat = 5V × (2kΩ / 3kΩ) = 3.33V ✅
-```
-
----
-
-## Problème B8 — I2C non détecté au premier essai
-
-**Statut :** ✅ Résolu
-**Sévérité :** Haute
-
-**Symptôme :**
-```
-Error: Could not open file `/dev/i2c-1'
-```
-
-**Cause :** I2C désactivé par défaut sur Raspberry Pi OS. Nécessite activation manuelle à chaque nouveau flash.
-
-**Solution :**
-```bash
-sudo raspi-config
-→ Interface Options → I2C → Enable → Reboot
-```
-
-**Vérification :**
-```bash
-i2cdetect -y 1
-# Résultat attendu : adresse 0x34 visible
-```
-
----
-
-## Problème B9 — Mauvais registres I2C → moteurs ne bougent pas
-
-**Statut :** ✅ Résolu
-**Sévérité :** Haute
-
-**Symptôme :** Script Python s'exécute sans erreur mais les moteurs ne bougent pas.
-
-**Cause :** Registre I2C incorrect utilisé (0x01 au lieu des vrais registres Hiwonder).
-
-**Diagnostic :**
-- `i2cdetect -y 1` → adresse 0x34 confirmée ✅
-- Moteurs font un bruit mais ne tournent pas → vitesse trop faible ou mauvais registre
-
-**Solution — registres corrects trouvés via documentation Hiwonder + repo GitHub communautaire :**
-
-```python
-I2C_ADDR = 0x34
-MOTOR_TYPE_ADDR = 20          # type de moteur
-MOTOR_ENCODER_POLARITY_ADDR = 21  # polarité encodeurs
-MOTOR_FIXED_SPEED_ADDR = 51   # commande vitesse
-```
-
-**Commandes de mouvement :**
-```python
-# [M1, M2, M3, M4] — positif = avant, négatif = arrière
-[100, 100, 0, 0]   # Avancer
-[-100, -100, 0, 0] # Reculer
-[-100, 100, 0, 0]  # Tourner gauche
-[100, -100, 0, 0]  # Tourner droite
-[0, 0, 0, 0]       # Stop
-```
-
----
-
-## Problème B10 — Fils moteurs débranchés
-
-**Statut :** ✅ Résolu
-**Sévérité :** Modérée
-
-**Symptôme :** Script fonctionne, moteurs font du bruit mais le robot ne bouge pas.
-
-**Cause :** Les fils d'alimentation des moteurs (M+ et M-) s'étaient débranchés des ports M1/M2 de la Hiwonder.
-
-**Solution :** Rebrancher les connecteurs JST moteurs fermement dans M1 et M2.
-
-**Résultat :** ✅ Robot avance, recule et tourne — Phase 1 complète !
-
----
-
-## Résumé global des achats déclenchés par les problèmes
-
-| Problème | Achat | Prix |
-|---|---|---|
-| Micro SD incompatible | SanDisk micro SD 32GB | ~15$ |
-| Connecteur LiPo incompatible | Adaptateur Deans → JST (inclus chargeur) | 0$ |
-| Alimentation insuffisante RPi | Chargeur CHICIRIS LiPo (inclut câble) | ~43$ |
-| Fils insuffisants | Jumper M-F 40pcs | ~8$ |
-| **Total** | | **~66$** |
-
----
-
-## Leçons d'ingénierie — Synthèse Phase 1
-
-1. **GND commun = fondation de tout système électronique**
-2. **Tester un composant à la fois** — isolation systématique des variables
-3. **SSH nécessite vérification explicite** — ne pas supposer qu'il est activé
-4. **Les registres I2C sont spécifiques au hardware** — toujours chercher la documentation officielle ou des exemples communautaires
-5. **Vérifier les connexions physiques avant de debugger le code** — un fil débranché ressemble à un bug logiciel
-6. **Décisions data-driven** — la migration vers chenilles justifiée par 5/7 problèmes nécessitant hardware upgrade
-
-## Probleme B11 — Warning "REMOTE HOST IDENTIFICATION HAS CHANGED"
-
-**Statut :** Resolu (commande a retenir)
-**Severite :** Faible — bloque juste la connexion SSH
-
-**Symptome :**
-```
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-Host key verification failed.
-```
-
-**Pourquoi ca arrive :**
-Chaque fois que le RPi est reflashe, il genere une nouvelle cle SSH. Ton ordi garde l'ancienne cle en memoire dans le fichier `known_hosts`. Quand les deux ne correspondent pas, SSH refuse la connexion par securite.
-
-Ce n'est pas une vraie attaque — c'est juste que le RPi a change d'identite apres le reflash.
-
-**Solution — une seule commande :**
-```bash
-ssh-keygen -R indigowing.local
-```
-
-Puis reconnecte normalement :
-```bash
 ssh indigozafa@indigowing.local
 ```
 
 **A faire a chaque fois qu'on reflashe la micro SD.**
 
+---
+
+## Probleme B6 — Court-circuit RPi lors branchement fils
+
+**Statut :** Resolu
+**Severite :** Critique
+
+**Symptome :** RPi s'eteint des qu'on branche des fils sur le GPIO.
+
+**Cause :** Le 5V de la Hiwonder et la Powerbank alimentaient le RPi en meme temps, causant un court-circuit.
+
+**Regle fondamentale etablie :**
+```
+Interdit : Powerbank + Hiwonder 5V -> RPi simultanement
+Permis  : Powerbank -> RPi uniquement
+Permis  : Hiwonder 5V -> ESP32 + HC-SR04 uniquement
+```
+
+**Methode de diagnostic utilisee :** Test un fil a la fois — brancher SDA, puis SCL, puis GND, puis 5V separement pour isoler le probleme.
+
+---
+
+## Probleme B7 — Signal ECHO HC-SR04 incompatible GPIO RPi
+
+**Statut :** Resolu
+**Severite :** Critique — risque de griller le GPIO
+
+**Cause :** HC-SR04 sort 5V sur ECHO, RPi GPIO accepte 3.3V maximum.
+
+**Solution — diviseur de tension :**
+```
+ECHO (5V) ---- 1kOhm ---- RPi Pin 13 (GPIO27)
+                    |
+                  2kOhm
+                    |
+                   GND
+
+Resultat = 5V x (2k / 3k) = 3.33V
+```
+
+---
+
+## Probleme B8 — I2C non detecte au premier essai
+
+**Statut :** Resolu
+**Severite :** Haute
+
+**Symptome :**
+```
+Error: Could not open file /dev/i2c-1
+```
+
+**Cause :** I2C desactive par defaut sur Raspberry Pi OS. Necessite activation manuelle a chaque nouveau flash.
+
+**Solution :**
+```bash
+sudo raspi-config
+-> Interface Options -> I2C -> Enable -> Reboot
+```
+
+**Verification :**
+```bash
+i2cdetect -y 1
+# Resultat attendu : adresse 0x34 visible
+```
+
+---
+
+## Probleme B9 — Mauvais registres I2C, moteurs ne bougent pas
+
+**Statut :** Resolu
+**Severite :** Haute
+
+**Symptome :** Script Python s'execute sans erreur mais les moteurs ne bougent pas.
+
+**Cause :** Registre I2C incorrect utilise (0x01 au lieu des vrais registres Hiwonder).
+
+**Diagnostic :**
+- `i2cdetect -y 1` confirme l'adresse 0x34
+- Moteurs font un bruit mais ne tournent pas : vitesse trop faible ou mauvais registre
+
+**Solution — registres corrects trouves via documentation Hiwonder et repo GitHub communautaire :**
+
+```python
+I2C_ADDR = 0x34
+MOTOR_TYPE_ADDR = 20
+MOTOR_ENCODER_POLARITY_ADDR = 21
+MOTOR_FIXED_SPEED_ADDR = 51
+```
+
+**Commandes de mouvement :**
+```python
+# [M1, M2, M3, M4] -- positif = avant, negatif = arriere
+[100, 100, 0, 0]    # Avancer
+[-100, -100, 0, 0]  # Reculer
+[-100, 100, 0, 0]   # Tourner gauche
+[100, -100, 0, 0]   # Tourner droite
+[0, 0, 0, 0]        # Stop
+```
+
+---
+
+## Probleme B10 — Fils moteurs debranches
+
+**Statut :** Resolu
+**Severite :** Moderee
+
+**Symptome :** Script fonctionne, moteurs font du bruit mais le robot ne bouge pas.
+
+**Cause :** Les fils d'alimentation des moteurs (M+ et M-) s'etaient debranches des ports M1/M2 de la Hiwonder.
+
+**Solution :** Rebrancher les connecteurs JST moteurs fermement dans M1 et M2.
+
+**Resultat :** Robot avance, recule et tourne. Phase 1 terminee.
+
+---
+
+## Probleme B11 — Avertissement "Host key has changed" (repetition frequente)
+
+**Statut :** Resolu, commande a retenir
+**Severite :** Faible — bloque uniquement la connexion SSH
+
+**Symptome :**
+```
+WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+Host key verification failed.
+```
+
+**Pourquoi ca arrive :** Chaque fois que le RPi est reflashe, il genere une nouvelle cle SSH. L'ordi garde l'ancienne cle en memoire dans le fichier known_hosts. Quand les deux ne correspondent pas, SSH refuse la connexion par securite. Ce n'est pas une attaque, simplement un changement d'identite du RPi apres reflash.
+
+**Solution — une seule commande :**
+```bash
+ssh-keygen -R indigowing.local
+ssh indigozafa@indigowing.local
+```
+
+**A faire systematiquement apres chaque reflash de la micro SD.**
+
+---
+
+## Resume global des achats declenches par les problemes
+
+| Probleme | Achat | Prix |
+|---|---|---|
+| Micro SD incompatible | SanDisk micro SD 32GB | environ 15$ |
+| Connecteur LiPo incompatible | Adaptateur Deans vers JST (inclus chargeur) | 0$ |
+| Alimentation insuffisante RPi | Chargeur CHICIRIS LiPo (inclut cable) | environ 43$ |
+| Fils insuffisants | Jumper M-F 40pcs | environ 8$ |
+| **Total** | | **environ 66$** |
+
+---
+
+## Lecons d'ingenierie — Synthese Phase 1
+
+1. GND commun est la fondation de tout systeme electronique
+2. Tester un composant a la fois — isolation systematique des variables
+3. SSH necessite verification explicite — ne jamais supposer qu'il est active
+4. Les registres I2C sont specifiques au hardware — toujours chercher la documentation officielle ou des exemples communautaires
+5. Verifier les connexions physiques avant de debugger le code — un fil debranche ressemble a un bug logiciel
+6. Decisions data-driven — la migration vers chenilles justifiee par 5 problemes sur 7 necessitant un upgrade hardware
+
+---
+
 # PARTIE C — Phase 2 : Liaison ESP32 -> RPi -> Hiwonder (Juin 2026)
- 
+
 ---
- 
+
 ## Probleme C1 — GPIO43/44 bloquent toute communication UART
- 
+
 **Statut :** Resolu
 **Severite :** Haute
- 
+
 **Symptome :** Avec Serial2 configure sur GPIO43 (TX) et GPIO44 (RX), aucune donnee n'arrive jamais sur le RPi, meme du bruit (`cat /dev/ttyS0` reste vide).
- 
+
 **Cause :** GPIO43 et GPIO44 sont les pins UART0 natifs (U0TXD/U0RXD) du ESP32-S3, deja reserves par le systeme meme quand le Serial standard utilise l'USB CDC. Le GPIO matrix ne peut pas overrider correctement cette connexion fixe (IOMUX) pour un usage Serial2.
- 
-**Solution :** Revenir aux pins GPIO17 (TX) et GPIO2 (RX), qui ne sont pas lies a une fonction UART0 fixe sur la variante non-touch du T-Display S3.
- 
+
+**Solution :** Revenir aux pins GPIO17 (TX) et GPIO2 (RX), qui ne sont pas liees a une fonction UART0 fixe sur la variante non-touch du T-Display S3.
+
 **Lecon :** Sur ESP32-S3, toujours verifier quelles pins sont liees a des peripheriques natifs (UART0, USB, strapping) avant de les assigner a un usage custom.
- 
+
 ---
- 
+
 ## Probleme C2 — Donnees UART corrompues (erreur decodage UTF-8)
- 
+
 **Statut :** Resolu
 **Severite :** Haute
- 
+
 **Symptome :**
 ```
 Erreur: 'utf-8' codec can't decode byte 0xfe in position 1: invalid start byte
 ```
- 
+
 **Cause :** GND non connecte entre l'ESP32 et le RPi. Sans masse commune, les niveaux logiques TX/RX n'ont pas de reference stable, causant des erreurs de bits aleatoires.
- 
+
 **Solution :** Verifier et reconnecter physiquement :
 ```
 ESP32 GND -> RPi Pin 14 (GND)
 ```
- 
+
 **Lecon :** Meme principe qu'en Phase 1 avec les moteurs — la masse commune est la base de toute communication electronique, peu importe le protocole (I2C, UART, etc).
- 
+
 ---
- 
+
 ## Probleme C3 — Joystick non centre sur zero au repos
- 
+
 **Statut :** Resolu
-**Severite :** Haute — cause le mouvement involontaire du robot
- 
+**Severite :** Haute — cause un mouvement involontaire du robot
+
 **Symptome :** Le robot avance ou tourne tout seul sans toucher la manette.
- 
-**Diagnostic :** Affichage des valeurs brutes des joysticks (`Serial.print`) a revele que joyV se stabilise autour de 200-300 et joyH autour de -1488 au repos — proche de zero mais pas exactement zero, et certaines lectures intermediaires montrent des valeurs beaucoup plus elevees (32537, -31407) lors de transitoires de connexion.
- 
-**Solution :** Augmenter le deadzone de 200 a 2000 :
+
+**Diagnostic :** Affichage des valeurs brutes des joysticks a revele que joyV se stabilise autour de 200-300 et joyH autour de -1488 au repos — proche de zero mais pas exactement zero, et certaines lectures intermediaires montrent des valeurs beaucoup plus elevees (32537, -31407) lors de transitoires de connexion.
+
+**Solution initiale :** Augmenter le deadzone de 200 a 2000 :
 ```cpp
 if (abs(joyV) < 2000) joyV = 0;
 if (abs(joyH) < 2000) joyH = 0;
 ```
- 
-**Lecon :** Les valeurs analogiques d'un joystick ne sont jamais exactement a zero au repos — toujours prevoir une zone morte (deadzone) suffisamment large.
- 
+
+**Lecon :** Les valeurs analogiques d'un joystick ne sont jamais exactement a zero au repos — toujours prevoir une zone morte suffisamment large.
+
 ---
- 
+
 ## Probleme C4 — Confusion entre code de test et code reel
- 
+
 **Statut :** Resolu
 **Severite :** Moyenne — a cause une fausse alerte de bug
- 
+
 **Symptome :** Le robot bouge en boucle automatique (avance, recule, tourne) sans manette connectee.
- 
+
 **Cause :** Le code de test fixe (boucle infinie envoyant 50,50 / -50,-50 / -50,50 / 50,-50 toutes les 2 secondes, ecrit pour isoler le probleme de communication UART) etait toujours actif sur l'ESP32 au lieu du vrai code de lecture manette Xbox.
- 
+
 **Solution :** Reuploader explicitement le code Xbox complet (avec xboxController.onLoop() et lecture des joysticks reels) apres chaque test de diagnostic.
- 
+
 **Lecon :** Toujours confirmer quel code est actuellement flashe sur le microcontroleur avant d'interpreter un comportement comme un bug — particulierement apres une session de debug avec plusieurs versions de code testees successivement.
- 
+
 ---
- 
-## Probleme C5 — Suspicion sur le masquage de bits negatifs (& 0xFF)
- 
+
+## Probleme C5 — Masquage de bits negatifs (& 0xFF) suspecte
+
 **Statut :** Investigue, cause non confirmee comme reelle
 **Severite :** Faible
- 
-**Symptome initial :** Le robot semblait toujours avancer/tourner a droite peu importe la direction du joystick.
- 
+
+**Symptome initial :** Le robot semblait toujours avancer ou tourner a droite peu importe la direction du joystick.
+
 **Hypothese testee :** `left & 0xFF` sur une valeur Python negative pourrait etre mal interprete par le registre I2C de la Hiwonder.
- 
+
 **Test de validation :** Un test manuel direct envoyant des listes Python avec valeurs negatives explicites (`[-50, -50, 0, 0]`) sans aucun masquage a fonctionne correctement (avance, recule, tourne gauche, tourne droite, dans le bon ordre).
- 
+
 **Conclusion :** Le masquage `& 0xFF` n'etait probablement pas la cause reelle du bug observe — celui-ci venait plutot du Probleme C4 (code de test actif par erreur). Le retrait du `& 0xFF` est conserve par precaution et simplicite du code, mais n'etait pas necessairement la correction determinante.
- 
+
 **Lecon :** Isoler chaque variable separement avant de conclure sur la cause d'un bug — plusieurs problemes peuvent se chevaucher et donner l'illusion qu'une correction a regle le souci alors qu'un autre probleme etait la vraie cause.
- 
+
 ---
- 
+
+## Probleme C6 — Debordement int16_t sur les valeurs joystick
+
+**Statut :** Resolu
+**Severite :** Haute — cause une direction incorrecte malgre un deadzone correct
+
+**Symptome :** Apres avoir corrige le deadzone (Probleme C3) et le code de test (Probleme C4), le robot repondait encore de facon incoherente : un seul axe semblait controler a la fois la vitesse et la direction, peu importe le sens du joystick.
+
+**Cause :** Les valeurs brutes du joystick etaient stockees en `int16_t`. Apres soustraction d'un centre de calibration mal etabli, certaines valeurs depassaient la plage representable en 16 bits signes (-32768 a 32767), provoquant un retournement (wraparound) qui inversait le signe de facon imprevisible selon la position exacte du joystick.
+
+**Solution :**
+- Calibration automatique du centre du joystick au demarrage (moyenne de 30 echantillons, sans toucher la manette)
+- Toutes les variables intermediaires (joyV, joyH, rawV, rawH, centerV, centerH) passees en `int32_t` pour eviter tout debordement
+
+```cpp
+int32_t rawV = (int32_t)notif.joyLVert;
+int32_t rawH = (int32_t)notif.joyLHori;
+int32_t joyV = rawV - centerV;
+int32_t joyH = rawH - centerH;
+```
+
+**Lecon :** Toujours utiliser un type de donnees avec assez de marge pour les calculs intermediaires, surtout lors de soustractions ou de recentrage de valeurs analogiques pres des limites du type.
+
+---
+
+## Probleme C7 — Erreur de compilation avr/eeprom.h introuvable
+
+**Statut :** Resolu
+**Severite :** Moderee
+
+**Symptome :**
+```
+fatal error: avr/eeprom.h: No such file or directory
+#include <avr/eeprom.h>
+```
+
+**Cause :** L'ajout de la librairie TFT_eSPI a entraine l'inclusion automatique d'une librairie tierce (EEPROMEx) conçue pour les microcontroleurs Arduino AVR, incompatible avec l'architecture ESP32. PlatformIO incluait cette dependance par erreur de resolution de librairies.
+
+**Solution :** Ajouter `lib_ldf_mode = chain+` dans platformio.ini pour forcer une analyse plus stricte des vraies dependances de chaque librairie, puis nettoyer le projet avant de recompiler :
+```bash
+pio run --target clean
+```
+
+**Lecon :** Une erreur de compilation provenant d'une librairie qu'on n'a pas explicitement demandee est souvent un signe de resolution de dependances trop permissive — verifier le mode de gestion des librairies (lib_ldf_mode) avant de chercher plus loin.
+
+---
+
+## Probleme C8 — Sortie 5V de la Hiwonder insuffisante pour alimenter l'ESP32
+
+**Statut :** Non resolu — solution materielle en attente
+**Severite :** Haute — empeche la mobilite complete sans fil
+
+**Symptome :** L'ESP32 ne s'allume pas quand il est branche sur la sortie 5V/GND de la Hiwonder, meme sans aucune autre charge connectee a cette sortie.
+
+**Diagnostic :**
+1. Tension mesuree au multimetre sur le port PWR de la Hiwonder (entree LiPo) : environ 7V, normale
+2. Tension mesuree sur la sortie 5V regulee de la Hiwonder, RPi debranche de cette sortie, aucune charge : 2.7V, stable
+3. Une tension de sortie regulee anormalement basse meme sans charge indique un regulateur interne (AMS1117) defaillant ou largement sous-dimensionne pour fournir un courant supplementaire au-dela de ses besoins internes
+
+**Cause probable :** Le regulateur de tension de la carte Hiwonder est concu pour alimenter la logique interne de la carte uniquement, pas pour servir de source 5V generale a d'autres composants externes comme un ESP32 complet (consommation plus elevee avec le Bluetooth actif).
+
+**Solution retenue (en attente de materiel) :** Utiliser un convertisseur abaisseur de tension dedie (buck converter, ex. LM2596) entre la LiPo (7.4V) et l'ESP32, regle precisement a 5V avec un multimetre avant connexion. Commande passee, en attente de livraison.
+
+**Solution temporaire actuelle :** ESP32 alimente par cable USB depuis l'ordinateur pendant les tests de developpement. Le robot n'est donc pas encore mobile de facon totalement autonome (sans fil).
+
+**Lecon :** Ne jamais supposer qu'une sortie regulee existante a la capacite de courant suffisante pour une nouvelle charge — toujours mesurer la tension sous charge reelle avant de batir une architecture d'alimentation autour d'elle.
+
+---
+
 ## Resume des fichiers de code Phase 2
- 
-**ESP32 (`main.cpp`) — pins definitifs :**
+
+**ESP32 (`main.cpp`) — pins UART definitifs :**
 ```cpp
 #define RPI_TX 17
 #define RPI_RX 2
 ```
- 
+
 **RPi (`xbox_receiver.py`) — emplacement et acces :**
 ```bash
 nano ~/xbox_receiver.py    # editer
 python3 ~/xbox_receiver.py # executer
+```
+
+**platformio.ini — librairies et configuration ecran :**
+```ini
+[env:lilygo-t-display-s3]
+platform = espressif32
+board = lilygo-t-display-s3
+framework = arduino
+lib_deps = 
+	h2zero/NimBLE-Arduino@^2.3.6
+	asukiaaa/XboxSeriesXControllerESP32_asukiaaa@^1.1.1
+	bodmer/TFT_eSPI@^2.5.43
+lib_ldf_mode = chain+
+build_flags = 
+	-DUSER_SETUP_LOADED=1
+	-DST7789_DRIVER=1
+	-DTFT_WIDTH=170
+	-DTFT_HEIGHT=320
+	-DCGRAM_OFFSET=1
+	-DTFT_RGB_ORDER=TFT_RGB
+	-DTFT_INVERSION_ON=1
+	-DTFT_PARALLEL_8_BIT=1
+	-DTFT_CS=6
+	-DTFT_DC=7
+	-DTFT_RST=5
+	-DTFT_WR=8
+	-DTFT_RD=9
+	-DTFT_D0=39
+	-DTFT_D1=40
+	-DTFT_D2=41
+	-DTFT_D3=42
+	-DTFT_D4=45
+	-DTFT_D5=46
+	-DTFT_D6=47
+	-DTFT_D7=48
+	-DTFT_BL=38
+	-DTFT_BACKLIGHT_ON=HIGH
+	-DLOAD_GLCD=1
+	-DLOAD_FONT2=1
+	-DLOAD_FONT4=1
+	-DLOAD_FONT6=1
+	-DLOAD_FONT7=1
+	-DLOAD_FONT8=1
+	-DLOAD_GFXFF=1
+	-DSMOOTH_FONT=1
+	-DSPI_FREQUENCY=27000000
+```
