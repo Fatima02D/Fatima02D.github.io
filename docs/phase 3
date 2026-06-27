@@ -1,0 +1,206 @@
+# Phase 3 — Odometrie
+
+**Statut :** A demarrer
+**Periode :** A venir
+**Prerequis :** Phase 2 complete — controle Xbox fonctionnel, communication I2C RPi vers Hiwonder validee
+
+---
+
+## Objectif de cette phase
+
+Donner au robot la capacite de savoir ou il se trouve dans l'espace (position x, y et orientation theta), en lisant les encodeurs des moteurs via la Hiwonder. C'est la base indispensable pour corriger la deviation en ligne droite (deja observee en Phase 1) et pour toute navigation autonome future (Phase 5).
+
+Cette phase est terminee quand :
+- Le RPi lit en continu les compteurs d'impulsions des deux moteurs via I2C
+- La distance parcourue par chaque chenille est calculee correctement en centimetres
+- La position (x, y, theta) du robot est mise a jour en temps reel a partir de ces distances
+- Un correcteur PID utilise la difference entre les deux encodeurs pour maintenir une trajectoire rectiligne
+- Le robot avance en ligne droite avec une deviation mesuree inferieure a 2cm sur 2 metres (contre 13.4cm en Phase 1)
+
+---
+
+## Registre Hiwonder pour la lecture des encodeurs
+
+Confirme via la documentation officielle Hiwonder (meme famille de carte que la notre, registres identiques a ceux deja valides en Phase 1) :
+
+```
+MOTOR_ENCODER_TOTAL_ADDR = 60
+```
+
+Ce registre retourne le compteur total d'impulsions pour chacun des 4 canaux moteur, sous forme de 4 entiers signes de 32 bits (16 octets au total, 4 octets par moteur, ordre M1/M2/M3/M4).
+
+Bonus disponible sur le meme bus :
+```
+ADC_BAT_ADDR = 0
+```
+Lecture du voltage de la batterie directement depuis la Hiwonder — utile pour afficher le niveau de la LiPo sur l'ecran de l'ESP32 plus tard, mais pas obligatoire pour cette phase.
+
+---
+
+## Etape 1 — Calibration physique (a faire avant tout code)
+
+Deux valeurs doivent etre mesurees manuellement sur le robot avant de pouvoir convertir des impulsions en distance reelle.
+
+### 1.1 — Pulsations par tour de roue
+
+Le type de moteur configure depuis la Phase 1 est `MOTOR_TYPE_ADDR = 3`, ce qui correspond au type JGB dans la documentation Hiwonder (encodeur magnetique, valeur par defaut 44 pulsations par tour du moteur, multipliee par le rapport de reduction de l'engrenage interne, generalement 131:1 sur ce type de moteur — mais peut varier selon le modele exact monte sur le chassis chenilles).
+
+**Methode de calibration recommandee par Hiwonder :** faire tourner une chenille a la main sur exactement 10 tours complets, lire le compteur d'impulsions avant et apres, diviser la difference par 10 pour obtenir le nombre de pulsations par tour reel de cette roue specifique. Repeter pour l'autre cote — les deux valeurs peuvent legerement differer.
+
+### 1.2 — Circonference de la roue motrice (pas la chenille elle-meme)
+
+Mesurer le diametre de la roue qui entraine la chenille (celle directement reliee au moteur), avec un ruban a mesurer ou un pied a coulisse si disponible. Calculer :
+```
+circonference = diametre x 3.14159
+```
+
+### 1.3 — Largeur de voie (track width / wheelbase)
+
+Mesurer la distance entre le centre de la chenille gauche et le centre de la chenille droite. Cette valeur est essentielle pour calculer l'angle de rotation a partir de la difference de distance parcourue entre les deux cotes.
+
+**Consigne :** noter ces 4 valeurs (pulsations/tour gauche, pulsations/tour droit, circonference, largeur de voie) dans le logbook avant de continuer — elles seront reutilisees dans tout le code de cette phase.
+
+---
+
+## Etape 2 — Lecture des encodeurs en Python
+
+Script de test isole, a executer separement du controle moteur pour valider la lecture avant d'integrer le calcul d'odometrie.
+
+```python
+import smbus2
+import struct
+import time
+
+I2C_ADDR = 0x34
+MOTOR_ENCODER_TOTAL_ADDR = 60
+
+bus = smbus2.SMBus(1)
+
+def read_encoders():
+    data = bus.read_i2c_block_data(I2C_ADDR, MOTOR_ENCODER_TOTAL_ADDR, 16)
+    raw_bytes = bytes(data)
+    m1, m2, m3, m4 = struct.unpack('<iiii', raw_bytes)
+    return m1, m2, m3, m4
+
+print("Lecture encodeurs - tourner les roues a la main pour valider")
+while True:
+    m1, m2, m3, m4 = read_encoders()
+    print(f"M1: {m1}  M2: {m2}  M3: {m3}  M4: {m4}")
+    time.sleep(0.5)
+```
+
+**Validation attendue :** tourner la chenille gauche a la main vers l'avant doit faire augmenter (ou diminuer de facon constante) la valeur M1 de facon proportionnelle au nombre de tours. Si une valeur ne change jamais, le moteur correspondant n'a pas l'encodeur correctement detecte par la Hiwonder.
+
+---
+
+## Etape 3 — Calcul de l'odometrie (cinematique differentielle)
+
+Une fois les encodeurs valides, le calcul de position repose sur le modele cinematique d'un robot a entrainement differentiel (skid steering, comme nos chenilles) :
+
+```
+A chaque iteration de boucle :
+
+delta_pulses_gauche = pulses_gauche_actuel - pulses_gauche_precedent
+delta_pulses_droit  = pulses_droit_actuel  - pulses_droit_precedent
+
+distance_gauche = (delta_pulses_gauche / pulses_par_tour_gauche) * circonference
+distance_droite = (delta_pulses_droit  / pulses_par_tour_droit)  * circonference
+
+distance_centre = (distance_gauche + distance_droite) / 2
+delta_theta     = (distance_droite - distance_gauche) / largeur_de_voie
+
+x     += distance_centre * cos(theta + delta_theta / 2)
+y     += distance_centre * sin(theta + delta_theta / 2)
+theta += delta_theta
+```
+
+Cette formule met a jour la position estimee (x, y) en centimetres et l'orientation theta en radians, a chaque cycle de la boucle de controle (recommande a 20Hz, en parallele de la lecture des commandes Xbox deja en place).
+
+---
+
+## Etape 4 — Correction PID pour la trajectoire rectiligne
+
+Objectif direct : corriger la deviation de 13.4cm/2m observee en Phase 1, qui n'avait pas pu etre resolue a l'epoque par manque de feedback (justement ce que les encodeurs apportent maintenant).
+
+**Principe :** comparer en continu la distance parcourue par la chenille gauche et la chenille droite. Si elles different alors que le robot devrait avancer tout droit, ajuster legerement la vitesse commandee de chaque cote pour compenser.
+
+```
+erreur = delta_pulses_gauche - delta_pulses_droit
+
+correction = Kp * erreur
+
+vitesse_gauche_corrigee = vitesse_demandee - correction
+vitesse_droite_corrigee = vitesse_demandee + correction
+```
+
+**Methode de reglage de Kp :** commencer avec une valeur tres faible (ex. 0.01), tester une ligne droite de 2 metres, mesurer la deviation, augmenter Kp progressivement jusqu'a ce que la deviation soit minimale sans provoquer d'oscillations (le robot qui zigzague legerement indique un Kp trop eleve).
+
+---
+
+## Etape 5 — Protocole de validation (reprend la methodologie Phase 1)
+
+Pour mesurer objectivement l'amelioration, reproduire exactement le protocole de test utilise en Phase 1 :
+
+| Test | Distance | Mesure | Resultat Phase 1 (sans encodeurs) | Objectif Phase 3 |
+|---|---|---|---|---|
+| Ligne droite | 2m | Deviation laterale | 13.4cm | Moins de 2cm |
+| Rotation 90 degres | - | Angle reel obtenu | Non teste | Plus ou moins 3 degres |
+| Reproductibilite | 5 essais | Ecart-type deviation | Plus ou moins 18 degres orientation | Variance fortement reduite |
+
+Documenter chaque essai dans un tableau au moment du test, comme cela a ete fait pour la plateforme en bois — ces donnees serviront a justifier objectivement que la Phase 3 a atteint son objectif.
+
+---
+
+## Architecture mise a jour
+
+```
+Xbox Controller (Bluetooth)
+        |
+      ESP32 TTGO        <- inchangee depuis Phase 2
+        | UART
+   Raspberry Pi 4B      <- ajoute : lecture encodeurs + calcul odometrie + PID
+        | I2C (0x34)
+  Hiwonder Module       <- ajoute : lecture MOTOR_ENCODER_TOTAL_ADDR (registre 60)
+        |
+  Moteurs M1 / M2 avec encodeurs Hall (deja physiquement presents depuis Phase 1)
+```
+
+Aucun nouveau branchement materiel n'est necessaire — les encodeurs sont deja cables a l'interieur de la Hiwonder depuis l'assemblage initial du chassis. Cette phase est entierement logicielle.
+
+---
+
+## Checklist Phase 3
+
+Calibration :
+- [ ] Pulsations par tour mesurees pour la roue gauche
+- [ ] Pulsations par tour mesurees pour la roue droite
+- [ ] Circonference de la roue motrice mesuree et calculee
+- [ ] Largeur de voie (distance entre les deux chenilles) mesuree
+- [ ] Toutes les valeurs notees dans le logbook
+
+Lecture encodeurs :
+- [ ] Script de lecture isole (registre 60) teste et valide manuellement
+- [ ] Les deux canaux M1 et M2 repondent de facon coherente au mouvement manuel des roues
+
+Odometrie :
+- [ ] Calcul de distance par roue implemente (delta pulses vers cm)
+- [ ] Calcul de position (x, y, theta) implemente avec le modele differentiel
+- [ ] Position affichee en temps reel (console ou ecran ESP32) pour validation visuelle
+
+Correction PID :
+- [ ] Erreur calculee comme difference entre encodeurs gauche et droit
+- [ ] Coefficient Kp regle empiriquement
+- [ ] Test ligne droite 2m repete 5 fois avec mesure de deviation
+
+Validation finale :
+- [ ] Deviation moyenne sur 2m inferieure a 2cm
+- [ ] Resultats compares formellement aux donnees de la Phase 1 dans le logbook
+
+---
+
+## Prochaine phase
+
+Phase 4 — Evitement d'obstacles :
+- Branchement et lecture du HC-SR04 (deja cable depuis la Phase 1, jamais encore utilise activement)
+- Integration de la detection d'obstacle dans la boucle de controle, en complement de l'odometrie
+- Le robot s'arrete ou contourne un obstacle tout en continuant a suivre sa position via l'odometrie de la Phase 3
